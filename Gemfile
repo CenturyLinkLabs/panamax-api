@@ -11,5 +11,6 @@ group :doc do
 end
 
 group :test, :development do
-  gem "rspec-rails"
+  gem 'rspec-rails'
+  gem 'shoulda'
 end
