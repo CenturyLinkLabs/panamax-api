@@ -6,4 +6,5 @@ ADD . /var/app/panamax-api
 RUN chmod +x /var/app/panamax-api/bin/start.sh
 
 WORKDIR /var/app/panamax-api
-CMD "/var/app/panamax-api/bin/start.sh"
+RUN bundle install
+CMD bundle exec rake db:setup && bundle exec rails s
