@@ -1,3 +1,5 @@
+require 'rake/task'
+
 class Docker::Image
 
   class << self
