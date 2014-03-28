@@ -3,9 +3,10 @@ class SearchController < ApplicationController
   respond_to :json
 
   def index
-    search_results = {}
-    search_results[:remote_images] = Docker::Image.search(query={ term: params[:q] })
-    search_results[:local_images] = images_for_repo_like(params[:q])
+    q = params[:q]
+    search_results = {q: q}
+    search_results[:remote_images] = Docker::Image.search(query={ term: q })
+    search_results[:local_images] = images_for_repo_like(q)
     respond_with search_results
   end
 

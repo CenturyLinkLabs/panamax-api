@@ -4,6 +4,13 @@ describe SearchController do
 
   describe 'GET index' do
 
+    it 'includes the original query in the response' do
+      Docker.stub(:connection).and_return(double("Docker::Connection", get: nil))
+
+      get :index, { q: "fake", format: 'json' }
+      expect(JSON.parse(response.body)).to include({"q"=>'fake'})
+    end
+
     context 'searching the docker index' do
       let(:query) { 'fake' }
 
