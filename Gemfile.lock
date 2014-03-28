@@ -30,7 +30,7 @@ GEM
     atomic (1.1.16)
     builder (3.1.4)
     diff-lcs (1.2.5)
-    docker-api (1.10.4)
+    docker-api (1.9.0)
       archive-tar-minitar
       excon (>= 0.28)
       json
@@ -112,7 +112,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  docker-api
+  docker-api (= 1.9.0)
   jbuilder (~> 1.2)
   rails (= 4.0.4)
   rspec-rails

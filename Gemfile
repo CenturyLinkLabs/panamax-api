@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gem 'rails', '4.0.4'
 gem 'sqlite3'
 gem 'jbuilder', '~> 1.2'
-gem 'docker-api', require: 'docker'
+gem 'docker-api', '1.9.0', require: 'docker'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
