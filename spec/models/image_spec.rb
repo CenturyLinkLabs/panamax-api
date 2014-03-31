@@ -21,7 +21,7 @@ describe Image do
     end
 
     it 'searches the remote Docker index' do
-      Docker::Image.should_receive(:search).with(query).and_return([remote_image])
+      expect(Docker::Image).to receive(:search).with(query).and_return([remote_image])
       Image.search_remote_index(query)
     end
 
@@ -46,7 +46,7 @@ describe Image do
     end
 
     it 'searches the local Docker index' do
-      Docker::Image.should_receive(:all).and_return([])
+      expect(Docker::Image).to receive(:all).and_return([])
       Image.all_local
     end
 
