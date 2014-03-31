@@ -40,4 +40,8 @@ class Image < ActiveRecord::Base
     # Remove nils and duplicates
     images.compact.uniq(&:repository)
   end
+
+  def self.local_with_repo_like(search_term)
+    self.all_local.find_all{ |image| image.repository =~ /#{search_term}/ }.compact
+  end
 end

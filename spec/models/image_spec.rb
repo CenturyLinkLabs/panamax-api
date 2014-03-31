@@ -99,4 +99,37 @@ describe Image do
       end
     end
   end
+
+  describe '.local_with_repo_like' do
+    context 'when there are no local images' do
+
+      before do
+        Image.stub(:all_local).and_return([])
+      end
+
+      it 'returns an empty array' do
+        images = Image.local_with_repo_like('query')
+        expect(images).to be_kind_of(Array)
+        expect(images).to be_empty
+      end
+    end
+
+    context 'when there are local images' do
+      let(:matching_image) { double(:matching_image, repository: 'query') }
+
+      let(:other_image) { double(:other_image, repository: 'blah') }
+
+      before do
+        Image.stub(:all_local).and_return([matching_image, other_image])
+      end
+
+      it 'returns only the images with repositories like the query argument' do
+        images = Image.local_with_repo_like('query')
+
+        expect(images).to be_kind_of(Array)
+        expect(images).to have(1).items
+        expect(images.first).to be matching_image
+      end
+    end
+  end
 end
