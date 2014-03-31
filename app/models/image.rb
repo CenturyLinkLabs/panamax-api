@@ -38,6 +38,6 @@ class Image < ActiveRecord::Base
     end
 
     # Remove nils and duplicates
-    images.compact.uniq { |image| image.repository }
+    images.compact.uniq(&:repository)
   end
 end
