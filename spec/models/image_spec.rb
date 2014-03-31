@@ -37,25 +37,66 @@ describe Image do
   describe '.all_local' do
 
     let(:local_image) do
-      double(:remote_image,
+      double(:local_image,
         info: { 'RepoTags' => ['foo/bar'] })
     end
 
     before do
-      Docker::Image.stub(:all).and_return([local_image])
+      Docker::Image.stub(:all).and_return([])
     end
 
     it 'searches the local Docker index' do
-      Docker::Image.should_receive(:all).and_return([local_image])
+      Docker::Image.should_receive(:all).and_return([])
       Image.all_local
     end
 
-    it 'returns a list of Image models' do
-      images = Image.all_local
+    context 'when local cache contains an image' do
 
-      expect(images).to be_kind_of(Array)
-      expect(images).to have(1).items
-      expect(images.first.repository).to eql(local_image.info['RepoTags'].first)
+      before do
+        Docker::Image.stub(:all).and_return([local_image])
+      end
+
+      it 'returns the local image' do
+        images = Image.all_local
+
+        expect(images).to be_kind_of(Array)
+        expect(images).to have(1).items
+        expect(images.first.repository).to eql(local_image.info['RepoTags'].first)
+      end
+    end
+
+    context 'when local cache contains an empty image' do
+
+      let(:none_image) do
+        double(:local_image,
+          info: { 'RepoTags' => ['<none>:<none>'] })
+      end
+
+      before do
+        Docker::Image.stub(:all).and_return([none_image])
+      end
+
+      it 'returns no results' do
+        images = Image.all_local
+
+        expect(images).to be_kind_of(Array)
+        expect(images).to have(0).items
+      end
+    end
+
+    context 'when local cache contains a duplicate images' do
+
+      before do
+        Docker::Image.stub(:all).and_return([local_image, local_image])
+      end
+
+      it 'returns only unique results' do
+        images = Image.all_local
+
+        expect(images).to be_kind_of(Array)
+        expect(images).to have(1).items
+        expect(images.first.repository).to eql(local_image.info['RepoTags'].first)
+      end
     end
   end
 end
