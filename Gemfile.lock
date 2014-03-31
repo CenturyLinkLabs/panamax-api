@@ -113,7 +113,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  docker-api
+  database_cleaner
+  docker-api (= 1.9.0)
   jbuilder (~> 1.2)
   rails (= 4.0.4)
   rspec-rails
