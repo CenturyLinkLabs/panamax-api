@@ -5,18 +5,10 @@ class SearchController < ApplicationController
   def index
     q = params[:q]
     search_results = {q: q}
-    search_results[:remote_images] = Docker::Image.search(term: q)
-    search_results[:local_images] = images_for_repo_like(q)
+    search_results[:remote_images] = Image.search_remote_index(term: q)
+    search_results[:local_images] = Image.local_with_repo_like(q)
     search_results[:template] = Template.recommended.named_like(q).first
     respond_with search_results
   end
 
-  private
-  def images_for_repo_like(repo)
-    images = Docker::Image.all.map do |image|
-               repo_tags = image.info['RepoTags'] || []
-               image if repo_tags.any? { |tag| tag =~ /#{repo}/ }
-             end
-    images.compact
-  end
 end
