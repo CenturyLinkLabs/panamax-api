@@ -1,0 +1,13 @@
+deployment:
+  #Production:
+    #branch: release
+    #commands:
+      #- ./deploy_pro.sh
+  QA:
+    branch: master
+    commands:
+      - ./bin/deploy_qa.sh
+  #Feature_Branch:
+    #branch: /feature_.*/
+    #commands:
+      #- ./deploy_feature.sh 
