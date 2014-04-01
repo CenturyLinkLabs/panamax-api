@@ -7,6 +7,7 @@ class SearchController < ApplicationController
     search_results = {q: q}
     search_results[:remote_images] = Docker::Image.search(term: q)
     search_results[:local_images] = images_for_repo_like(q)
+    search_results[:template] = Template.recommended.named_like(q).first
     respond_with search_results
   end
 

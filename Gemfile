@@ -14,3 +14,7 @@ group :test, :development do
   gem 'rspec-rails'
   gem 'shoulda'
 end
+
+group :test do
+  gem 'database_cleaner'
+end

@@ -29,6 +29,7 @@ GEM
     arel (4.0.2)
     atomic (1.1.16)
     builder (3.1.4)
+    database_cleaner (1.2.0)
     diff-lcs (1.2.5)
     docker-api (1.9.0)
       archive-tar-minitar
@@ -112,6 +113,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  database_cleaner
   docker-api (= 1.9.0)
   jbuilder (~> 1.2)
   rails (= 4.0.4)
