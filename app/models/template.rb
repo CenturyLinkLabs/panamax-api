@@ -4,4 +4,7 @@ class Template < ActiveRecord::Base
   scope :recommended, -> { where(recommended: true) }
   scope :named_like, -> (name){ where("name LIKE ?", "%#{name}%") }
 
+  def as_json(options={})
+    super(options).merge(image_count: images.count)
+  end
 end
