@@ -44,4 +44,9 @@ class Image < ActiveRecord::Base
   def self.local_with_repo_like(search_term)
     self.all_local.find_all{ |image| image.repository =~ /#{search_term}/ }.compact
   end
+
+  def as_json(options={})
+    super(options).merge(is_official: is_official, is_trusted: is_trusted, star_count: star_count)
+  end
+
 end
