@@ -6,7 +6,6 @@ module PanamaxAgent
     def connection
       Faraday.new(options) do |faraday|
         faraday.request :json
-        faraday.response :mashify
         faraday.response :json
         faraday.adapter adapter
 

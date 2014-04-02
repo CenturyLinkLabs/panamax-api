@@ -7,7 +7,6 @@ describe PanamaxAgent::Connection do
 
     handlers = [
       FaradayMiddleware::EncodeJson,
-      FaradayMiddleware::Mashify,
       FaradayMiddleware::ParseJson,
       Faraday::Adapter::NetHttp
     ]
