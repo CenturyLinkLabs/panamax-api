@@ -16,5 +16,6 @@ group :test, :development do
 end
 
 group :test do
+  gem 'coveralls'
   gem 'database_cleaner'
 end
