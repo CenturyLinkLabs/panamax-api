@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '4.0.4'
 gem 'sqlite3'
+gem 'faraday_middleware'
 gem 'jbuilder', '~> 1.2'
 gem 'docker-api', '1.9.0', require: 'docker'
 
