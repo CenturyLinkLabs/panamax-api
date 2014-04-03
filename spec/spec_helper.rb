@@ -11,7 +11,6 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
     Coveralls::SimpleCov::Formatter
 ]
 
-#Coveralls.wear!('rails')
 SimpleCov.start('rails')
 
 if ENV['CIRCLE_ARTIFACTS']
