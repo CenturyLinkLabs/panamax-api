@@ -48,8 +48,10 @@ describe SearchController do
         Docker::Image.stub(:search).and_return(nil)
         Docker::Image.stub(:all).and_return([])
       end
-      it 'returns the first recommended template with a name matching the query' do
+      it 'returns the recommended templates with a name matching the query' do
         get :index, {q: "#{query}", format: 'json'}
+        parsed_results = JSON.parse(response.body)
+        expect(parsed_results['templates']).to be_an Array
         expect(response.body).to include(Template.where(name: 'wordpress').first.to_json)
       end
     end
