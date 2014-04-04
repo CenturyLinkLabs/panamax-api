@@ -137,8 +137,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  coveralls
   active_model_serializers
+  coveralls
   database_cleaner
   docker-api (= 1.9.0)
   faraday_middleware

@@ -1,0 +1,1 @@
+ActiveModel::ArraySerializer.root = false
