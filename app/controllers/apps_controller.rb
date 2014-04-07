@@ -1,4 +1,5 @@
 class AppsController < ApplicationController
+  respond_to :json
 
   def index
 
