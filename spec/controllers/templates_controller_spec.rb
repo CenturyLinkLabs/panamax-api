@@ -6,6 +6,7 @@ describe TemplatesController do
 
     it "returns the list of templates" do
       get :index, format: :json
+      expect(JSON.parse(response.body)).to be_an Array
       expect(response.body).to include(TemplateSerializer.new(Template.first).to_json)
     end
 
