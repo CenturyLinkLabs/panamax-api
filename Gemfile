@@ -5,6 +5,7 @@ gem 'sqlite3'
 gem 'faraday_middleware'
 gem 'jbuilder', '~> 1.2'
 gem 'docker-api', '1.9.0', require: 'docker'
+gem 'active_model_serializers'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
