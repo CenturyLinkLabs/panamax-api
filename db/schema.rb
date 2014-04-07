@@ -11,7 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140326201625) do
+ActiveRecord::Schema.define(version: 20140407181403) do
+
+  create_table "apps", force: true do |t|
+    t.string "name"
+    t.string "from"
+  end
 
   create_table "images", force: true do |t|
     t.string   "image_id"
@@ -32,6 +37,21 @@ ActiveRecord::Schema.define(version: 20140326201625) do
     t.integer "template_id"
     t.integer "image_id"
   end
+
+  create_table "services", force: true do |t|
+    t.string  "name"
+    t.text    "description"
+    t.string  "from"
+    t.string  "links"
+    t.string  "ports"
+    t.string  "expose"
+    t.text    "environment"
+    t.text    "volumes"
+    t.integer "app_id"
+  end
+
+  add_index "services", ["app_id"], name: "index_services_on_app_id"
+  add_index "services", ["name"], name: "index_services_on_name"
 
   create_table "templates", force: true do |t|
     t.string   "name"
