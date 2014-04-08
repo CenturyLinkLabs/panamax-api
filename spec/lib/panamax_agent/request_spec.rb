@@ -33,12 +33,26 @@ describe PanamaxAgent::Request do
 
       it 'sets the headers' do
         headers = { foo: :bar }
-        expect(request).to receive(:headers=).with(headers)
+        expect(request).to receive(:headers=).with(hash_including(headers))
         subject.send(method, path, options={}, headers)
       end
 
       it 'returns the response body' do
         expect(subject.send(method, path)).to eql(response.body)
+      end
+
+      context 'when the default request_type is used' do
+        it 'instantiates a connection object with the default request type' do
+          expect(subject).to receive(:connection).with(:json).and_return(connection)
+          subject.send(method, path)
+        end
+      end
+
+      context 'when the request_type is overridden' do
+        it 'instantiates a connection object with the overridden request type' do
+          expect(subject).to receive(:connection).with(:foo).and_return(connection)
+          subject.send(method, path, options={}, headers={}, :foo)
+        end
       end
     end
   end
@@ -86,6 +100,26 @@ describe PanamaxAgent::Request do
           subject.send(method, path)
         end
       end
+
+      context 'when querystring AND body provided' do
+        let(:options) { { querystring: { a: :b }, body: { c: :d } } }
+
+        before do
+          request.stub(:params=)
+          request.stub(:body=)
+        end
+
+        it 'sets the querystring as request params' do
+          expect(request).to receive(:params=).with(options[:querystring])
+          subject.send(method, path, options)
+        end
+
+        it 'sets the body as request body' do
+          expect(request).to receive(:body=).with(options[:body])
+          subject.send(method, path, options)
+        end
+      end
+
     end
   end
 

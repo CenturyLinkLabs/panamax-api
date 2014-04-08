@@ -1,0 +1,30 @@
+[Unit]
+Description=<%= @service_name %>
+<% @links.each do |link| -%>
+After=<%= link %>.service
+Requires=<%= link %>.service
+<% end -%>
+
+[Service]
+ExecStart=/usr/bin/docker run -name <%= @service_name -%>
+<% if @links -%>
+<% @links.each do |link| -%>
+ --link <%= link %>:<%= link -%>
+<% end -%>
+<% end -%>
+<% if @ports -%>
+<% @ports.each do |host_port, container_port| -%>
+ -p <%= host_port %>:<%= container_port -%>
+<% end -%>
+<% end -%>
+<% if @volumes -%>
+<% @volumes.each do |host_volume, container_volume| -%>
+ -v <%= host_volume %>:<%= container_volume -%>
+<% end -%>
+<% end -%>
+<% if @envs -%>
+<% @envs.each do |name, value| -%>
+ -e <%= name %>=<%= value -%>
+<% end -%>
+<% end -%>
+ <%= @image || 'foobar' %>
