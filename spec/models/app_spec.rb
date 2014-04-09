@@ -11,4 +11,21 @@ describe App do
     end
 
   end
+
+  describe '.create_from_image' do
+    let(:params) do
+      {
+          image: 'foo/bar:baz',
+          links: 'SERVICE2',
+          ports: '3306:3306',
+          expose: '3306',
+          environment: 'MYSQL_ROOT_PASSWORD=pass@word01',
+          volumes: '/var/panamax:/var/app/panamax'
+      }
+    end
+    it 'creates a new app' do
+      expect(App).to receive(:create).with(name: params[:image], from: "Image: #{params[:image]}")
+      App.create_from_image(params)
+    end
+  end
 end
