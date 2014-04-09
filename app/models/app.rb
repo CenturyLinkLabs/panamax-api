@@ -23,7 +23,7 @@ class App < ActiveRecord::Base
       #TODO verify that app has been saved
       app.services.create(
           name: image_create_params[:image],
-          from: "Image: #{image_create_params[:image]}",
+          from: "#{image_create_params[:image]}:#{image_create_params[:tag]}",
           links: image_create_params[:links],
           ports: image_create_params[:ports],
           expose: image_create_params[:expose],

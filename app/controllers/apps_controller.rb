@@ -21,7 +21,7 @@ class AppsController < ApplicationController
 
   private
   def image_create_params
-    params.permit(:image, :links, :ports, :expose, :environment, :volumes)
+    params.permit(:image, :tag, :links, :ports, :expose, :environment, :volumes)
   end
 
 end
