@@ -5,3 +5,15 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+Template.create(
+  name: 'Wordpress',
+  description: 'This is a wordpress template',
+  recommended: false
+)
+
+Template.create(
+  name: 'Apache',
+  description: 'This is a reccomended apache template',
+  recommended: true
+)
