@@ -26,6 +26,11 @@ ActiveRecord::Schema.define(version: 20140407181403) do
     t.string   "keywords"
     t.boolean  "recommended"
     t.string   "icon"
+    t.text     "links"
+    t.text     "ports"
+    t.text     "expose"
+    t.text     "environment"
+    t.text     "volumes"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

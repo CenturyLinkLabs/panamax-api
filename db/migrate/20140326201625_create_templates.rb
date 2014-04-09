@@ -20,6 +20,11 @@ class CreateTemplates < ActiveRecord::Migration
       t.string :keywords
       t.boolean :recommended
       t.string :icon
+      t.text :links
+      t.text :ports
+      t.text :expose
+      t.text :environment
+      t.text :volumes
 
       t.timestamps
     end
