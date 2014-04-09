@@ -3,10 +3,10 @@ class CreateServices < ActiveRecord::Migration
     create_table :services do |t|
       t.string :name
       t.text :description
-      t.string :from
-      t.string :links
-      t.string :ports
-      t.string :expose
+      t.text :from
+      t.text :links
+      t.text :ports
+      t.text :expose
       t.text :environment
       t.text :volumes
       t.references :app, index: true
