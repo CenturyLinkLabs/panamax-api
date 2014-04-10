@@ -9,7 +9,7 @@ class Image < ActiveRecord::Base
   serialize :links, Array
   serialize :ports, Array
   serialize :expose, Array
-  serialize :environment, Array
+  serialize :environment, Hash
   serialize :volumes, Array
 
   has_and_belongs_to_many :templates
