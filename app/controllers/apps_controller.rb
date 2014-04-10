@@ -10,18 +10,22 @@ class AppsController < ApplicationController
   end
 
   def create
-    if params[:template_id]
-      App.create_from_template(Template.find(params[:template_id]))
-    else
-      App.create_from_image(image_create_params)
-    end
+    @app = if params[:template_id]
+             App.create_from_template(Template.find(params[:template_id]))
+           else
+             App.create_from_image(
+                 image: params[:image],
+                 tag: params[:tag],
+                 links: params[:links],
+                 ports: params[:ports],
+                 expose: params[:expose],
+                 environment: params[:environment],
+                 volumes: params[:volumes]
+             )
+           end
 
-    render nothing: true
+    respond_with @app
   end
 
-  private
-  def image_create_params
-    params.permit(:image, :tag, :links, :ports, :expose, :environment, :volumes)
-  end
 
 end
