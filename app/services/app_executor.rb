@@ -12,7 +12,7 @@ class AppExecutor
 
   def run
     @app.services.each { |service| fleet_client.submit(service_def_from_service(service)) }
-    @app.services.each { |service| fleet_client.start(service.name) }
+    @app.services.each { |service| fleet_client.start(service.unit_name) }
   end
 
   private
@@ -21,16 +21,23 @@ class AppExecutor
     PanamaxAgent.fleet_client
   end
 
+  REMOVE_EXITED_CONTAINERS = '/usr/bin/docker ps -a -q | xargs docker rm'
+
   def service_def_from_service(service)
-    sd = PanamaxAgent::Fleet::ServiceDefinition.new(service.name)
+    sd = PanamaxAgent::Fleet::ServiceDefinition.new(service.unit_name)
     sd.description = service.description
 
     # Collect service dependencies
-    dep_services = service.links.map { |link| link[:service] }.join(' ')
+    dep_services = service.links.map { |link| "#{link[:service]}.service" }.join(' ')
     sd.after = dep_services
     sd.requires = dep_services
 
+    sd.exec_start_pre = REMOVE_EXITED_CONTAINERS
     sd.exec_start = generate_docker_run(service)
+    sd.exec_start_post = REMOVE_EXITED_CONTAINERS
+    sd.exec_stop = "/usr/bin/docker kill #{service.name}"
+    sd.exec_stop_post = REMOVE_EXITED_CONTAINERS
+    sd.restart_sec = '10s'
     sd
   end
 
@@ -65,6 +72,7 @@ class AppExecutor
     end
 
     cmd = '/usr/bin/docker run '
+    cmd += " --name #{service.name}"
     cmd += links.join(' ')
     cmd += ports.join(' ')
     cmd += expose.join(' ')

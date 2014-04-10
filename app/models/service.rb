@@ -7,4 +7,7 @@ class Service < ActiveRecord::Base
   serialize :environment, Hash
   serialize :volumes, Array
 
+  def unit_name
+    "#{name}.service"
+  end
 end

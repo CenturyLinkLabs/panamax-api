@@ -61,6 +61,7 @@ module PanamaxAgent
         block['ExecReload'] = exec_reload if exec_reload
         block['ExecStop'] = exec_stop if exec_stop
         block['ExecStopPost'] = exec_stop_post if exec_stop_post
+        block['Restart'] = 'always'
         block['RestartSec'] = restart_sec if restart_sec
 
         block

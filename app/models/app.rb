@@ -6,7 +6,7 @@ class App < ActiveRecord::Base
       app = self.create(name: t.name, from: "Template: #{t.name}")
       t.images.each do |i|
         app.services.create(
-            name: i.repository,
+            name: i.name,
             description: i.description,
             from: "#{i.repository}:#{i.tag}",
             links: i.links,
@@ -27,7 +27,6 @@ class App < ActiveRecord::Base
       app.services.create(
           name: "#{image_create_params[:image].gsub('/', '_')}.service",
           from: "#{image_create_params[:image]}:#{image_create_params[:tag]}",
-          links: image_create_params[:links],
           ports: image_create_params[:ports],
           expose: image_create_params[:expose],
           environment: image_create_params[:environment],
