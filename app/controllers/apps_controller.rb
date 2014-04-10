@@ -24,6 +24,7 @@ class AppsController < ApplicationController
              )
            end
 
+    AppExecutor.run(@app)
     respond_with @app
   end
 

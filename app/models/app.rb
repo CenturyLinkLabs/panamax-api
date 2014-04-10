@@ -25,7 +25,7 @@ class App < ActiveRecord::Base
     transaction do
       app = self.create(name: image_create_params[:image], from: "Image: #{image_create_params[:image]}")
       app.services.create(
-          name: image_create_params[:image],
+          name: "#{image_create_params[:image].gsub('/', '_')}.service",
           from: "#{image_create_params[:image]}:#{image_create_params[:tag]}",
           links: image_create_params[:links],
           ports: image_create_params[:ports],
