@@ -1,9 +1,9 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.0.4'
+gem 'rails', '4.1.0'
 gem 'sqlite3'
 gem 'faraday_middleware'
-gem 'jbuilder', '~> 1.2'
+gem 'jbuilder', '~> 2.0'
 gem 'docker-api', '1.9.0', require: 'docker'
 gem 'active_model_serializers'
 
@@ -14,7 +14,7 @@ end
 
 group :test, :development do
   gem 'rspec-rails'
-  gem 'shoulda'
+  gem 'shoulda-matchers'
 end
 
 group :test do
