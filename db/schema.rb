@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(version: 20140407181403) do
 
   create_table "images", force: true do |t|
     t.string   "image_id"
+    t.string   "name"
     t.string   "repository"
     t.string   "tag"
     t.text     "description"

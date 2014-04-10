@@ -12,20 +12,23 @@ wp = Template.create(
   recommended: false
 )
 wp.images.create(
-  repository: 'foo/wordpress',
-  tag: '3.9',
-  description: 'Wordpress 3.9',
-  links: [{service: 'foo_mysql', alias:'db'}],
-  ports: [{host_interface: '0.0.0.0', host_port: 80, container_port: 80, proto: 'tcp'}],
+  name: 'WP',
+  repository: 'panamax/panamax-docker-wordpress',
+  tag: 'latest',
+  description: 'Wordpress',
+  links: [{service: 'DB_1', alias:'DB_1'}],
+  ports: [{host_port: 8080, container_port: 80}],
   expose: [80],
-  environment: { 'MY_ENV_KEY' => 'my_env_value' },
-  volumes: [{host_path: '/home/core', container_path: '/var/www'}]
+  environment: { 'DB_PASSWORD' => 'pass@word01' }
 )
 wp.images.create(
-  repository: 'foo/mysql',
+  name: 'DB_1',
+  repository: 'panamax/panamax-docker-mysql',
   tag: 'latest',
-  description: 'The latest and greatest mysql',
-  expose: [3306]
+  description: 'MySQL',
+  expose: [3306],
+  environment: { 'MYSQL_ROOT_PASSWORD' => 'pass@word01'},
+  ports: [{host_port: 3306, container_port: 3306}]
 )
 
 Template.create(

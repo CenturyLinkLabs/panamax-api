@@ -14,6 +14,7 @@ class CreateTemplates < ActiveRecord::Migration
 
     create_table :images do |t|
       t.string :image_id
+      t.string :name
       t.string :repository
       t.string :tag
       t.text :description
