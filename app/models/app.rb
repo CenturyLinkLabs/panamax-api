@@ -2,7 +2,8 @@ class App < ActiveRecord::Base
   has_many :services
 
   def self.create_from_template(t)
-    self.create(name: t.name, from: "Template: #{t.name}") do |app|
+    transaction do
+      app = self.create(name: t.name, from: "Template: #{t.name}")
       t.images.each do |i|
         app.services.create(
             name: i.repository,
@@ -15,6 +16,7 @@ class App < ActiveRecord::Base
             volumes: i.volumes
         )
       end
+      app
     end
   end
 

@@ -6,10 +6,26 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-Template.create(
+wp = Template.create(
   name: 'Wordpress',
   description: 'This is a wordpress template',
   recommended: false
+)
+wp.images.create(
+  repository: 'foo/wordpress',
+  tag: '3.9',
+  description: 'Wordpress 3.9',
+  links: [{service: 'foo_mysql', alias:'db'}],
+  ports: [{host_interface: '0.0.0.0', host_port: 80, container_port: 80, proto: 'tcp'}],
+  expose: [80],
+  environment: { 'MY_ENV_KEY' => 'my_env_value' },
+  volumes: [{host_path: '/home/core', container_path: '/var/www'}]
+)
+wp.images.create(
+  repository: 'foo/mysql',
+  tag: 'latest',
+  description: 'The latest and greatest mysql',
+  expose: [3306]
 )
 
 Template.create(
