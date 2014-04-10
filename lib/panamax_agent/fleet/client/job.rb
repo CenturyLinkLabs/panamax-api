@@ -17,12 +17,12 @@ module PanamaxAgent
           get(job_path(service_name, :object), opts)
         end
 
-        def create_job(service_def)
+        def create_job(service_name, job)
           opts = {
             querystring: { 'prevExist' => false },
-            body: { value: service_def.to_json }
+            body: { value: job.to_json }
           }
-          put(job_path(service_def.name, :object),
+          put(job_path(service_name, :object),
               opts,
               headers={},
               request_type=:url_encoded)

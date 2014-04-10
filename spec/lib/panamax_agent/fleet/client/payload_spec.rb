@@ -50,7 +50,8 @@ describe PanamaxAgent::Fleet::Client::Payload do
 
   describe '#create_payload' do
 
-    let(:service_def) { double(:service_def, name: 'foo.service', to_json: {}) }
+    let(:service_name) { 'foo.service' }
+    let(:service_def) { { name: service_name } }
 
     before do
       subject.stub(put: response)
@@ -63,14 +64,14 @@ describe PanamaxAgent::Fleet::Client::Payload do
       }
 
       expect(subject).to receive(:put)
-        .with("v2/keys/_coreos.com/fleet/payload/#{service_def.name}", opts, {}, :url_encoded)
+        .with("v2/keys/_coreos.com/fleet/payload/#{service_name}", opts, {}, :url_encoded)
         .and_return(response)
 
-      subject.create_payload(service_def)
+      subject.create_payload(service_name, service_def)
     end
 
     it 'returns the payload response' do
-      expect(subject.create_payload(service_def)).to eql(response)
+      expect(subject.create_payload(service_name, service_def)).to eql(response)
     end
   end
 
