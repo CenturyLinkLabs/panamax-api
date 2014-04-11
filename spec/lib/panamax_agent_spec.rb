@@ -27,4 +27,13 @@ describe PanamaxAgent do
       expect(PanamaxAgent.fleet_client).to be_kind_of(PanamaxAgent::Fleet::Client)
     end
   end
+
+  describe '.journal_client' do
+
+    it 'returns a Journal::Client instance' do
+      expect(PanamaxAgent.journal_client).to be_kind_of(PanamaxAgent::Journal::Client)
+    end
+  end
+
+
 end
