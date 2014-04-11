@@ -35,9 +35,9 @@ class AppExecutor
     sd.exec_start_pre = REMOVE_EXITED_CONTAINERS
     sd.exec_start = generate_docker_run(service)
     sd.exec_start_post = REMOVE_EXITED_CONTAINERS
-    sd.exec_stop = "/usr/bin/docker kill #{service.name}"
+    sd.exec_stop = "/usr/bin/docker kill #{service.name} ; /usr/bin/docker rm #{service.name}"
     sd.exec_stop_post = REMOVE_EXITED_CONTAINERS
-    sd.restart_sec = '10s'
+    sd.restart_sec = '10'
     sd
   end
 
@@ -72,6 +72,7 @@ class AppExecutor
     end
 
     cmd = '/usr/bin/docker run '
+    cmd += ' --rm'
     cmd += " --name #{service.name}"
     cmd += links.join(' ')
     cmd += ports.join(' ')
@@ -79,6 +80,8 @@ class AppExecutor
     cmd += environment.join(' ')
     cmd += volumes.join(' ')
     cmd += " #{service.from}"
+    puts cmd
+    cmd
   end
 
 end
