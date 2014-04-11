@@ -11,3 +11,7 @@ deployment:
     #branch: /feature_.*/
     #commands:
       #- ./deploy_feature.sh 
+notify:
+  webhooks:
+    # Runscope triggger for API tests
+    - url: https://api.runscope.com/radar/5a4b5ba5-bf59-4b60-9a80-4af29e4e8639/run
