@@ -28,11 +28,13 @@ describe AppsController do
   describe '#create' do
 
     context 'when the request contains a template id' do
-
+      let(:app){ App.new }
       let(:params){ { template_id: 1 } }
       let(:template){ double(:template, name: 'my_template') }
 
       before do
+        App.stub(:create_from_template).and_return(app)
+        AppExecutor.stub(:run)
         Template.stub(:find).with(params[:template_id]).and_return(template)
       end
 
@@ -51,19 +53,27 @@ describe AppsController do
     context 'when the request contains an image repository' do
 
       let(:params) do
-        HashWithIndifferentAccess.new({
+        {
             image: 'foo/bar:baz',
             links: 'SERVICE2',
             ports: '3306:3306',
             expose: '3306',
             environment: 'MYSQL_ROOT_PASSWORD=pass@word01',
-            volumes: '/var/panamax:/var/app/panamax'
-        })
+            volumes: '/var/panamax:/var/app/panamax',
+            tag: 'latest'
+        }
+      end
+
+      let(:app){ App.new }
+
+      before do
+        App.stub(:create_from_image).and_return(app)
+        AppExecutor.stub(:run)
       end
 
       it 'creates the application from the image' do
-        expect(App).to receive(:create_from_image).with(params)
-        post :create, params, format: :json
+        expect(App).to receive(:create_from_image).with(params).and_return(app)
+        post :create, params.merge(format: :json)
       end
 
     end

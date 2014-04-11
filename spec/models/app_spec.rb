@@ -23,8 +23,12 @@ describe App do
           volumes: '/var/panamax:/var/app/panamax'
       }
     end
+
+    let(:app){ double(:app) }
+
     it 'creates a new app' do
-      expect(App).to receive(:create).with(name: params[:image], from: "Image: #{params[:image]}")
+      app.stub_chain(:services, :create)
+      expect(App).to receive(:create).with(name: params[:image], from: "Image: #{params[:image]}").and_return(app)
       App.create_from_image(params)
     end
   end

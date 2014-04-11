@@ -21,7 +21,6 @@ class App < ActiveRecord::Base
   end
 
   def self.create_from_image(image_create_params)
-    puts image_create_params
     transaction do
       app = self.create(name: image_create_params[:image], from: "Image: #{image_create_params[:image]}")
       app.services.create(
