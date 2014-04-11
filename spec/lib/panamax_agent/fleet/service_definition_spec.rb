@@ -49,7 +49,7 @@ describe PanamaxAgent::Fleet::ServiceDefinition do
     its(:restart_sec) { should eql attrs[:restart_sec] }
   end
 
-  describe '#to_json' do
+  describe '#to_hash' do
 
     subject { PanamaxAgent::Fleet::ServiceDefinition.new(name, attrs) }
 
@@ -71,12 +71,13 @@ describe PanamaxAgent::Fleet::ServiceDefinition do
               'ExecStop' => attrs[:exec_stop],
               'ExecStopPost' => attrs[:exec_stop_post],
               'RestartSec' => attrs[:restart_sec],
+              'Restart' => 'always',
             }
           }
         }
-      }.to_json
+      }
 
-      expect(subject.to_json).to eq expected
+      expect(subject.to_hash).to eq expected
     end
 
     context 'when the service name does not end in .service' do
@@ -89,12 +90,14 @@ describe PanamaxAgent::Fleet::ServiceDefinition do
           'Unit' => {
             'Contents' => {
               'Unit' => {},
-              'Service' => {}
+              'Service' => {
+                'Restart' => 'always'
+              }
             }
           }
-        }.to_json
+        }
 
-        expect(subject.to_json).to eq expected
+        expect(subject.to_hash).to eq expected
       end
     end
 
@@ -112,12 +115,14 @@ describe PanamaxAgent::Fleet::ServiceDefinition do
               'Unit' => {
                 'After' => after.join(' ')
               },
-              'Service' => {}
+              'Service' => {
+                'Restart' => 'always'
+              }
             }
           }
-        }.to_json
+        }.to_hash
 
-        expect(subject.to_json).to eq expected
+        expect(subject.to_hash).to eq expected
       end
     end
 
@@ -135,12 +140,14 @@ describe PanamaxAgent::Fleet::ServiceDefinition do
               'Unit' => {
                 'Requires' => requires.join(' ')
               },
-              'Service' => {}
+              'Service' => {
+                'Restart' => 'always'
+              }
             }
           }
-        }.to_json
+        }
 
-        expect(subject.to_json).to eq expected
+        expect(subject.to_hash).to eq expected
       end
     end
   end

@@ -14,12 +14,18 @@ class CreateTemplates < ActiveRecord::Migration
 
     create_table :images do |t|
       t.string :image_id
+      t.string :name
       t.string :repository
       t.string :tag
       t.text :description
       t.string :keywords
       t.boolean :recommended
       t.string :icon
+      t.text :links
+      t.text :ports
+      t.text :expose
+      t.text :environment
+      t.text :volumes
 
       t.timestamps
     end

@@ -17,12 +17,12 @@ module PanamaxAgent
           get(payload_path(service_name), opts)
         end
 
-        def create_payload(service_def)
+        def create_payload(service_name, payload)
           opts = {
             querystring: { 'prevExist' => false },
-            body: { value: service_def.to_json }
+            body: { value: payload.to_json }
           }
-          put(payload_path(service_def.name),
+          put(payload_path(service_name),
               opts,
               headers={},
               request_type=:url_encoded)

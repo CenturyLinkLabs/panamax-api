@@ -6,6 +6,12 @@ class Image < ActiveRecord::Base
   attr_accessor :is_trusted
   attr_accessor :star_count
 
+  serialize :links, Array
+  serialize :ports, Array
+  serialize :expose, Array
+  serialize :environment, Hash
+  serialize :volumes, Array
+
   has_and_belongs_to_many :templates
 
   def self.search_remote_index(query={})

@@ -23,7 +23,7 @@ module PanamaxAgent
         self.restart_sec = attrs[:restart_sec]
       end
 
-      def to_json
+      def to_hash
         {
           'Name' => name.end_with?('.service') ? name : "#{name}.service",
           'Unit' => {
@@ -32,7 +32,7 @@ module PanamaxAgent
               'Service' => service_def
             }
           }
-        }.to_json
+        }
       end
 
       private
@@ -61,6 +61,7 @@ module PanamaxAgent
         block['ExecReload'] = exec_reload if exec_reload
         block['ExecStop'] = exec_stop if exec_stop
         block['ExecStopPost'] = exec_stop_post if exec_stop_post
+        block['Restart'] = 'always'
         block['RestartSec'] = restart_sec if restart_sec
 
         block
