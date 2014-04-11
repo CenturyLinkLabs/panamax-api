@@ -9,7 +9,7 @@
 wp = Template.create(
   name: 'Wordpress',
   description: 'This is a wordpress template',
-  recommended: false
+  recommended: true
 )
 wp.images.create(
   name: 'WP',
@@ -31,8 +31,29 @@ wp.images.create(
   ports: [{host_port: 3306, container_port: 3306}]
 )
 
+rails = Template.create(
+    name: 'Rails',
+    description: 'This is a Rails app template',
+    recommended: true
+)
+rails.images.create(
+    name: 'DB',
+    repository: 'dharmamike/dc-pgsql',
+    tag: 'latest',
+    description: 'PostgreSQL',
+    ports: [{host_port: 5432, container_port: 5432}]
+)
+rails.images.create(
+  name: 'APP',
+  repository: 'dharmamike/dc-rails',
+  tag: 'latest',
+  description: 'welcome to rails',
+  links: [{service: 'DB', alias:'DB_1'}],
+  ports: [{host_port: 8088, container_port: 3000}]
+)
+
 Template.create(
   name: 'Apache',
   description: 'This is a reccomended apache template',
-  recommended: true
+  recommended: false
 )
