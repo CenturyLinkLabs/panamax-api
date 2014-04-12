@@ -1,4 +1,6 @@
 class Service < ActiveRecord::Base
+  include DockerRunnable
+
   belongs_to :app
 
   serialize :links, Array
