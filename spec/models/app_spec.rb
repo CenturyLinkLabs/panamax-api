@@ -3,13 +3,51 @@ require 'spec_helper'
 describe App do
   it { should have_many(:services) }
 
+  let(:fake_services_relation) { double(:fake_services_relation) }
+  let(:app){ double(:app, services: fake_services_relation) }
+
   describe '.create_from_template' do
+    let(:template) { Template.where(name: 'wordpress').first }
+
     it 'creates a new app using values from the template' do
-      template = Template.where(name: 'wordpress').first
       expect(App).to receive(:create).with(name: template.name, from: "Template: #{template.name}").and_return(true)
       App.create_from_template(template)
     end
 
+    context 'with an associated image' do
+      let(:associated_image) do
+        Image.new({
+          name: 'MySql',
+          description: 'a database',
+          repository: 'foo',
+          tag: 'bar',
+          links: [],
+          ports: ['8080'],
+          expose: ['expose this'],
+          environment: {var: 'val'},
+          volumes: ['volumes']
+        })
+      end
+
+      before do
+        template.images << associated_image
+        App.stub(:create).and_return(app)
+      end
+
+      it 'creates a service for each image' do
+        fake_services_relation.should_receive(:create).with({
+          name: "MySql",
+          description: "a database",
+          from: "foo:bar",
+          links: [],
+          ports: ["8080"],
+          expose: ["expose this"],
+          environment: {:var=>"val"},
+          volumes: ["volumes"]
+        })
+        App.create_from_template(template)
+      end
+    end
   end
 
   describe '.create_from_image' do
@@ -24,10 +62,8 @@ describe App do
       }
     end
 
-    let(:app){ double(:app) }
-
     it 'creates a new app' do
-      app.stub_chain(:services, :create)
+      fake_services_relation.stub(:create)
       expect(App).to receive(:create).with(name: params[:image], from: "Image: #{params[:image]}").and_return(app)
       App.create_from_image(params)
     end
