@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-shared_examples "a docker runnable model" do
+shared_examples_for "a docker runnable model" do
   let(:name) { 'FOO' }
   let(:from) { 'panamax/image' }
 
