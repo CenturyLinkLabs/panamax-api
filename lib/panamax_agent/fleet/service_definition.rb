@@ -21,6 +21,8 @@ module PanamaxAgent
         self.exec_stop = attrs[:exec_stop]
         self.exec_stop_post = attrs[:exec_stop_post]
         self.restart_sec = attrs[:restart_sec]
+
+        yield self if block_given?
       end
 
       def to_hash
