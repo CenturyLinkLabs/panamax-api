@@ -11,7 +11,7 @@ describe RepositoriesController do
     let(:client) { double(:client, list_repository_tags: tags) }
 
     before do
-      controller.stub(registry_client: client)
+      PanamaxAgent.stub(registry_client: client)
     end
 
     it 'passes the query to the registry client' do

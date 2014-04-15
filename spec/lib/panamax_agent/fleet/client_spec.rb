@@ -21,7 +21,6 @@ describe PanamaxAgent::Fleet::Client do
   end
 
   describe '#start' do
-
     let(:service_name) { 'foo.service' }
     let(:payload) do
       {
@@ -57,6 +56,31 @@ describe PanamaxAgent::Fleet::Client do
         .and_return(nil)
 
       subject.start(service_name)
+    end
+
+    context 'with bad stuff' do
+      before do
+        subject.stub(:get_payload).and_return({
+          'node' => {
+            'value' => "{ kaplow! Good luck pars'n this! }\" }"
+          }
+        })
+      end
+
+      it 'receives an empty thingy' do
+        expected_job = {
+          "Name" => service_name,
+          "JobRequirements" => {},
+          "Payload" => {},
+          "State" => nil
+        }
+
+        expect(subject).to receive(:create_job)
+          .with(service_name, expected_job)
+          .and_return(nil)
+
+        subject.start(service_name)
+      end
     end
   end
 end
