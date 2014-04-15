@@ -78,6 +78,40 @@ describe AppsController do
 
     end
 
+
+    context 'when attempting to run the application raises an exception' do
+      let(:app){ apps(:app1) } # load from fixture to get services assoc
+      let(:params){ { template_id: 1 } }
+      let(:template){ double(:template, name: 'my_template') }
+
+      before do
+        App.stub(:create_from_template).and_return(app)
+        AppExecutor.stub(:run).and_raise('boom')
+        Template.stub(:find)
+      end
+
+      it 'destroys the app' do
+        post :create, params.merge(format: :json)
+        expect(App.where(id: app.id).first).to be_nil
+      end
+
+      it 'destroys the app services' do
+        post :create, params.merge(format: :json)
+        expect(Service.where(app_id: app.id)).to be_empty
+      end
+
+      it 'returns 500 error' do
+        post :create, params.merge(format: :json)
+        expect(response.status).to eq(400) # :bad_request
+      end
+
+      it 'renders the error in the json body' do
+        post :create, params.merge(format: :json)
+        expect(JSON.parse(response.body)).to have_key('error')
+      end
+
+    end
+
   end
 
 end
