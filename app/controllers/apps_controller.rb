@@ -26,6 +26,10 @@ class AppsController < ApplicationController
 
     AppExecutor.run(@app)
     respond_with @app
+  rescue => ex
+    logger.error("app creation failed: #{ex.message}")
+    @app.destroy
+    render json: {error: ex.message}.to_json, status: :bad_request
   end
 
 
