@@ -15,3 +15,5 @@ notify:
   webhooks:
     # Runscope triggger for API tests
     - url: https://api.runscope.com/radar/5a4b5ba5-bf59-4b60-9a80-4af29e4e8639/run
+    - url: https://api.runscope.com/radar/f532883c-6a2d-4eb5-9d83-834262d94e68/run
+    - url: https://api.runscope.com/radar/7171232a-2c6d-4fcc-8257-6af1b44192fb/run
