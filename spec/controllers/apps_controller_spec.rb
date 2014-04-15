@@ -100,14 +100,43 @@ describe AppsController do
         expect(Service.where(app_id: app.id)).to be_empty
       end
 
-      it 'returns 500 error' do
+      it 'returns 400 error' do
         post :create, params.merge(format: :json)
-        expect(response.status).to eq(400) # :bad_request
+        expect(response.status).to eq(422) # :unprocessable_entity
       end
 
       it 'renders the error in the json body' do
         post :create, params.merge(format: :json)
-        expect(JSON.parse(response.body)).to have_key('error')
+        expect(JSON.parse(response.body)).to have_key('errors')
+      end
+
+    end
+
+    context 'when the app name is already in use' do
+
+      let(:app){ App.create(name: apps(:app1).name) }
+      let(:params){ { template_id: 1 } }
+      let(:template){ double(:template, name: 'my_template') }
+
+      before do
+        App.stub(:create_from_template).and_return(app)
+        AppExecutor.stub(:run)
+        Template.stub(:find).with(params[:template_id]).and_return(template)
+      end
+
+      it 'does not persist the app' do
+        post :create, params.merge(format: :json)
+        expect(app.persisted?).to be_false
+      end
+
+      it 'returns a 422 error' do
+        post :create, params.merge(format: :json)
+        expect(response.status).to eq 422
+      end
+
+      it 'renders the errors in the json body' do
+        post :create, params.merge(format: :json)
+        expect(JSON.parse(response.body)).to have_key('errors')
       end
 
     end

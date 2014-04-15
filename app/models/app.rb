@@ -1,23 +1,24 @@
 class App < ActiveRecord::Base
   has_many :services, dependent: :destroy
 
+  validates_uniqueness_of :name
+
   def self.create_from_template(t)
-    transaction do
-      app = self.create(name: t.name, from: "Template: #{t.name}")
-      t.images.each do |i|
-        app.services.create(
-            name: i.name,
-            description: i.description,
-            from: "#{i.repository}:#{i.tag}",
-            links: i.links,
-            ports: i.ports,
-            expose: i.expose,
-            environment: i.environment,
-            volumes: i.volumes
-        )
-      end
-      app
+    app = self.new(name: t.name, from: "Template: #{t.name}")
+    t.images.each do |i|
+      app.services.new(
+          name: i.name,
+          description: i.description,
+          from: "#{i.repository}:#{i.tag}",
+          links: i.links,
+          ports: i.ports,
+          expose: i.expose,
+          environment: i.environment,
+          volumes: i.volumes
+      )
     end
+    app.save
+    return app
   end
 
   def self.create_from_image(image_create_params)

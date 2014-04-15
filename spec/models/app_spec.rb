@@ -4,13 +4,13 @@ describe App do
   it { should have_many(:services) }
 
   let(:fake_services_relation) { double(:fake_services_relation) }
-  let(:app){ double(:app, services: fake_services_relation) }
+  let(:app){ double(:app, services: fake_services_relation, save: true) }
 
   describe '.create_from_template' do
     let(:template) { Template.where(name: 'wordpress').first }
 
     it 'creates a new app using values from the template' do
-      expect(App).to receive(:create).with(name: template.name, from: "Template: #{template.name}").and_return(true)
+      expect(App).to receive(:new).with(name: template.name, from: "Template: #{template.name}").and_return(app)
       App.create_from_template(template)
     end
 
@@ -31,11 +31,11 @@ describe App do
 
       before do
         template.images << associated_image
-        App.stub(:create).and_return(app)
+        App.stub(:new).and_return(app)
       end
 
       it 'creates a service for each image' do
-        fake_services_relation.should_receive(:create).with({
+        fake_services_relation.should_receive(:new).with({
           name: "MySql",
           description: "a database",
           from: "foo:bar",

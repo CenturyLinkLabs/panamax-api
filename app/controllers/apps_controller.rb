@@ -24,12 +24,17 @@ class AppsController < ApplicationController
              )
            end
 
-    AppExecutor.run(@app)
-    respond_with @app
+    if @app.valid?
+      AppExecutor.run(@app)
+      render json: @app
+    else
+      render json: @app, status: :unprocessable_entity
+    end
   rescue => ex
     logger.error("app creation failed: #{ex.message}")
     @app.destroy
-    render json: {error: ex.message}.to_json, status: :bad_request
+    @app.errors[:base] << ex.message
+    render json: @app, status: :unprocessable_entity
   end
 
 
