@@ -31,7 +31,9 @@ describe AppExecutor do
 
   before do
     PanamaxAgent.stub(:fleet_client).and_return(fake_fleet_client)
-    PanamaxAgent::Fleet::ServiceDefinition.stub(:new).and_return(fake_service_definition)
+    PanamaxAgent::Fleet::ServiceDefinition.stub(:new)
+      .and_yield(fake_service_definition)
+      .and_return(fake_service_definition)
   end
 
   describe '.run' do
@@ -40,11 +42,11 @@ describe AppExecutor do
       expect(fake_service_definition).to receive(:description=).with(service_description)
       expect(fake_service_definition).to receive(:after=).with('some-service.service')
       expect(fake_service_definition).to receive(:requires=).with('some-service.service')
-      expect(fake_service_definition).to receive(:exec_start_pre=).with('/usr/bin/docker ps -a -q | xargs docker rm')
+      expect(fake_service_definition).to receive(:exec_start_pre=).with("-/usr/bin/docker rm #{service_name}")
       expect(fake_service_definition).to receive(:exec_start=).with(docker_run_string)
-      expect(fake_service_definition).to receive(:exec_start_post=).with('/usr/bin/docker ps -a -q | xargs docker rm')
-      expect(fake_service_definition).to receive(:exec_stop=).with("/usr/bin/docker kill #{service_name} ; /usr/bin/docker rm #{service_name}")
-      expect(fake_service_definition).to receive(:exec_stop_post=).with('/usr/bin/docker ps -a -q | xargs docker rm')
+      expect(fake_service_definition).to receive(:exec_start_post=).with("-/usr/bin/docker rm #{service_name}")
+      expect(fake_service_definition).to receive(:exec_stop=).with("/usr/bin/docker kill #{service_name}")
+      expect(fake_service_definition).to receive(:exec_stop_post=).with("-/usr/bin/docker rm #{service_name}")
       expect(fake_service_definition).to receive(:restart_sec=).with('10')
       expect(fake_fleet_client).to receive(:submit).with(fake_service_definition)
 

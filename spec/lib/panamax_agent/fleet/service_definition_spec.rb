@@ -19,7 +19,7 @@ describe PanamaxAgent::Fleet::ServiceDefinition do
     }
   end
 
-  subject { PanamaxAgent::Fleet::ServiceDefinition.new(name) }
+  subject { described_class.new(name) }
 
   it { should respond_to :name }
   it { should respond_to :description }
@@ -35,7 +35,7 @@ describe PanamaxAgent::Fleet::ServiceDefinition do
 
   describe '#initialize' do
 
-    subject { PanamaxAgent::Fleet::ServiceDefinition.new(name, attrs) }
+    subject { described_class.new(name, attrs) }
 
     its(:name) { should eql name }
     its(:description) { should eql attrs[:description] }
@@ -47,11 +47,20 @@ describe PanamaxAgent::Fleet::ServiceDefinition do
     its(:exec_stop) { should eql attrs[:exec_stop] }
     its(:exec_stop_post) { should eql attrs[:exec_stop_post] }
     its(:restart_sec) { should eql attrs[:restart_sec] }
+
+    context 'when a block is specified' do
+
+      it 'yields itself' do
+        yielded_instance = nil
+        new_instance = described_class.new(name) { |i| yielded_instance = i }
+        expect(yielded_instance).to be new_instance
+      end
+    end
   end
 
   describe '#to_hash' do
 
-    subject { PanamaxAgent::Fleet::ServiceDefinition.new(name, attrs) }
+    subject { described_class.new(name, attrs) }
 
     it 'provides a JSON formatted service definition' do
       expected = {
@@ -82,7 +91,7 @@ describe PanamaxAgent::Fleet::ServiceDefinition do
 
     context 'when the service name does not end in .service' do
 
-      subject { PanamaxAgent::Fleet::ServiceDefinition.new('foo') }
+      subject { described_class.new('foo') }
 
       it 'appends .service to the service name' do
         expected = {
@@ -105,7 +114,7 @@ describe PanamaxAgent::Fleet::ServiceDefinition do
 
       let(:after) { ['a', 'b'] }
 
-      subject { PanamaxAgent::Fleet::ServiceDefinition.new('foo', after: after) }
+      subject { described_class.new('foo', after: after) }
 
       it 'generates a space-delimited list of after requirements' do
         expected = {
@@ -130,7 +139,7 @@ describe PanamaxAgent::Fleet::ServiceDefinition do
 
       let(:requires) { ['a', 'b'] }
 
-      subject { PanamaxAgent::Fleet::ServiceDefinition.new('foo', requires: requires) }
+      subject { described_class.new('foo', requires: requires) }
 
       it 'generates a space-delimited list of requires requirements' do
         expected = {
