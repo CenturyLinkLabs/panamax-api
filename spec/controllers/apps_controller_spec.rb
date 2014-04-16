@@ -55,11 +55,11 @@ describe AppsController do
       let(:params) do
         {
             image: 'foo/bar:baz',
-            links: 'SERVICE2',
-            ports: '3306:3306',
-            expose: '3306',
-            environment: 'MYSQL_ROOT_PASSWORD=pass@word01',
-            volumes: '/var/panamax:/var/app/panamax',
+            links: [{service: '1', alias: '1'}, {service: '1', alias: '1'}],
+            ports: [{host_interface: '', host_port: '', container_port: '', proto: ''}],
+            expose: [''],
+            environment: { 'SOME_KEY' => ''},
+            volumes: [{host_path: '', container_path: ''}],
             tag: 'latest'
         }
       end
@@ -72,7 +72,7 @@ describe AppsController do
       end
 
       it 'creates the application from the image' do
-        expect(App).to receive(:create_from_image).with(params).and_return(app)
+        expect(App).to receive(:create_from_image).with(params.stringify_keys!).and_return(app)
         post :create, params.merge(format: :json)
       end
 
