@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 VALID_FIELDPAIRS_FOR_ENTRIES = {
-    'boot' => 0,
     'PRIORITY' => 6,
     'MESSAGE' => '',
     'MESSAGE_ID' => '',
@@ -25,10 +24,10 @@ describe PanamaxAgent::Journal::Client::Entries do
     subject.stub(get: response)
   end
 
-  describe '#get_entries_by_fields - single key' do
-
+  describe '#get_entries_by_fields - current boot with single key' do
+    opts = {'boot' => 0}
     VALID_FIELDPAIRS_FOR_ENTRIES.each do |key, value|
-      opts = {key => value}
+      opts[key] = value
       it "GETs the entries resource for key - #{key}=#{value}" do
         headers = { accept: 'application/json'}
         expect(subject).to receive(:get)
@@ -44,8 +43,27 @@ describe PanamaxAgent::Journal::Client::Entries do
     end
   end
 
-  describe '#get_entries_by_fields - multiple keys' do
-    opts    = VALID_FIELDPAIRS_FOR_ENTRIES
+  describe '#get_entries_by_fields - all boots with single key' do
+    opts = {'boot' => 99999}
+    VALID_FIELDPAIRS_FOR_ENTRIES.each do |key, value|
+      opts[key] = value
+      it "GETs the entries resource for key - #{key}=#{value}" do
+        headers = { accept: 'application/json'}
+        expect(subject).to receive(:get)
+                           .with("entries", opts, headers)
+                           .and_return(response)
+
+        subject.get_entries_by_fields(opts, 99999)
+      end
+      it 'returns the entries by key response' do
+        expect(subject.get_entries_by_fields(opts, 99999)).to eql(response)
+      end
+
+    end
+  end
+
+  describe '#get_entries_by_fields - current boot with multiple keys' do
+    opts = {'boot' => 0}.merge!(VALID_FIELDPAIRS_FOR_ENTRIES)
 
     it 'GETs the entries resource for multiple keys' do
       headers = { accept: 'application/json'}
@@ -57,6 +75,22 @@ describe PanamaxAgent::Journal::Client::Entries do
     end
     it 'returns the entries by multiple keys response' do
       expect(subject.get_entries_by_fields(opts)).to eql(response)
+    end
+  end
+
+  describe '#get_entries_by_fields - all boots with multiple keys' do
+    opts = {'boot' => 99999}.merge!(VALID_FIELDPAIRS_FOR_ENTRIES)
+
+    it 'GETs the entries resource for multiple keys' do
+      headers = { accept: 'application/json'}
+      expect(subject).to receive(:get)
+                         .with("entries", opts, headers)
+                         .and_return(response)
+
+      subject.get_entries_by_fields(opts, 99999)
+    end
+    it 'returns the entries by multiple keys response' do
+      expect(subject.get_entries_by_fields(opts, 99999)).to eql(response)
     end
   end
 
