@@ -132,4 +132,15 @@ describe Image do
       end
     end
   end
+
+  describe '#recommended' do
+    it 'defaults to false if not set' do
+      expect(subject.recommended).to eq false
+    end
+
+    it 'is true if set to true' do
+      truther = described_class.new(recommended: true)
+      expect(truther.recommended).to eq true
+    end
+  end
 end

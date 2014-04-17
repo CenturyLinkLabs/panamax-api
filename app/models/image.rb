@@ -51,6 +51,10 @@ class Image < ActiveRecord::Base
     self.all_local.find_all{ |image| image.repository =~ /#{search_term}/ }.compact
   end
 
+  def recommended
+    self[:recommended] || false
+  end
+
   def as_json(options={})
     super(options).merge(is_official: is_official, is_trusted: is_trusted, star_count: star_count)
   end
