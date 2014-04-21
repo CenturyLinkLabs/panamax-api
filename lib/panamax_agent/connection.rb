@@ -1,4 +1,5 @@
 require 'faraday'
+require 'panamax_agent/middleware/response/raise_error'
 
 module PanamaxAgent
   module Connection
@@ -7,6 +8,7 @@ module PanamaxAgent
       Faraday.new(options) do |faraday|
         faraday.request request_type
         faraday.response :json
+        faraday.response :raise_error
         faraday.adapter adapter
       end
     end
