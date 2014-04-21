@@ -10,6 +10,7 @@ describe PanamaxAgent::Connection do
       handlers = [
         FaradayMiddleware::EncodeJson,
         FaradayMiddleware::ParseJson,
+        PanamaxAgent::Response::FixBadJson,
         PanamaxAgent::Response::RaiseError,
         Faraday::Adapter::NetHttp
       ]
@@ -29,6 +30,7 @@ describe PanamaxAgent::Connection do
       handlers = [
         Faraday::Request::UrlEncoded,
         FaradayMiddleware::ParseJson,
+        PanamaxAgent::Response::FixBadJson,
         PanamaxAgent::Response::RaiseError,
         Faraday::Adapter::NetHttp
       ]
@@ -41,6 +43,5 @@ describe PanamaxAgent::Connection do
         expect(subject.builder.handlers.count).to eql handlers.count
       end
     end
-
   end
 end
