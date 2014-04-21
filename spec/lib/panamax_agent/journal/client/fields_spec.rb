@@ -31,7 +31,7 @@ describe PanamaxAgent::Journal::Client::Fields do
       it "GETs the values for the field - #{field}" do
         headers = { accept: 'application/json'}
         expect(subject).to receive(:get)
-                           .with("fields/#{field}", opts, headers)
+                           .with("fields/#{field}", opts)
                            .and_return(response)
 
         subject.get_values_by_field(field)

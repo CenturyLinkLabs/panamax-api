@@ -29,9 +29,8 @@ describe PanamaxAgent::Journal::Client::Entries do
     VALID_FIELDPAIRS_FOR_ENTRIES.each do |key, value|
       opts[key] = value
       it "GETs the entries resource for key - #{key}=#{value}" do
-        headers = { accept: 'application/json'}
         expect(subject).to receive(:get)
-                           .with("entries", opts, headers)
+                           .with("entries", opts)
                            .and_return(response)
 
         subject.get_entries_by_fields(opts)
@@ -48,9 +47,8 @@ describe PanamaxAgent::Journal::Client::Entries do
     VALID_FIELDPAIRS_FOR_ENTRIES.each do |key, value|
       opts[key] = value
       it "GETs the entries resource for key - #{key}=#{value}" do
-        headers = { accept: 'application/json'}
         expect(subject).to receive(:get)
-                           .with("entries", opts, headers)
+                           .with("entries", opts)
                            .and_return(response)
 
         subject.get_entries_by_fields(opts, 99999)
@@ -66,9 +64,8 @@ describe PanamaxAgent::Journal::Client::Entries do
     opts = {'boot' => 0}.merge!(VALID_FIELDPAIRS_FOR_ENTRIES)
 
     it 'GETs the entries resource for multiple keys' do
-      headers = { accept: 'application/json'}
       expect(subject).to receive(:get)
-                         .with("entries", opts, headers)
+                         .with("entries", opts)
                          .and_return(response)
 
       subject.get_entries_by_fields(opts)
@@ -82,9 +79,8 @@ describe PanamaxAgent::Journal::Client::Entries do
     opts = {'boot' => 99999}.merge!(VALID_FIELDPAIRS_FOR_ENTRIES)
 
     it 'GETs the entries resource for multiple keys' do
-      headers = { accept: 'application/json'}
       expect(subject).to receive(:get)
-                         .with("entries", opts, headers)
+                         .with("entries", opts)
                          .and_return(response)
 
       subject.get_entries_by_fields(opts, 99999)

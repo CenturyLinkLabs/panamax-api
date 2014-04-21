@@ -12,13 +12,10 @@ module PanamaxAgent
         #             : 99999 - special value to show entries from all boots
         ###
         def get_entries_by_fields(fieldpairs={}, boot_offset=0)
-          boot = {}
-          boot['boot'] = boot_offset unless boot_offset == 99999
-          opts = boot.merge!(remove_invalid_fieldpairs(fieldpairs))
+          opts = remove_invalid_fieldpairs(fieldpairs)
+          opts['boot'] = boot_offset unless boot_offset == 99999
 
-          get(entries_path,
-              opts,
-              headers={ accept: "#{@data_format}"})
+          get(entries_path, opts)
         end
 
         private

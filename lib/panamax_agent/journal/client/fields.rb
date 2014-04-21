@@ -8,9 +8,7 @@ module PanamaxAgent
         def get_values_by_field(field)
           if valid?(field)
             opts = {}
-            get(fields_path(field),
-                opts,
-                headers={ accept: "#{@data_format}"})
+            get(fields_path(field), opts)
           end
         end
 
