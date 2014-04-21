@@ -9,7 +9,8 @@
 wp = Template.create(
   name: 'Wordpress',
   description: 'This is a wordpress template',
-  recommended: true
+  recommended: true,
+  icon: '/assets/template_logos/wordpress.png'
 )
 wp.images.create(
   name: 'WP',
