@@ -22,10 +22,7 @@ module PanamaxAgent
             querystring: { 'prevExist' => false },
             body: { value: payload.to_json }
           }
-          put(payload_path(service_name),
-              opts,
-              headers={},
-              request_type=:url_encoded)
+          put(payload_path(service_name), opts)
         end
 
         def delete_payload(service_name)

@@ -21,11 +21,7 @@ module PanamaxAgent
           '_TRANSPORT'         # ['driver', 'syslog', 'journal', 'stdout', 'kernel']
       ]
 
-      def initialize(options={})
-        super
-        @url = self.journal_api_url
-      end
-
+      include PanamaxAgent::Journal::Connection
       include PanamaxAgent::Journal::Client::Machine
       include PanamaxAgent::Journal::Client::Entries
       include PanamaxAgent::Journal::Client::Fields

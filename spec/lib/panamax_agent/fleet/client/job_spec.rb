@@ -64,7 +64,7 @@ describe PanamaxAgent::Fleet::Client::Job do
       }
 
       expect(subject).to receive(:put)
-        .with("v2/keys/_coreos.com/fleet/job/#{service_name}/object", opts, {}, :url_encoded)
+        .with("v2/keys/_coreos.com/fleet/job/#{service_name}/object", opts)
         .and_return(response)
 
       subject.create_job(service_name, service_def)

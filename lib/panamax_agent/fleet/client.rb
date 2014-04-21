@@ -4,6 +4,7 @@ require 'panamax_agent/fleet/client/payload'
 require 'panamax_agent/fleet/client/job'
 require 'panamax_agent/fleet/client/state'
 
+
 module PanamaxAgent
   module Fleet
     class Client < PanamaxAgent::Client
@@ -12,9 +13,10 @@ module PanamaxAgent
 
       def initialize(options={})
         super
-        self.url = self.etcd_api_url
         @base_path = etcd_api_version + FLEET_PATH
       end
+
+      include PanamaxAgent::Fleet::Connection
 
       include PanamaxAgent::Fleet::Client::Payload
       include PanamaxAgent::Fleet::Client::Job

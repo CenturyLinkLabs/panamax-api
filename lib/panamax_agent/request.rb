@@ -2,8 +2,8 @@ module PanamaxAgent
   module Request
 
     [:get, :head, :put, :post, :delete].each do |method|
-      define_method(method) do |path, options={}, headers={}, request_type=:json|
-        request(connection(request_type), method, path, options, headers)
+      define_method(method) do |path, options={}, headers={}|
+        request(connection, method, path, options, headers)
       end
     end
 
