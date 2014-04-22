@@ -1,5 +1,4 @@
 require 'panamax_agent/configuration'
-require 'panamax_agent/registry/client'
 
 module PanamaxAgent
   extend Configuration
@@ -10,6 +9,10 @@ module PanamaxAgent
 
   def self.fleet_client(options={})
     PanamaxAgent::Fleet::Client.new(options)
+  end
+
+  def self.journal_client(options={})
+    PanamaxAgent::Journal::Client.new(options)
   end
 
   def self.configure
