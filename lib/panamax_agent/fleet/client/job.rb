@@ -22,10 +22,7 @@ module PanamaxAgent
             querystring: { 'prevExist' => false },
             body: { value: job.to_json }
           }
-          put(job_path(service_name, :object),
-              opts,
-              headers={},
-              request_type=:url_encoded)
+          put(job_path(service_name, :object), opts)
         end
 
         def delete_job(service_name)

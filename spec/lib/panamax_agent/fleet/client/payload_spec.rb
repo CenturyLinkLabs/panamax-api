@@ -64,7 +64,7 @@ describe PanamaxAgent::Fleet::Client::Payload do
       }
 
       expect(subject).to receive(:put)
-        .with("v2/keys/_coreos.com/fleet/payload/#{service_name}", opts, {}, :url_encoded)
+        .with("v2/keys/_coreos.com/fleet/payload/#{service_name}", opts)
         .and_return(response)
 
       subject.create_payload(service_name, service_def)

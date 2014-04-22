@@ -1,15 +1,11 @@
-require 'panamax_agent/connection'
 require 'panamax_agent/request'
 
 module PanamaxAgent
   class Client
 
-    include PanamaxAgent::Connection
     include PanamaxAgent::Request
 
     attr_accessor(*Configuration::VALID_OPTIONS_KEYS)
-    attr_accessor :url
-    attr_accessor :api_version
 
     def initialize(options={})
       options = PanamaxAgent.options.merge(options)

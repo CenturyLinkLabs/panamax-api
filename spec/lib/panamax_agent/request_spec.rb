@@ -40,20 +40,6 @@ describe PanamaxAgent::Request do
       it 'returns the response body' do
         expect(subject.send(method, path)).to eql(response.body)
       end
-
-      context 'when the default request_type is used' do
-        it 'instantiates a connection object with the default request type' do
-          expect(subject).to receive(:connection).with(:json).and_return(connection)
-          subject.send(method, path)
-        end
-      end
-
-      context 'when the request_type is overridden' do
-        it 'instantiates a connection object with the overridden request type' do
-          expect(subject).to receive(:connection).with(:foo).and_return(connection)
-          subject.send(method, path, options={}, headers={}, :foo)
-        end
-      end
     end
   end
 
