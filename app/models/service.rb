@@ -9,7 +9,44 @@ class Service < ActiveRecord::Base
   serialize :environment, Hash
   serialize :volumes, Array
 
+  before_save :sanitize_name
+
+  validates_presence_of :name
+  validates_uniqueness_of :name
+
   def unit_name
     "#{name}.service"
   end
+
+  def self.new_from_image(image)
+    self.new(
+      name: image.name,
+      description: image.description,
+      from: "#{image.repository}:#{image.tag}",
+      links: image.links,
+      ports: image.ports,
+      expose: image.expose,
+      environment: image.environment,
+      volumes: image.volumes
+    )
+  end
+
+  def self.new_from_params(image_create_params)
+    self.new(name: "#{image_create_params[:image]}",
+             from: "#{image_create_params[:image]}:#{image_create_params[:tag]}",
+             ports: image_create_params[:ports],
+             expose: image_create_params[:expose],
+             environment: image_create_params[:environment],
+             volumes: image_create_params[:volumes]
+    )
+  end
+
+  private
+
+  def sanitize_name
+    sanitized_name = name.gsub('/', '_')
+    count = Service.where('name LIKE ?', "#{sanitized_name}%").count
+    self.name = "#{sanitized_name}_#{count+1}"
+  end
+
 end
