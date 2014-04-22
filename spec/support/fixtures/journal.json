@@ -1,0 +1,25 @@
+[
+  {
+    "__CURSOR": "s=870b47e6b85247c18a3f37b70524c170",
+    "__REALTIME_TIMESTAMP": "1398180576283733",
+    "__MONOTONIC_TIMESTAMP": "86173430339",
+    "_BOOT_ID": "ae087f61cf75498098dd638e168ea599",
+    "PRIORITY": "6",
+    "_UID": "0",
+    "_GID": "0",
+    "_SYSTEMD_SLICE": "system.slice",
+    "SYSLOG_FACILITY": "3",
+    "_CAP_EFFECTIVE": "1fffffffff",
+    "_TRANSPORT": "stdout",
+    "_EXE": "/usr/bin/bash",
+    "_MACHINE_ID": "ea9faaa0bbaf4135a0f3f8390be440ce",
+    "_HOSTNAME": "default",
+    "SYSLOG_IDENTIFIER": "bash",
+    "MESSAGE": "HI",
+    "_PID": "13846",
+    "_COMM": "bash",
+    "_CMDLINE": "/bin/bash -c while true; do echo 'HI'; sleep 1; done",
+    "_SYSTEMD_CGROUP": "/system.slice/forever.service",
+    "_SYSTEMD_UNIT": "forever.service"
+  }
+]

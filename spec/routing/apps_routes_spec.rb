@@ -82,6 +82,15 @@ describe 'apps routes' do
                                )
     end
 
+    it 'routes get journal to the app services controller journal action' do
+      expect(get: '/apps/1/services/1/journal').to route_to(
+                                   controller: 'services',
+                                   action: 'journal',
+                                   app_id: '1',
+                                   id: '1'
+                               )
+    end
+
 
   end
 end
