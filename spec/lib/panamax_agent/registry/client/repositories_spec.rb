@@ -15,7 +15,7 @@ describe PanamaxAgent::Registry::Client::Repositories do
 
     it 'GETs the tags for the repository resource' do
       expect(subject).to receive(:get)
-        .with("repositories/#{repository}/tags")
+        .with("v1/repositories/#{repository}/tags")
         .and_return(response)
 
       subject.list_repository_tags(repository)
@@ -30,7 +30,7 @@ describe PanamaxAgent::Registry::Client::Repositories do
 
     it 'GETs the named tag for the repository resource' do
       expect(subject).to receive(:get)
-        .with("repositories/#{repository}/tags/#{:tag}")
+        .with("v1/repositories/#{repository}/tags/#{:tag}")
         .and_return(response)
 
       subject.get_repository_tag(repository, :tag)
