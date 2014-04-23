@@ -4,4 +4,6 @@ class ServiceSerializer < ActiveModel::Serializer
   attributes :id, :name, :description, :from, :links, :ports, :expose, :environment, :volumes
 
   has_one :app, serializer: AppLiteSerializer
+
+  has_many :categories, serializer: CategorySerializer
 end

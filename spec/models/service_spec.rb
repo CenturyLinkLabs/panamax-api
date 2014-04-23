@@ -5,6 +5,8 @@ describe Service do
   subject{ described_class.new(name:'foo') }
 
   it { should belong_to(:app) }
+  it { should have_many(:service_categories) }
+  it { should have_many(:categories).through(:service_categories).source(:app_category) }
 
   it_behaves_like "a docker runnable model"
 
