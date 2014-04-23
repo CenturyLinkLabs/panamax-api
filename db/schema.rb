@@ -11,7 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140407181403) do
+ActiveRecord::Schema.define(version: 20140424201023) do
+
+  create_table "app_categories", force: true do |t|
+    t.string   "name"
+    t.integer  "app_id"
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "app_categories", ["name", "app_id"], name: "index_app_categories_on_name_and_app_id", unique: true
 
   create_table "apps", force: true do |t|
     t.string "name"
@@ -43,6 +53,18 @@ ActiveRecord::Schema.define(version: 20140407181403) do
     t.integer "template_id"
     t.integer "image_id"
   end
+
+  create_table "service_categories", force: true do |t|
+    t.integer  "service_id"
+    t.integer  "app_category_id"
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "service_categories", ["app_category_id"], name: "index_service_categories_on_app_category_id"
+  add_index "service_categories", ["service_id", "app_category_id"], name: "index_service_categories_on_service_id_and_app_category_id", unique: true
+  add_index "service_categories", ["service_id"], name: "index_service_categories_on_service_id"
 
   create_table "services", force: true do |t|
     t.string  "name"
