@@ -83,4 +83,44 @@ describe PanamaxAgent::Fleet::Client do
       end
     end
   end
+
+  describe '#stop' do
+    let(:service_name) { 'foo.service' }
+
+    before do
+      subject.stub(:delete_job).and_return(nil)
+    end
+
+    it 'invokes #delete_job' do
+
+      expect(subject).to receive(:delete_job)
+                         .with(service_name)
+                         .and_return(nil)
+
+      subject.stop(service_name)
+    end
+
+  end
+
+  describe 'destroy' do
+    let(:service_name) { 'foo.service' }
+
+    before do
+      subject.stub(:delete_job).and_return(nil)
+      subject.stub(:delete_payload).and_return(nil)
+    end
+
+    it 'invokes #delete_job' do
+
+      expect(subject).to receive(:delete_job)
+                         .with(service_name)
+                         .and_return(nil)
+      expect(subject).to receive(:delete_payload)
+                         .with(service_name)
+                         .and_return(nil)
+
+      subject.destroy(service_name)
+    end
+
+  end
 end

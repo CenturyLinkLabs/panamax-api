@@ -41,6 +41,15 @@ module PanamaxAgent
         create_job(service_name, job)
       end
 
+      def stop(service_name)
+        delete_job(service_name)
+      end
+
+      def destroy(service_name)
+        delete_job(service_name)
+        delete_payload(service_name)
+      end
+
       protected
 
       def resource_path(resource, *parts)
