@@ -78,7 +78,6 @@ describe AppsController do
 
     end
 
-
     context 'when attempting to run the application raises an exception' do
       let(:app){ apps(:app1) } # load from fixture to get services assoc
       let(:params){ { template_id: 1 } }
@@ -86,6 +85,7 @@ describe AppsController do
 
       before do
         App.stub(:create_from_template).and_return(app)
+        PanamaxAgent::Fleet::Client.any_instance.stub(:destroy).and_return true
         AppExecutor.stub(:run).and_raise('boom')
         Template.stub(:find)
       end
@@ -100,7 +100,7 @@ describe AppsController do
         expect(Service.where(app_id: app.id)).to be_empty
       end
 
-      it 'returns 400 error' do
+      it 'returns 422 error' do
         post :create, params.merge(format: :json)
         expect(response.status).to eq(422) # :unprocessable_entity
       end
@@ -139,6 +139,33 @@ describe AppsController do
         expect(JSON.parse(response.body)).to have_key('errors')
       end
 
+    end
+
+  end
+
+  describe '#destroy' do
+    let(:app){ apps(:app1) } # load from fixture to get services assoc
+    let(:service_name) {app.services.first.name}
+    let(:client) { double(:client, destroy: service_name) }
+
+    before do
+      PanamaxAgent.stub(fleet_client: client)
+      PanamaxAgent::Fleet::Client.any_instance.stub(:destroy).and_return true
+    end
+
+    it 'deletes the app' do
+      delete :destroy, { id: app.id, format: :json }
+      expect(App.where(id: app.id).first).to be_nil
+    end
+
+    it 'destroys the app services' do
+      delete :destroy, { id: app.id, format: :json }
+      expect(Service.where(app_id: app.id)).to be_empty
+    end
+
+    it "returns no content in response body" do
+      delete :destroy, { id: app.id, format: :json }
+      expect(response.body).to be_empty
     end
 
   end

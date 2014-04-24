@@ -12,9 +12,10 @@ class Service < ActiveRecord::Base
   serialize :environment, Hash
   serialize :volumes, Array
 
-  before_save :sanitize_name
+  before_save   :sanitize_name
+  after_destroy :delete_service_unit
 
-  validates_presence_of :name
+  validates_presence_of   :name
   validates_uniqueness_of :name
 
   def unit_name
@@ -69,6 +70,10 @@ class Service < ActiveRecord::Base
   end
 
   private
+
+  def delete_service_unit
+    fleet_client.destroy(self.unit_name)
+  end
 
   def sanitize_name
     sanitized_name = name.gsub('/', '_')

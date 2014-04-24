@@ -9,6 +9,10 @@ class AppsController < ApplicationController
     respond_with App.find(params[:id])
   end
 
+  def destroy
+    respond_with App.find(params[:id]).destroy
+  end
+
   def create
     @app = if params[:template_id]
              App.create_from_template(Template.find(params[:template_id]))
@@ -20,6 +24,7 @@ class AppsController < ApplicationController
       AppExecutor.run(@app)
       render json: @app
     else
+      logger.error("app validation failed: #{@app.errors.to_hash}")
       render json: @app, status: :unprocessable_entity
     end
   rescue => ex
