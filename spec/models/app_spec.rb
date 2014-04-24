@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe App do
   it { should have_many(:services) }
+  it { should have_many(:categories).class_name('AppCategory') }
 
   describe '.create_from_template' do
     let(:template) { Template.where(name: 'wordpress').first }
@@ -37,6 +38,23 @@ describe App do
         expect {
           App.create_from_template(template)
         }.to change { Service.count }.by(1)
+      end
+    end
+
+    context 'with images with categegories' do
+      before do
+        i1 = Image.create(name: 'image 1', categories: [TemplateCategory.create(name: 'cat 1', template: template)])
+        i2 = Image.create(name: 'image 2', categories: [TemplateCategory.create(name: 'cat 2', template: template)])
+        template.images = [i1,i2]
+      end
+
+      it 'copies the categories over like a boss' do
+        new_app = App.create_from_template(template)
+        expect(new_app.categories.map(&:name)).to match_array ['cat 1', 'cat 2']
+        expect(new_app.services.first.categories.first.name).to eq 'cat 1'
+        expect(new_app.services.first.categories.first.app_id).to eq new_app.id
+        expect(new_app.services.last.categories.first.name).to eq 'cat 2'
+        expect(new_app.services.last.categories.first.app_id).to eq new_app.id
       end
     end
   end
