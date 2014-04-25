@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe Image do
   it { should have_and_belong_to_many(:templates) }
+  it { should have_many(:image_categories) }
+  it { should have_many(:categories).through(:image_categories).source(:template_category) }
   it { should respond_to :is_official }
   it { should respond_to :is_trusted }
   it { should respond_to :star_count }
