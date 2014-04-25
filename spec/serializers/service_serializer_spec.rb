@@ -16,7 +16,10 @@ describe ServiceSerializer do
       :expose,
       :volumes,
       :app,
-      :categories
+      :categories,
+      :active_state,
+      :load_state,
+      :sub_state
     ]
     expect(serialized.keys).to match_array expected_keys
   end
