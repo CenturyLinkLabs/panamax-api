@@ -10,7 +10,7 @@ wp = Template.create(
   name: 'Wordpress',
   description: 'This is a wordpress template',
   recommended: true,
-  icon: '/assets/template_logos/wordpress.png'
+  icon: 'http://panamax.ca.tier3.io/template_logos/wordpress.png'
 )
 wp.images.create(
   name: 'WP',
