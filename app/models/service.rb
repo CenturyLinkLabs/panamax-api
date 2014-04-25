@@ -2,6 +2,8 @@ class Service < ActiveRecord::Base
   include DockerRunnable
 
   belongs_to :app
+  has_many :service_categories
+  has_many :categories, through: :service_categories, source: :app_category
 
   serialize :links, Array
   serialize :ports, Array

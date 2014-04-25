@@ -5,4 +5,6 @@ class ServiceSerializer < ActiveModel::Serializer
              :active_state, :sub_state
 
   has_one :app, serializer: AppLiteSerializer
+
+  has_many :categories, serializer: CategorySerializer
 end
