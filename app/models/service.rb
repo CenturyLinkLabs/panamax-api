@@ -16,10 +16,6 @@ class Service < ActiveRecord::Base
   validates_presence_of :name
   validates_uniqueness_of :name
 
-  def unit_name
-    "#{name}.service"
-  end
-
   def self.new_from_image(image)
     self.new(
       name: image.name,
@@ -41,6 +37,16 @@ class Service < ActiveRecord::Base
              environment: image_create_params[:environment],
              volumes: image_create_params[:volumes]
     )
+  end
+
+  def unit_name
+    "#{name}.service"
+  end
+
+  def copy_categories_from_image(image, app_categories)
+    image.categories.each do |image_cat|
+      self.categories << app_categories.find { |app_cat| app_cat.name == image_cat.name }
+    end
   end
 
   private

@@ -2,9 +2,10 @@ require 'spec_helper'
 
 describe App do
   it { should have_many(:services) }
+  it { should have_many(:categories).class_name('AppCategory') }
 
   describe '.create_from_template' do
-    let(:template) { Template.where(name: 'wordpress').first }
+    let(:template) { templates(:wordpress) }
 
     it 'creates a new app using values from the template' do
       result = App.create_from_template(template)
@@ -37,6 +38,46 @@ describe App do
         expect {
           App.create_from_template(template)
         }.to change { Service.count }.by(1)
+      end
+    end
+
+    context 'with images with multiple categegories' do
+      before do
+        i1 = Image.create(name: 'image 1', categories: [TemplateCategory.create(name: 'cat 1', template: template)])
+        i2 = Image.create(name: 'image 2', categories: [TemplateCategory.create(name: 'cat 2', template: template)])
+        template.images = [i1,i2]
+      end
+
+      it 'copies the categories over like a boss' do
+        new_app = App.create_from_template(template)
+        expect(new_app.categories.map(&:name)).to match_array ['cat 1', 'cat 2']
+        expect(new_app.services.first.categories.first.name).to eq 'cat 1'
+        expect(new_app.services.first.categories.first.app_id).to eq new_app.id
+        expect(new_app.services.last.categories.first.name).to eq 'cat 2'
+        expect(new_app.services.last.categories.first.app_id).to eq new_app.id
+      end
+    end
+
+    context 'with images with a shared category' do
+      before do
+        c = TemplateCategory.create(name: 'cat 1', template: template)
+        i1 = Image.create(name: 'image 1', categories: [c])
+        i2 = Image.create(name: 'image 2', categories: [c])
+        template.images = [i1,i2]
+      end
+
+      it 'creates category associated with the app' do
+        new_app = App.create_from_template(template)
+        expect(new_app.categories.count).to eq 1
+        expect(new_app.categories.first.name).to eq 'cat 1'
+        expect(new_app.categories.first.app_id).to eq new_app.id
+      end
+
+      it 'assigns the same category to both images' do
+        new_app = App.create_from_template(template)
+        s1, s2 = new_app.services
+        expect(s1.categories.count).to eq 1
+        expect(s1.categories.first).to eq s2.categories.first
       end
     end
   end
