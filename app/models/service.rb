@@ -5,8 +5,8 @@ class Service < ActiveRecord::Base
   belongs_to :app
   has_many :service_categories
   has_many :categories, through: :service_categories, source: :app_category
+  has_many :links, class_name: 'ServiceLink', foreign_key: 'linked_from_service_id'
 
-  serialize :links, Array
   serialize :ports, Array
   serialize :expose, Array
   serialize :environment, Hash

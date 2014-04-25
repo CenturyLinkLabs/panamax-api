@@ -20,7 +20,7 @@ module DockerRunnable
 
   def link_flags
     if links
-      links.collect { |link| "--link #{link[:service]}:#{link[:alias]}" }
+      links.collect { |link| "--link #{link.link_string}" }
     end
   end
 

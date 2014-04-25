@@ -17,7 +17,9 @@ shared_examples "a docker runnable model" do
   context "when links are specified" do
 
     before do
-      model.links = [{ service: 'MYSQL', alias: 'DB' }]
+      linked_to_service = Service.new(name: 'MYSQL')
+      link = ServiceLink.new(linked_to_service: linked_to_service, alias: 'DB')
+      model.links << link
     end
 
     it "generates a docker command with --link" do

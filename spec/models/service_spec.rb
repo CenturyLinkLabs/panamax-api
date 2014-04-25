@@ -7,6 +7,7 @@ describe Service do
   it { should belong_to(:app) }
   it { should have_many(:service_categories) }
   it { should have_many(:categories).through(:service_categories).source(:app_category) }
+  it { should have_many(:links) }
 
   it_behaves_like "a docker runnable model"
 
@@ -64,9 +65,7 @@ describe Service do
 
 
   describe '.new_from_image' do
-    let(:image_attributes) do
-
-    end
+    let(:linked_service) { ServiceLink.new(alias: 'DB', linked_to_service: Service.new(name: 'MYSQL')) }
 
     let(:fake_image) do
       double(:fake_image, {
@@ -74,7 +73,7 @@ describe Service do
           description: 'a webserver',
           repository: 'ApacheFoundation/Apache',
           tag: 'latest',
-          links: [{service: 'MYSQL', alias: 'DB'}],
+          links: [linked_service],
           ports: [{host_interface: '', host_port: '', container_port: '', proto: ''}],
           expose: [''],
           environment: {'SOME_KEY' => ''},
@@ -88,7 +87,7 @@ describe Service do
       expect(result.name).to eq 'Apache'
       expect(result.description).to eq 'a webserver'
       expect(result.from).to eq 'ApacheFoundation/Apache:latest'
-      expect(result.links).to eq [{service: 'MYSQL', alias: 'DB'}]
+      expect(result.links).to eq [linked_service]
       expect(result.ports).to eq [{host_interface: '', host_port: '', container_port: '', proto: ''}]
       expect(result.expose).to eq ['']
       expect(result.environment).to eq({'SOME_KEY' => ''})

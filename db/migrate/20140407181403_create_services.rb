@@ -4,7 +4,6 @@ class CreateServices < ActiveRecord::Migration
       t.string :name
       t.text :description
       t.text :from
-      t.text :links
       t.text :ports
       t.text :expose
       t.text :environment
