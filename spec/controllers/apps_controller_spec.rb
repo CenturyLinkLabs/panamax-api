@@ -124,19 +124,19 @@ describe AppsController do
         Template.stub(:find).with(params[:template_id]).and_return(template)
       end
 
-      it 'does not persist the app' do
+      it 'persists the app with a new name' do
         post :create, params.merge(format: :json)
-        expect(app.persisted?).to be_false
+        expect(app.persisted?).to be_true
       end
 
-      it 'returns a 422 error' do
+      it 'the app has a new name' do
         post :create, params.merge(format: :json)
-        expect(response.status).to eq 422
+        expect(app.name).to eq("App 1_1")
       end
 
-      it 'renders the errors in the json body' do
+      it 'returns no errors' do
         post :create, params.merge(format: :json)
-        expect(JSON.parse(response.body)).to have_key('errors')
+        expect(response.status).to eq 200
       end
 
     end

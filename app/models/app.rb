@@ -2,9 +2,7 @@ class App < ActiveRecord::Base
   has_many :services, dependent: :destroy
   has_many :categories, class_name: 'AppCategory'
 
-  before_save :sanitize_name
-
-  validates_uniqueness_of :name
+  before_save :resolve_name_conflicts
 
   def self.create_from_template(t)
     categories = t.categories.map { |cat| AppCategory.new(name: cat.name) }
@@ -34,9 +32,11 @@ class App < ActiveRecord::Base
     end
   end
 
-  def sanitize_name
-    sanitized_name = name.gsub('/', '_')
-    count = App.where('name LIKE ?', "#{sanitized_name}%").count
-    self.name = (count > 0) ? "#{sanitized_name}_#{count}" : sanitized_name
+  def resolve_name_conflicts
+      unless persisted?
+        sanitized_name = name.gsub('/', '_')
+        count = App.where('name LIKE ?', "#{sanitized_name}%").count
+        self.name = (count > 0) ? "#{sanitized_name}_#{count}" : sanitized_name
+      end
   end
 end

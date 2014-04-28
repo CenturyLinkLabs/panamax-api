@@ -14,6 +14,16 @@ describe App do
       expect(result.from).to eq "Template: #{template.name}"
     end
 
+    it 'creates a new app from the same template again' do
+      result = ''
+      2.times {
+        result = App.create_from_template(template)
+        result.reload
+      }
+      expect(result.name).to eq "#{template.name}_1"
+      expect(result.from).to eq "Template: #{template.name}"
+    end
+
     context 'with an associated image' do
       let(:associated_image) do
         image_params = {

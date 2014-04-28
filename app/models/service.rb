@@ -12,11 +12,10 @@ class Service < ActiveRecord::Base
   serialize :environment, Hash
   serialize :volumes, Array
 
-  before_save   :sanitize_name
+  before_save   :resolve_name_conflicts
   after_destroy :delete_service_unit
 
   validates_presence_of   :name
-  validates_uniqueness_of :name
 
   def unit_name
     "#{name}.service"
@@ -75,10 +74,12 @@ class Service < ActiveRecord::Base
     fleet_client.destroy(self.unit_name)
   end
 
-  def sanitize_name
-    sanitized_name = name.gsub('/', '_')
-    count = Service.where('name LIKE ?', "#{sanitized_name}%").count
-    self.name = "#{sanitized_name}_#{count+1}"
+  def resolve_name_conflicts
+    unless persisted?
+      sanitized_name = name.gsub('/', '_')
+      count = Service.where('name LIKE ?', "#{sanitized_name}%").count
+      self.name = (count > 0) ? "#{sanitized_name}_#{count}" : sanitized_name
+    end
   end
 
   def service_state
