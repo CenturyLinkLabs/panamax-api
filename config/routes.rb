@@ -5,6 +5,10 @@ PanamaxApi::Application.routes.draw do
 
   resources :templates, only: [:index, :show]
   resources :apps, only: [:index, :show, :create] do
-    resources :services, only: [:index, :show, :create]
+    resources :services, only: [:index, :show, :create] do
+      member do
+        get :journal
+      end
+    end
   end
 end

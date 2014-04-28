@@ -30,6 +30,10 @@ describe PanamaxAgent do
 
   describe '.journal_client' do
 
+    before do
+      PanamaxAgent.unstub(:journal_client)
+    end
+
     it 'returns a Journal::Client instance' do
       expect(PanamaxAgent.journal_client).to be_kind_of(PanamaxAgent::Journal::Client)
     end

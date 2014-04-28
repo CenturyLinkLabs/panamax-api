@@ -10,10 +10,14 @@ class ServicesController < ApplicationController
   end
 
   def create
+  end
 
+  def journal
+    respond_with app.services.find(params[:id]).journal
   end
 
   private
+
   def app
     @app ||= App.find(params[:app_id])
   end

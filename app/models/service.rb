@@ -1,5 +1,6 @@
 class Service < ActiveRecord::Base
   include DockerRunnable
+  include ServiceJournal
 
   belongs_to :app
   has_many :service_categories

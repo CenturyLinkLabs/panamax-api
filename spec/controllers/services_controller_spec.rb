@@ -27,4 +27,12 @@ describe ServicesController do
 
   end
 
+  describe '#journal' do
+
+    it 'returns the service journal' do
+      get :journal, { app_id: app.id, id: Service.first.id, format: :json }
+      expect(response.body).to eq fixture_data('journal')
+    end
+  end
+
 end

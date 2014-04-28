@@ -56,4 +56,21 @@ RSpec.configure do |config|
 
   config.global_fixtures = :all
 
+  config.before(:each) do
+    # Stub methods on PanamaxAgent::Journal::Client
+    journal_client = double(:journal_client)
+    journal_client.stub(get_entries_by_fields: hash_from_fixture('journal'))
+
+    PanamaxAgent.stub(journal_client: journal_client)
+  end
+end
+
+def fixture_data(filename, path='support/fixtures')
+  filename += '.json' if File.extname(filename).empty?
+  file_path = File.expand_path(File.join(path, filename), __dir__)
+  File.read(file_path).gsub(/\s+/, '')
+end
+
+def hash_from_fixture(filename, path='support/fixtures')
+  JSON.parse(fixture_data(filename, path))
 end
