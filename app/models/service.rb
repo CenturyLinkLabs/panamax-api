@@ -2,6 +2,8 @@ class Service < ActiveRecord::Base
   include DockerRunnable
 
   belongs_to :app
+  has_many :service_categories
+  has_many :categories, through: :service_categories, source: :app_category
 
   serialize :links, Array
   serialize :ports, Array
@@ -28,6 +30,12 @@ class Service < ActiveRecord::Base
 
   def sub_state
     service_state['subState']
+  end
+
+  def copy_categories_from_image(image, app_categories)
+    image.categories.each do |image_cat|
+      self.categories << app_categories.find { |app_cat| app_cat.name == image_cat.name }
+    end
   end
 
   def self.new_from_image(image)
