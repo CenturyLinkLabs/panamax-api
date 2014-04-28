@@ -2,6 +2,8 @@ class App < ActiveRecord::Base
   has_many :services, dependent: :destroy
   has_many :categories, class_name: 'AppCategory'
 
+  before_save :sanitize_name
+
   validates_uniqueness_of :name
 
   def self.create_from_template(t)
@@ -30,5 +32,11 @@ class App < ActiveRecord::Base
       service.copy_categories_from_image(image, categories)
       service
     end
+  end
+
+  def sanitize_name
+    sanitized_name = name.gsub('/', '_')
+    count = App.where('name LIKE ?', "#{sanitized_name}%").count
+    self.name = (count > 0) ? "#{sanitized_name}_#{count}" : sanitized_name
   end
 end

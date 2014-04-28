@@ -98,7 +98,17 @@ describe App do
     it 'creates a new app from the params' do
       result = App.create_from_image(params)
       result.reload
-      expect(result.name).to eq 'foo/bar:baz'
+      expect(result.name).to eq 'foo_bar:baz'
+      expect(result.from).to eq 'Image: foo/bar:baz'
+    end
+
+    it 'creates a new app from the same image again' do
+      result = ''
+      2.times {
+        result = App.create_from_image(params)
+        result.reload
+      }
+      expect(result.name).to eq 'foo_bar:baz_1'
       expect(result.from).to eq 'Image: foo/bar:baz'
     end
 
