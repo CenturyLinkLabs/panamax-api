@@ -4,7 +4,7 @@ PanamaxApi::Application.routes.draw do
   get 'repositories/*repository/tags', to: 'repositories#list_tags'
 
   resources :templates, only: [:index, :show]
-  resources :apps, only: [:index, :show, :create] do
+  resources :apps, only: [:index, :show, :create, :destroy] do
     resources :services, only: [:index, :show] do
       member do
         get :journal

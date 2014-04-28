@@ -39,6 +39,14 @@ describe 'apps routes' do
                                      )
   end
 
+  it 'routes delete to the apps controller destroy action' do
+    expect(delete: app_path(1)).to route_to(
+                                    controller: 'apps',
+                                    action: 'destroy',
+                                    id: '1'
+    )
+  end
+
   describe 'services sub-resource routes' do
     it 'routes get to the app services controller index' do
       expect(get: '/apps/1/services').to route_to(
