@@ -12,6 +12,10 @@ wp = Template.create(
   recommended: true,
   icon: 'http://panamax.ca.tier3.io/template_logos/wordpress.png'
 )
+web_cat = TemplateCategory.create(
+  name: 'Web Tier',
+  template: wp
+)
 wp.images.create(
   name: 'WP',
   repository: 'panamax/panamax-docker-wordpress',
@@ -20,7 +24,8 @@ wp.images.create(
   links: [{service: 'DB_1', alias:'DB_1'}],
   ports: [{host_port: 8080, container_port: 80}],
   expose: [80],
-  environment: { 'DB_PASSWORD' => 'pass@word01' }
+  environment: { 'DB_PASSWORD' => 'pass@word01' },
+  categories: [web_cat]
 )
 wp.images.create(
   name: 'DB_1',
