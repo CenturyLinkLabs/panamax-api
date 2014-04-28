@@ -9,9 +9,6 @@ class ServicesController < ApplicationController
     respond_with app.services.find(params[:id])
   end
 
-  def create
-  end
-
   def journal
     respond_with app.services.find(params[:id]).journal
   end
