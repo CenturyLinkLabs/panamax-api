@@ -104,6 +104,23 @@ describe App do
         expect(s1.categories.first).to eq s2.categories.first
       end
     end
+
+    context 'with linked images' do
+
+      before do
+        i1 = Image.create(name: 'WP', links: [{ service: 'MYSQL', alias: 'DB' }])
+        i2 = Image.create(name: 'MYSQL')
+        template.images = [i1, i2]
+      end
+
+      it 'creates a service link between linked images' do
+        new_app = App.create_from_template(template)
+        s1, s2 = new_app.services
+        expect(s1.links.count).to eq 1
+        expect(s1.links.first.alias).to eq 'DB'
+        expect(s1.links.first.linked_to_service).to eq s2
+      end
+    end
   end
 
   describe '.create_from_image' do

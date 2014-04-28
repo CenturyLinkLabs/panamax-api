@@ -63,17 +63,13 @@ describe Service do
 
   end
 
-
   describe '.new_from_image' do
-    let(:linked_service) { ServiceLink.new(alias: 'DB', linked_to_service: Service.new(name: 'MYSQL')) }
-
     let(:fake_image) do
       double(:fake_image, {
           name: 'Apache',
           description: 'a webserver',
           repository: 'ApacheFoundation/Apache',
           tag: 'latest',
-          links: [linked_service],
           ports: [{host_interface: '', host_port: '', container_port: '', proto: ''}],
           expose: [''],
           environment: {'SOME_KEY' => ''},
@@ -87,7 +83,6 @@ describe Service do
       expect(result.name).to eq 'Apache'
       expect(result.description).to eq 'a webserver'
       expect(result.from).to eq 'ApacheFoundation/Apache:latest'
-      expect(result.links).to eq [linked_service]
       expect(result.ports).to eq [{host_interface: '', host_port: '', container_port: '', proto: ''}]
       expect(result.expose).to eq ['']
       expect(result.environment).to eq({'SOME_KEY' => ''})
