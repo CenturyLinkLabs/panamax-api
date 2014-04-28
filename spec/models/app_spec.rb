@@ -7,21 +7,35 @@ describe App do
   describe '.create_from_template' do
     let(:template) { templates(:wordpress) }
 
-    it 'creates a new app using values from the template' do
-      result = App.create_from_template(template)
-      result.reload
-      expect(result.name).to eq template.name
-      expect(result.from).to eq "Template: #{template.name}"
-    end
-
-    it 'creates a new app from the same template again' do
-      result = ''
-      2.times {
+    context 'creates a new app' do
+      it 'when using values from the template, has a unique name' do
         result = App.create_from_template(template)
         result.reload
-      }
-      expect(result.name).to eq "#{template.name}_1"
-      expect(result.from).to eq "Template: #{template.name}"
+        expect(result.name).to eq template.name
+        expect(result.from).to eq "Template: #{template.name}"
+      end
+
+      it 'when using the same template again, has a unique name' do
+        result = ''
+        2.times {
+          result = App.create_from_template(template)
+          result.reload
+        }
+        expect(result.name).to eq "#{template.name}_1"
+        expect(result.from).to eq "Template: #{template.name}"
+      end
+
+      it 'and updates a category, name is not affected' do
+        app = App.create_from_template(template)
+        app.reload
+        expect(app.name).to eq template.name
+        expect(app.from).to eq "Template: #{template.name}"
+        app.categories = [AppCategory.new(name: 'My Category')]
+        app.save
+        app.reload
+        expect(app.name).to eq template.name
+      end
+
     end
 
     context 'with an associated image' do
@@ -51,7 +65,7 @@ describe App do
       end
     end
 
-    context 'with images with multiple categegories' do
+    context 'with images with multiple categories' do
       before do
         i1 = Image.create(name: 'image 1', categories: [TemplateCategory.create(name: 'cat 1', template: template)])
         i2 = Image.create(name: 'image 2', categories: [TemplateCategory.create(name: 'cat 2', template: template)])

@@ -141,6 +141,26 @@ describe AppsController do
 
     end
 
+    context 'when the app is updated with a category' do
+      let(:app){ App.create(name: apps(:app1).name) }
+      let(:params){ { template_id: 1 } }
+      let(:template){ double(:template, name: 'my_template') }
+
+      before do
+        App.stub(:create_from_template).and_return(app)
+        AppExecutor.stub(:run)
+        Template.stub(:find).with(params[:template_id]).and_return(template)
+      end
+
+      it 'the name is not affected' do
+        post :create, params.merge(format: :json)
+        app.categories = [AppCategory.new(name: 'My Category')]
+        app.save
+        app.reload
+        expect(app.name).to eq("App 1_1")
+      end
+
+    end
   end
 
   describe '#destroy' do
