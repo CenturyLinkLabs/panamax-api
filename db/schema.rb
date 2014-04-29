@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140424201023) do
+ActiveRecord::Schema.define(version: 20140425195310) do
 
   create_table "app_categories", force: true do |t|
     t.string   "name"
@@ -78,11 +78,22 @@ ActiveRecord::Schema.define(version: 20140424201023) do
   add_index "service_categories", ["service_id", "app_category_id"], name: "index_service_categories_on_service_id_and_app_category_id", unique: true
   add_index "service_categories", ["service_id"], name: "index_service_categories_on_service_id"
 
+  create_table "service_links", force: true do |t|
+    t.integer  "linked_to_service_id"
+    t.integer  "linked_from_service_id"
+    t.string   "alias"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "service_links", ["linked_from_service_id", "linked_to_service_id"], name: "index_service_link_keys", unique: true
+  add_index "service_links", ["linked_from_service_id"], name: "index_service_links_on_linked_from_service_id"
+  add_index "service_links", ["linked_to_service_id"], name: "index_service_links_on_linked_to_service_id"
+
   create_table "services", force: true do |t|
     t.string  "name"
     t.text    "description"
     t.text    "from"
-    t.text    "links"
     t.text    "ports"
     t.text    "expose"
     t.text    "environment"

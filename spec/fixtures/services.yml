@@ -3,7 +3,6 @@ service1:
   name: 'my-service'
   description: 'just some service I ran'
   from: 'panamax/panamax-docker-mysql'
-  links: 'SERVICE2'
   ports: '3306:3306'
   expose: '3306'
   environment: 'MYSQL_ROOT_PASSWORD=pass@word01'

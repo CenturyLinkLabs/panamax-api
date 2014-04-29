@@ -5,8 +5,8 @@ class Service < ActiveRecord::Base
   belongs_to :app
   has_many :service_categories
   has_many :categories, through: :service_categories, source: :app_category
+  has_many :links, class_name: 'ServiceLink', foreign_key: 'linked_from_service_id'
 
-  serialize :links, Array
   serialize :ports, Array
   serialize :expose, Array
   serialize :environment, Hash
@@ -39,12 +39,18 @@ class Service < ActiveRecord::Base
     end
   end
 
+  def copy_links_from_image(image, services)
+    image.links.each do |link|
+      linked_to_service = services.find { |service| service.name == link[:service] }
+      self.links << ServiceLink.new(linked_to_service: linked_to_service, alias: link[:alias])
+    end
+  end
+
   def self.new_from_image(image)
     self.new(
       name: image.name,
       description: image.description,
       from: "#{image.repository}:#{image.tag}",
-      links: image.links,
       ports: image.ports,
       expose: image.expose,
       environment: image.environment,
