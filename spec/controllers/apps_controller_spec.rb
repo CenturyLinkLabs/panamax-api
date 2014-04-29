@@ -78,7 +78,6 @@ describe AppsController do
 
     end
 
-
     context 'when attempting to run the application raises an exception' do
       let(:app){ apps(:app1) } # load from fixture to get services assoc
       let(:params){ { template_id: 1 } }
@@ -86,6 +85,7 @@ describe AppsController do
 
       before do
         App.stub(:create_from_template).and_return(app)
+        PanamaxAgent::Fleet::Client.any_instance.stub(:destroy).and_return true
         AppExecutor.stub(:run).and_raise('boom')
         Template.stub(:find)
       end
@@ -100,7 +100,7 @@ describe AppsController do
         expect(Service.where(app_id: app.id)).to be_empty
       end
 
-      it 'returns 400 error' do
+      it 'returns 422 error' do
         post :create, params.merge(format: :json)
         expect(response.status).to eq(422) # :unprocessable_entity
       end
@@ -124,21 +124,68 @@ describe AppsController do
         Template.stub(:find).with(params[:template_id]).and_return(template)
       end
 
-      it 'does not persist the app' do
+      it 'persists the app with a new name' do
         post :create, params.merge(format: :json)
-        expect(app.persisted?).to be_false
+        expect(app.persisted?).to be_true
       end
 
-      it 'returns a 422 error' do
+      it 'the app has a new name' do
         post :create, params.merge(format: :json)
-        expect(response.status).to eq 422
+        expect(app.name).to eq("App 1_1")
       end
 
-      it 'renders the errors in the json body' do
+      it 'returns no errors' do
         post :create, params.merge(format: :json)
-        expect(JSON.parse(response.body)).to have_key('errors')
+        expect(response.status).to eq 200
       end
 
+    end
+
+    context 'when the app is updated with a category' do
+      let(:app){ App.create(name: apps(:app1).name) }
+      let(:params){ { template_id: 1 } }
+      let(:template){ double(:template, name: 'my_template') }
+
+      before do
+        App.stub(:create_from_template).and_return(app)
+        AppExecutor.stub(:run)
+        Template.stub(:find).with(params[:template_id]).and_return(template)
+      end
+
+      it 'the name is not affected' do
+        post :create, params.merge(format: :json)
+        app.categories = [AppCategory.new(name: 'My Category')]
+        app.save
+        app.reload
+        expect(app.name).to eq("App 1_1")
+      end
+
+    end
+  end
+
+  describe '#destroy' do
+    let(:app){ apps(:app1) } # load from fixture to get services assoc
+    let(:service_name) {app.services.first.name}
+    let(:client) { double(:client, destroy: service_name) }
+
+    before do
+      PanamaxAgent.stub(fleet_client: client)
+      PanamaxAgent::Fleet::Client.any_instance.stub(:destroy).and_return true
+    end
+
+    it 'deletes the app' do
+      delete :destroy, { id: app.id, format: :json }
+      expect(App.where(id: app.id).first).to be_nil
+    end
+
+    it 'destroys the app services' do
+      delete :destroy, { id: app.id, format: :json }
+      expect(Service.where(app_id: app.id)).to be_empty
+    end
+
+    it "returns no content in response body" do
+      delete :destroy, { id: app.id, format: :json }
+      expect(response.body).to be_empty
     end
 
   end

@@ -110,7 +110,7 @@ describe Service do
       it 'appends an incremented count' do
         described_class.create(name: image_name)
         result = described_class.create(name: image_name)
-        expect(result.name).to eq('foo_bar_2')
+        expect(result.name).to eq('foo_bar_1')
       end
 
 
