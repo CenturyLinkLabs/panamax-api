@@ -27,6 +27,48 @@ describe ServicesController do
 
   end
 
+  describe '#update' do
+
+    let(:dummy_app) { double(:app) }
+    let(:dummy_service) { double(:service) }
+    let(:params) do
+      {
+        name: 'servicename',
+        description: 'servicedescription',
+        ports: [{ host_port: '80', container_port: '80', proto: 'tcp'}],
+        expose: ['80', '443'],
+        environment: { 'SOME_KEY' => 'some_value'},
+        volumes: [{ host_path: '/tmp/foo', container_path: '/tmp/bar' }],
+      }
+    end
+
+    before do
+      App.stub(:find).and_return(dummy_app)
+      dummy_app.stub_chain(:services, :find).and_return(dummy_service)
+      dummy_service.stub(:update_with_relationships).and_return(true)
+    end
+
+    it 'updates attributes on the service' do
+      expect(dummy_service).to receive(:update_with_relationships).with(hash_including(params))
+
+      put :update, params.merge(
+        app_id: '1',
+        id: '2',
+        format: :json
+      )
+    end
+
+    it 'returns an empty response body' do
+      put :update, params.merge(
+        app_id: '1',
+        id: '2',
+        format: :json
+      )
+
+      expect(response.body).to be_empty
+    end
+  end
+
   describe '#journal' do
 
     it 'returns the service journal' do

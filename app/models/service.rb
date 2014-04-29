@@ -5,7 +5,8 @@ class Service < ActiveRecord::Base
   belongs_to :app
   has_many :service_categories
   has_many :categories, through: :service_categories, source: :app_category
-  has_many :links, class_name: 'ServiceLink', foreign_key: 'linked_from_service_id'
+  has_many :links, class_name: 'ServiceLink', foreign_key: 'linked_from_service_id',
+    dependent: :destroy
 
   serialize :ports, Array
   serialize :expose, Array
@@ -56,6 +57,22 @@ class Service < ActiveRecord::Base
     end
   end
 
+  # Works just like ActiveRecord::Persistence#update but will also update relations
+  def update_with_relationships(attributes)
+    if attributes[:links]
+      attributes[:links].map! do |link|
+        self.links.find_or_initialize_by(
+          linked_to_service_id: link[:service_id],
+          alias: link[:alias]
+        )
+      end
+    end
+
+    # Do same as above w/ categories here
+
+    self.update(attributes)
+  end
+
   def self.new_from_image(image)
     self.new(
       name: image.name,
@@ -69,12 +86,13 @@ class Service < ActiveRecord::Base
   end
 
   def self.new_from_params(image_create_params)
-    self.new(name: "#{image_create_params[:image]}",
-             from: "#{image_create_params[:image]}:#{image_create_params[:tag]}",
-             ports: image_create_params[:ports],
-             expose: image_create_params[:expose],
-             environment: image_create_params[:environment],
-             volumes: image_create_params[:volumes]
+    self.new(
+      name: "#{image_create_params[:image]}",
+      from: "#{image_create_params[:image]}:#{image_create_params[:tag]}",
+      ports: image_create_params[:ports],
+      expose: image_create_params[:expose],
+      environment: image_create_params[:environment],
+      volumes: image_create_params[:volumes]
     )
   end
 

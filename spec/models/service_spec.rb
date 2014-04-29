@@ -24,7 +24,6 @@ describe Service do
     end
   end
 
-
   describe 'service states' do
     let(:fleet_state) do
       {
@@ -126,6 +125,47 @@ describe Service do
     it 'invokes start on the service manager' do
       expect(dummy_manager).to receive(:start)
       subject.start
+    end
+  end
+
+  describe '#update_with_relationships' do
+
+    let(:attrs) { { name: 'new_name' } }
+
+    before do
+      subject.stub(:update).and_return(true)
+    end
+
+    context 'when links are not provided' do
+
+      it 'does not populate the related links' do
+        expect(subject).to receive(:update).with(attrs)
+        subject.update_with_relationships(attrs)
+      end
+    end
+
+    context 'when links are provided' do
+
+      let(:attrs_with_links) do
+        attrs.merge(
+          links: [ { service_id: 1, alias: 'DB' } ]
+        )
+      end
+
+      let(:service_link) { ServiceLink.new(linked_to_service_id: 1, alias: 'DB') }
+
+      before do
+        subject.stub_chain(:links, :find_or_initialize_by).and_return(service_link)
+      end
+
+      it 'populates the related links' do
+        expect(subject).to receive(:update).with(attrs.merge(links: [service_link]))
+        subject.update_with_relationships(attrs_with_links)
+      end
+    end
+
+    it 'returns the result of the update' do
+      expect(subject.update_with_relationships(attrs)).to eq true
     end
   end
 
