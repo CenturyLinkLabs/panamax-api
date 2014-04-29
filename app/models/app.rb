@@ -25,11 +25,20 @@ class App < ActiveRecord::Base
   private
 
   def self.create_services(template, categories)
-    template.images.map do |image|
+    services = template.images.map do |image|
       service = Service.new_from_image(image)
       service.copy_categories_from_image(image, categories)
       service
     end
+
+    template.images.each do |image|
+      if image.links?
+        linked_from_service = services.find { |service| service.name == image.name }
+        linked_from_service.copy_links_from_image(image, services)
+      end
+    end
+
+    services
   end
 
   def resolve_name_conflicts
