@@ -22,6 +22,11 @@ class App < ActiveRecord::Base
     )
   end
 
+  def run
+    services.each(&:submit)
+    services.each(&:start)
+  end
+
   private
 
   def self.create_services(template, categories)

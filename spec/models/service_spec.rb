@@ -2,7 +2,13 @@ require 'spec_helper'
 
 describe Service do
 
+  let(:dummy_manager) { double(:dummy_manager, submit: true, start: true) }
+
   subject{ described_class.new(name:'foo') }
+
+  before do
+    subject.manager = dummy_manager
+  end
 
   it { should belong_to(:app) }
   it { should have_many(:service_categories) }
@@ -106,10 +112,21 @@ describe Service do
         result = described_class.create(name: image_name)
         expect(result.name).to eq('foo_bar_1')
       end
-
-
     end
+  end
 
+  describe '#submit' do
+    it 'invokes submit on the service manager' do
+      expect(dummy_manager).to receive(:submit)
+      subject.submit
+    end
+  end
+
+  describe '#start' do
+    it 'invokes start on the service manager' do
+      expect(dummy_manager).to receive(:start)
+      subject.start
+    end
   end
 
 end

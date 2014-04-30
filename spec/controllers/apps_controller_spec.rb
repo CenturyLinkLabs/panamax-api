@@ -34,7 +34,7 @@ describe AppsController do
 
       before do
         App.stub(:create_from_template).and_return(app)
-        AppExecutor.stub(:run)
+        app.stub(:run)
         Template.stub(:find).with(params[:template_id]).and_return(template)
       end
 
@@ -68,7 +68,7 @@ describe AppsController do
 
       before do
         App.stub(:create_from_image).and_return(app)
-        AppExecutor.stub(:run)
+        app.stub(:run)
       end
 
       it 'creates the application from the image' do
@@ -79,14 +79,14 @@ describe AppsController do
     end
 
     context 'when attempting to run the application raises an exception' do
-      let(:app){ apps(:app1) } # load from fixture to get services assoc
-      let(:params){ { template_id: 1 } }
-      let(:template){ double(:template, name: 'my_template') }
+      let(:app) { apps(:app1) } # load from fixture to get services assoc
+      let(:params) { { template_id: 1 } }
+      let(:template) { double(:template, name: 'my_template') }
 
       before do
         App.stub(:create_from_template).and_return(app)
         PanamaxAgent::Fleet::Client.any_instance.stub(:destroy).and_return true
-        AppExecutor.stub(:run).and_raise('boom')
+        app.stub(:run).and_raise('boom')
         Template.stub(:find)
       end
 
@@ -120,7 +120,7 @@ describe AppsController do
 
       before do
         App.stub(:create_from_template).and_return(app)
-        AppExecutor.stub(:run)
+        app.stub(:run)
         Template.stub(:find).with(params[:template_id]).and_return(template)
       end
 
@@ -148,7 +148,7 @@ describe AppsController do
 
       before do
         App.stub(:create_from_template).and_return(app)
-        AppExecutor.stub(:run)
+        app.stub(:run)
         Template.stub(:find).with(params[:template_id]).and_return(template)
       end
 
