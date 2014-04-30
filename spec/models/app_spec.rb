@@ -165,6 +165,27 @@ describe App do
       expect(result.services.count).to eq(1)
       expect(Service.last.app).to eq result
     end
+  end
 
+  describe '#run' do
+
+    let(:s1) { Service.new(name: 's1') }
+    let(:s2) { Service.new(name: 's2') }
+
+    before do
+      subject.services = [s1, s2].each { |s| s.stub(submit: true, start: true) }
+    end
+
+    it 'submits each service' do
+      expect(s1).to receive(:submit)
+      expect(s2).to receive(:submit)
+      subject.run
+    end
+
+    it 'runs each service' do
+      expect(s1).to receive(:start)
+      expect(s2).to receive(:start)
+      subject.run
+    end
   end
 end

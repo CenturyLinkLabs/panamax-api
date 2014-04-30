@@ -17,6 +17,8 @@ class Service < ActiveRecord::Base
 
   validates_presence_of   :name
 
+  attr_writer :manager
+
   def unit_name
     "#{name}.service"
   end
@@ -31,6 +33,14 @@ class Service < ActiveRecord::Base
 
   def sub_state
     service_state['subState']
+  end
+
+  def submit
+    manager.submit
+  end
+
+  def start
+    manager.start
   end
 
   def copy_categories_from_image(image, app_categories)
@@ -76,8 +86,12 @@ class Service < ActiveRecord::Base
 
   private
 
+  def manager
+    @manager ||= ServiceManager.new(self)
+  end
+
   def delete_service_unit
-    fleet_client.destroy(self.unit_name)
+    manager.destroy
   end
 
   def resolve_name_conflicts

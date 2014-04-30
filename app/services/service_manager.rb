@@ -1,16 +1,31 @@
-class AppExecutor
+class ServiceManager
 
-  def self.run(app)
-    new(app).run
+  def self.submit(service)
+    new(service).submit
   end
 
-  def initialize(app)
-    @app = app
+  def self.start(service)
+    new(service).start
   end
 
-  def run
-    @app.services.each { |service| fleet_client.submit(service_def_from_service(service)) }
-    @app.services.each { |service| fleet_client.start(service.unit_name) }
+  def initialize(service)
+    @service = service
+  end
+
+  def submit
+    fleet_client.submit(service_def_from_service(@service))
+  end
+
+  def start
+    fleet_client.start(@service.unit_name)
+  end
+
+  def stop
+    fleet_client.stop(@service.unit_name)
+  end
+
+  def destroy
+    fleet_client.destroy(@service.unit_name)
   end
 
   private
@@ -24,7 +39,7 @@ class AppExecutor
       sd.description = service.description
 
       # Collect service dependencies
-      dep_services = service.links.map { |link| "#{link[:service]}.service" }.join(' ')
+      dep_services = service.links.map { |link| link.linked_to_service.unit_name }.join(' ')
       sd.after = dep_services
       sd.requires = dep_services
 

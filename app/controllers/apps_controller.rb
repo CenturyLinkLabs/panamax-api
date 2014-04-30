@@ -21,7 +21,7 @@ class AppsController < ApplicationController
            end
 
     if @app.valid?
-      AppExecutor.run(@app)
+      @app.run
       render json: @app
     else
       logger.error("app validation failed: #{@app.errors.to_hash}")
