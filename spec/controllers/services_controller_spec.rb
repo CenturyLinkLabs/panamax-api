@@ -46,6 +46,7 @@ describe ServicesController do
       App.stub(:find).and_return(dummy_app)
       dummy_app.stub_chain(:services, :find).and_return(dummy_service)
       dummy_service.stub(:update_with_relationships).and_return(true)
+      dummy_service.stub(:restart)
     end
 
     it 'updates attributes on the service' do
@@ -56,6 +57,36 @@ describe ServicesController do
         id: '2',
         format: :json
       )
+    end
+
+    context 'when the service update succeeds' do
+
+      it 'restarts the service' do
+        expect(dummy_service).to receive(:restart)
+
+        put :update, params.merge(
+          app_id: '1',
+          id: '2',
+          format: :json
+        )
+      end
+    end
+
+    context 'when the service update fails' do
+
+      before do
+        dummy_service.stub(:update_with_relationships).and_return(false)
+      end
+
+      it 'restarts the service' do
+        expect(dummy_service).to_not receive(:restart)
+
+        put :update, params.merge(
+          app_id: '1',
+          id: '2',
+          format: :json
+        )
+      end
     end
 
     it 'returns an empty response body' do

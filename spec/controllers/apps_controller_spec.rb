@@ -166,11 +166,9 @@ describe AppsController do
   describe '#destroy' do
     let(:app){ apps(:app1) } # load from fixture to get services assoc
     let(:service_name) {app.services.first.name}
-    let(:client) { double(:client, destroy: service_name) }
 
     before do
-      PanamaxAgent.stub(fleet_client: client)
-      PanamaxAgent::Fleet::Client.any_instance.stub(:destroy).and_return true
+      ServiceManager.any_instance.stub(:destroy).and_return(true)
     end
 
     it 'deletes the app' do

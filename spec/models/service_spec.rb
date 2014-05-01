@@ -2,7 +2,13 @@ require 'spec_helper'
 
 describe Service do
 
-  let(:dummy_manager) { double(:dummy_manager, submit: true, start: true) }
+  let(:dummy_manager) do
+    double(:dummy_manager,
+      submit: true,
+      start: true,
+      destroy: true
+    )
+  end
 
   subject{ described_class.new(name:'foo') }
 
@@ -125,6 +131,41 @@ describe Service do
     it 'invokes start on the service manager' do
       expect(dummy_manager).to receive(:start)
       subject.start
+    end
+  end
+
+  describe '#shutdown' do
+    it 'invokes destroy on the service manager' do
+      expect(dummy_manager).to receive(:destroy)
+      subject.shutdown
+    end
+  end
+
+  describe '#restart' do
+    it 'invokes destroy on the service manager' do
+      expect(dummy_manager).to receive(:destroy)
+      subject.restart
+    end
+
+    it 'invokes submit on the service manager' do
+      expect(dummy_manager).to receive(:submit)
+      subject.restart
+    end
+
+    it 'invokes start on the service manager' do
+      expect(dummy_manager).to receive(:start)
+      subject.restart
+    end
+
+    context 'when the destroy fails' do
+
+      before do
+        dummy_manager.stub(:destroy).and_raise('boom')
+      end
+
+      it 'ignores the failure' do
+        subject.restart
+      end
     end
   end
 

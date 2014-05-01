@@ -14,7 +14,7 @@ class Service < ActiveRecord::Base
   serialize :volumes, Array
 
   before_save   :resolve_name_conflicts
-  after_destroy :delete_service_unit
+  after_destroy :shutdown
 
   validates_presence_of   :name
 
@@ -42,6 +42,16 @@ class Service < ActiveRecord::Base
 
   def start
     manager.start
+  end
+
+  def shutdown
+    manager.destroy
+  end
+
+  def restart
+    self.shutdown rescue nil
+    self.submit
+    self.start
   end
 
   def copy_categories_from_image(image, app_categories)
@@ -106,10 +116,6 @@ class Service < ActiveRecord::Base
 
   def manager
     @manager ||= ServiceManager.new(self)
-  end
-
-  def delete_service_unit
-    manager.destroy
   end
 
   def resolve_name_conflicts
