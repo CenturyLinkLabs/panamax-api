@@ -48,7 +48,7 @@ class ServiceManager
       # don't really care if it fails.
       docker_rm = "-/usr/bin/docker rm #{service.name}"
 
-      sd.exec_start_pre = docker_rm
+      sd.exec_start_pre = "-/usr/bin/docker pull #{service.from}"
       sd.exec_start = service.docker_run_string
       sd.exec_start_post = docker_rm
       sd.exec_stop = "/usr/bin/docker kill #{service.name}"

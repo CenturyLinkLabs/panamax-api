@@ -3,6 +3,7 @@ require 'spec_helper'
 describe ServiceManager do
 
   let(:service_name) { 'wordpress' }
+  let(:image_name) { 'some_image' }
   let(:service_description) { 'A wordpress service' }
   let(:fake_fleet_client) do
     double(:fake_fleet_client,
@@ -16,7 +17,8 @@ describe ServiceManager do
   let(:service) do
     Service.new(
       name: service_name,
-      description: service_description
+      description: service_description,
+      from: image_name
     )
   end
 
@@ -83,7 +85,7 @@ describe ServiceManager do
         expect(service_def.description).to eq service_description
         expect(service_def.after).to eq linked_to_service.unit_name
         expect(service_def.requires).to eq linked_to_service.unit_name
-        expect(service_def.exec_start_pre).to eq "-/usr/bin/docker rm #{service_name}"
+        expect(service_def.exec_start_pre).to eq "-/usr/bin/docker pull #{image_name}"
         expect(service_def.exec_start).to eq docker_run_string
         expect(service_def.exec_start_post).to eq "-/usr/bin/docker rm #{service_name}"
         expect(service_def.exec_stop).to eq "/usr/bin/docker kill #{service_name}"
