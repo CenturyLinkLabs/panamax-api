@@ -21,6 +21,10 @@ class ServicesController < ApplicationController
     respond_with app.services.find(params[:id]).journal
   end
 
+  def destroy
+    respond_with app.services.find(123).destroy
+  end
+
   private
 
   def app
