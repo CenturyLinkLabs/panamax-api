@@ -22,7 +22,7 @@ class ServicesController < ApplicationController
   end
 
   def destroy
-    respond_with app.services.find(123).destroy
+    respond_with app.services.find(params[:id]).destroy
   end
 
   private
