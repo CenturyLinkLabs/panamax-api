@@ -118,9 +118,14 @@ class Service < ActiveRecord::Base
     @manager ||= ServiceManager.new(self)
   end
 
+  def sanitize_name(bad_name)
+    # Allow only chars - A-z, 0-9, ., -, _ in names
+    bad_name.gsub(/[^0-9A-z.-]|[\^]|[\`]|[\[]|[\]]/, '_')
+  end
+
   def resolve_name_conflicts
     unless persisted?
-      sanitized_name = name.gsub('/', '_')
+      sanitized_name = sanitize_name(name)
       count = Service.where('name LIKE ?', "#{sanitized_name}%").count
       self.name = (count > 0) ? "#{sanitized_name}_#{count}" : sanitized_name
     end
