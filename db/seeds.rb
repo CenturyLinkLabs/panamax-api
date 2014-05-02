@@ -16,25 +16,30 @@ web_cat = TemplateCategory.create(
   name: 'Web Tier',
   template: wp
 )
+db_cat = TemplateCategory.create(
+  name: 'DB Tier',
+  template: wp
+)
 wp.images.create(
   name: 'WP',
   repository: 'panamax/panamax-docker-wordpress',
   tag: 'latest',
   description: 'Wordpress',
-  links: [{service: 'DB_1', alias:'DB_1'}],
+  links: [{service: 'DB', alias:'DB'}],
   ports: [{host_port: 8080, container_port: 80}],
   expose: [80],
   environment: { 'DB_PASSWORD' => 'pass@word01' },
   categories: [web_cat]
 )
 wp.images.create(
-  name: 'DB_1',
+  name: 'DB',
   repository: 'panamax/panamax-docker-mysql',
   tag: 'latest',
   description: 'MySQL',
   expose: [3306],
   environment: { 'MYSQL_ROOT_PASSWORD' => 'pass@word01'},
-  ports: [{host_port: 3306, container_port: 3306}]
+  ports: [{host_port: 3306, container_port: 3306}],
+  categories: [db_cat]
 )
 
 rails = Template.create(
@@ -43,7 +48,7 @@ rails = Template.create(
     recommended: true
 )
 rails.images.create(
-    name: 'DB',
+    name: 'DB1',
     repository: 'dharmamike/dc-pgsql',
     tag: 'latest',
     description: 'PostgreSQL',
@@ -54,7 +59,7 @@ rails.images.create(
   repository: 'dharmamike/dc-rails',
   tag: 'latest',
   description: 'welcome to rails',
-  links: [{service: 'DB', alias:'DB_1'}],
+  links: [{service: 'DB1', alias:'DB1'}],
   ports: [{host_port: 8088, container_port: 3000}]
 )
 
