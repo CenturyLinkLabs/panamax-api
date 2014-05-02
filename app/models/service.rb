@@ -5,7 +5,8 @@ class Service < ActiveRecord::Base
   belongs_to :app
   has_many :service_categories
   has_many :categories, through: :service_categories, source: :app_category
-  has_many :links, class_name: 'ServiceLink', foreign_key: 'linked_from_service_id'
+  has_many :links, class_name: 'ServiceLink', foreign_key: 'linked_from_service_id',
+    dependent: :destroy
 
   serialize :ports, Array
   serialize :expose, Array
@@ -13,7 +14,7 @@ class Service < ActiveRecord::Base
   serialize :volumes, Array
 
   before_save   :resolve_name_conflicts
-  after_destroy :delete_service_unit
+  after_destroy :shutdown
 
   validates_presence_of   :name
 
@@ -43,6 +44,16 @@ class Service < ActiveRecord::Base
     manager.start
   end
 
+  def shutdown
+    manager.destroy
+  end
+
+  def restart
+    self.shutdown rescue nil
+    self.submit
+    self.start
+  end
+
   def copy_categories_from_image(image, app_categories)
     image.categories.each do |image_cat|
       self.categories << app_categories.find { |app_cat| app_cat.name == image_cat.name }
@@ -54,6 +65,22 @@ class Service < ActiveRecord::Base
       linked_to_service = services.find { |service| service.name == link[:service] }
       self.links << ServiceLink.new(linked_to_service: linked_to_service, alias: link[:alias])
     end
+  end
+
+  # Works just like ActiveRecord::Persistence#update but will also update relations
+  def update_with_relationships(attributes)
+    if attributes[:links]
+      attributes[:links].map! do |link|
+        self.links.find_or_initialize_by(
+          linked_to_service_id: link[:service_id],
+          alias: link[:alias]
+        )
+      end
+    end
+
+    # Do same as above w/ categories here
+
+    self.update(attributes)
   end
 
   def self.new_from_image(image)
@@ -69,12 +96,13 @@ class Service < ActiveRecord::Base
   end
 
   def self.new_from_params(image_create_params)
-    self.new(name: "#{image_create_params[:image]}",
-             from: "#{image_create_params[:image]}:#{image_create_params[:tag]}",
-             ports: image_create_params[:ports],
-             expose: image_create_params[:expose],
-             environment: image_create_params[:environment],
-             volumes: image_create_params[:volumes]
+    self.new(
+      name: "#{image_create_params[:image]}",
+      from: "#{image_create_params[:image]}:#{image_create_params[:tag]}",
+      ports: image_create_params[:ports],
+      expose: image_create_params[:expose],
+      environment: image_create_params[:environment],
+      volumes: image_create_params[:volumes]
     )
   end
 
@@ -88,10 +116,6 @@ class Service < ActiveRecord::Base
 
   def manager
     @manager ||= ServiceManager.new(self)
-  end
-
-  def delete_service_unit
-    manager.destroy
   end
 
   def resolve_name_conflicts
