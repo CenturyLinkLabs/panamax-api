@@ -28,6 +28,14 @@ class ServiceManager
     fleet_client.destroy(@service.unit_name)
   end
 
+  def get_state
+    fleet_state = fleet_client.get_state(@service.unit_name)
+    service_states = JSON.parse(fleet_state['node']['value'])
+    service_states.each_with_object({}) { |(k,v), hash| hash[k.underscore.to_sym] = v }
+  rescue Exception
+    {}
+  end
+
   private
 
   def fleet_client

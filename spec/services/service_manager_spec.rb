@@ -5,6 +5,14 @@ describe ServiceManager do
   let(:service_name) { 'wordpress' }
   let(:image_name) { 'some_image' }
   let(:service_description) { 'A wordpress service' }
+  let(:service_state) do
+    {
+      'node' => {
+        'value' => '{"loadState":"loaded"}'
+      }
+    }
+  end
+
   let(:fake_fleet_client) do
     double(:fake_fleet_client,
       submit: true,
@@ -113,6 +121,29 @@ describe ServiceManager do
 
       it 'returns the result of the fleet call' do
         expect(subject.send(method)).to eql true
+      end
+    end
+  end
+
+  describe '#get_state' do
+
+    it 'retrieves service state from the fleet client' do
+      expect(fake_fleet_client).to receive(:get_state).with(service.unit_name)
+      subject.get_state
+    end
+
+    it 'returns the state hash w/ normalized keys' do
+
+    end
+
+    context 'when an error occurs while querying fleet' do
+
+      before do
+        fake_fleet_client.stub(:get_state).and_raise('boom')
+      end
+
+      it 'returns an empty hash' do
+        expect(subject.get_state).to eql({})
       end
     end
   end
