@@ -69,13 +69,12 @@ class Service < ActiveRecord::Base
 
   # Works just like ActiveRecord::Persistence#update but will also update relations
   def update_with_relationships(attributes)
-    if attributes[:links]
-      attributes[:links].map! do |link|
-        self.links.find_or_initialize_by(
-          linked_to_service_id: link[:service_id],
-          alias: link[:alias]
-        )
-      end
+    attributes[:links] ||= []
+    attributes[:links].map! do |link|
+      self.links.find_or_initialize_by(
+        linked_to_service_id: link[:service_id],
+        alias: link[:alias]
+      )
     end
 
     # Do same as above w/ categories here
