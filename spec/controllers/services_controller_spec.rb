@@ -100,6 +100,33 @@ describe ServicesController do
     end
   end
 
+  describe '#destroy' do
+    let(:dummy_app) { double(:app) }
+    let(:dummy_service) { double(:service) }
+
+    before do
+      App.stub(:find).and_return(dummy_app)
+      dummy_app.stub_chain(:services, :find).and_return(dummy_service)
+      dummy_service.stub(:destroy).and_return(dummy_service)
+    end
+
+    it 'calls destroy on the service' do
+      delete :destroy, { app_id: '1', id: '2', format: :json }
+      expect(dummy_service).to have_received(:destroy)
+    end
+
+    it 'returns an empty response body' do
+      delete :destroy, { app_id: '1', id: '2', format: :json }
+      expect(response.body).to be_empty
+    end
+
+    it 'returns an response code 204' do
+      delete :destroy, { app_id: '1', id: '2', format: :json }
+      expect(response.status).to eq 204
+    end
+
+  end
+
   describe '#journal' do
 
     it 'returns the service journal' do
