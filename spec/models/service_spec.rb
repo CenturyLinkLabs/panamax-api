@@ -189,7 +189,7 @@ describe Service do
     context 'when links are not provided' do
 
       it 'does not populate the related links' do
-        expect(subject).to receive(:update).with(attrs)
+        expect(subject).to receive(:update).with({ name: 'new_name', links: [] })
         subject.update_with_relationships(attrs)
       end
     end
@@ -217,6 +217,6 @@ describe Service do
     it 'returns the result of the update' do
       expect(subject.update_with_relationships(attrs)).to eq true
     end
-  end
 
+  end
 end
