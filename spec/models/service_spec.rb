@@ -106,6 +106,7 @@ describe Service do
     describe "#name=" do
 
       let(:image_name){ 'foo/bar' }
+      let(:bad_name){ 'Foo123_- ~!@#$%&*()+={}|:;"\'<>,?^`][ -890baR' }
 
       it 'replaces slashes with underscores' do
         result = described_class.create(name: image_name)
@@ -117,6 +118,14 @@ describe Service do
         result = described_class.create(name: image_name)
         expect(result.name).to eq('foo_bar_1')
       end
+
+      it 'sanitizes names with bad chars' do
+        expected_name = "Foo123_-_____________________________-890baR"
+        result = described_class.create(name: bad_name)
+        expect(result.name).to eq(expected_name)
+        expect(result.name.length).to eq(expected_name.length)
+      end
+
     end
   end
 
