@@ -126,7 +126,7 @@ class Service < ActiveRecord::Base
   end
 
   def increment_name(name)
-    unless persisted?
+    if self.name_changed? || !persisted?
       count = Service.where('name LIKE ?', "#{name}%").count
       name = (count > 0) ? "#{name}_#{count}" : name
     end
