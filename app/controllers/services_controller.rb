@@ -25,6 +25,14 @@ class ServicesController < ApplicationController
     respond_with app.services.find(params[:id]).destroy
   end
 
+  def create
+    service = app.add_service(service_create_params)
+    if service
+      app.restart
+    end
+    render json: service
+  end
+
   private
 
   def app
@@ -35,6 +43,21 @@ class ServicesController < ApplicationController
     params.permit(
       :name,
       :description,
+      :ports => [[:host_interface, :host_port, :container_port, :proto]],
+      :expose => [],
+      :volumes => [[:host_path, :container_path]],
+      :links => [[:service_id, :alias]]
+    ).tap do |whitelisted|
+      whitelisted[:environment] = params[:environment]
+    end
+  end
+
+  def service_create_params
+    params.permit(
+      :name,
+      :description,
+      :from,
+      :categories => [[:id]],
       :ports => [[:host_interface, :host_port, :container_port, :proto]],
       :expose => [],
       :volumes => [[:host_path, :container_path]],

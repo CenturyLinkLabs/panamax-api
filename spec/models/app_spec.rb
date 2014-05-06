@@ -188,4 +188,69 @@ describe App do
       subject.run
     end
   end
+
+  describe '#restart' do
+
+    let(:s1) { Service.new(name: 's1') }
+    let(:s2) { Service.new(name: 's2') }
+
+    before do
+      subject.services = [s1, s2]
+    end
+
+    it 'restarts each service' do
+      expect(s1).to receive(:restart)
+      expect(s2).to receive(:restart)
+      subject.restart
+    end
+  end
+
+  describe '#add_service' do
+    let(:some_app) {App.new}
+    let(:category) {AppCategory.find(1)}
+    let(:params) do
+      {
+          name: 'foo_bar',
+          description: 'my foo service',
+          from: 'some image',
+          categories: [{ id: 1, id: 2}],
+          ports: [{host_interface: '', host_port: '', container_port: '', proto: ''}],
+          expose: [''],
+          links:[],
+          volumes: [{host_path: '', container_path: ''}],
+          environment: { 'SOME_KEY' => ''}
+      }
+    end
+    before do
+      App.stub(:find).and_return(some_app)
+      some_app.stub(:resolve_name_conflicts).and_return(true)
+      AppCategory.stub(:find).and_return(category)
+    end
+
+    it 'creates a new service' do
+      result = some_app.add_service(params)
+      expect(result.name).to eq 'foo_bar'
+      expect(result.from).to eq 'some image'
+    end
+
+    it 'increments the service count' do
+      expect {
+        some_app.add_service(params)
+      }.to change { Service.count }.by(1)
+    end
+
+    it 'adds the service to the existing app' do
+      some_app.add_service(params)
+      some_app.reload
+      expect(Service.last.app).to eq some_app
+    end
+
+    it 'increments the app services count' do
+      expect {
+        some_app.add_service(params)
+        some_app.reload
+      }.to change { some_app.services.count }.by(1)
+    end
+
+  end
 end
