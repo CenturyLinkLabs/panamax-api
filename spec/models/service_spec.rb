@@ -216,12 +216,8 @@ describe Service do
 
     describe "#name=" do
 
-      let(:service) { Service.new(name:'foo') }
+      let(:service) { Service.create(name:'foo') }
       let(:attrs_with_bad_name){ { name: 'Foo123_- ~!@#$%&*()+={}|:;"\'<>,?^`][ -890baR'} }
-
-      before do
-        Service.stub(:find).and_return(service)
-      end
 
       it 'sanitizes names with bad chars' do
         expected_name = "Foo123_-_____________________________-890baR"
@@ -229,6 +225,21 @@ describe Service do
         service.reload
         expect(service.name).to eq(expected_name)
         expect(service.name.length).to eq(expected_name.length)
+      end
+
+      it 'appends an incremented count when service with updated name already exists' do
+        # simulate existing service
+        Service.create({ name: 'foo_bar' })
+        # update service name from 'foo' to 'foo_bar' which already exists
+        service.update_with_relationships({ name: 'foo_bar' })
+        service.reload
+        expect(service.name).to eq('foo_bar_1')
+      end
+
+      it 'appends an incremented count only if name is updated' do
+        service.update_with_relationships({ description: 'description for foo' })
+        service.reload
+        expect(service.name).to eq('foo')
       end
 
     end
