@@ -122,12 +122,17 @@ class Service < ActiveRecord::Base
     bad_name.gsub(/[^0-9A-z.-]|[\^]|[\`]|[\[]|[\]]/, '_')
   end
 
-  def resolve_name_conflicts
+  def increment_name(name)
     unless persisted?
-      sanitized_name = sanitize_name(name)
-      count = Service.where('name LIKE ?', "#{sanitized_name}%").count
-      self.name = (count > 0) ? "#{sanitized_name}_#{count}" : sanitized_name
+      count = Service.where('name LIKE ?', "#{name}%").count
+      name = (count > 0) ? "#{name}_#{count}" : name
     end
+    name
+  end
+
+  def resolve_name_conflicts
+    sanitized_name = sanitize_name(name)
+    self.name = increment_name(sanitized_name)
   end
 
   def service_state
