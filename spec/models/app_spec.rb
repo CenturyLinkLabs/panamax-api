@@ -252,5 +252,11 @@ describe App do
       }.to change { some_app.services.count }.by(1)
     end
 
+    it 'associates the service to the correct category' do
+      some_app.add_service(params)
+      some_app.reload
+      expect(Service.last.categories.first).to eq category
+    end
+
   end
 end

@@ -37,8 +37,8 @@ class App < ActiveRecord::Base
     service = Service.new(service_create_params)
     # add categories
     if categories
-      categories.each do |category_id|
-        category = AppCategory.find(category_id)
+      categories.each do |cat|
+        category = AppCategory.find(cat[:id])
         service.categories << category if category
       end
     end
