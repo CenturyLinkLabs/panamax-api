@@ -77,6 +77,9 @@ class Service < ActiveRecord::Base
       )
     end
 
+    attributes[:ports] ||= []
+    attributes[:environment] ||= {}
+
     # Do same as above w/ categories here
 
     self.update(attributes)

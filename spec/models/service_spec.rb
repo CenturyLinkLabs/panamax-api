@@ -186,10 +186,43 @@ describe Service do
       subject.stub(:update).and_return(true)
     end
 
-    context 'when links are not provided' do
+    context 'when ports are not provided' do
+      it 'updates with an empty ports list' do
+        expect(subject).to receive(:update).with(hash_including(ports: []))
+        subject.update_with_relationships(attrs)
+      end
+    end
 
-      it 'does not populate the related links' do
-        expect(subject).to receive(:update).with({ name: 'new_name', links: [] })
+    context 'when ports are provided' do
+
+      let(:attrs_with_ports) { attrs.merge(ports: [{ container_port: '8080' }]) }
+
+      it 'passes the ports through to the update' do
+        expect(subject).to receive(:update).with(hash_including(attrs_with_ports))
+        subject.update_with_relationships(attrs_with_ports)
+      end
+    end
+
+    context 'when environment vars are not provided' do
+      it 'updates with an empty env variable hash' do
+        expect(subject).to receive(:update).with(hash_including(environment: {}))
+        subject.update_with_relationships(attrs)
+      end
+    end
+
+    context 'when environment variables are provided' do
+
+      let(:attrs_with_env_vars) { attrs.merge(environment: { PASSWORD: 'password' }) }
+
+      it 'passes the ports through to the update' do
+        expect(subject).to receive(:update).with(hash_including(attrs_with_env_vars))
+        subject.update_with_relationships(attrs_with_env_vars)
+      end
+    end
+
+    context 'when links are not provided' do
+      it 'updates with an empty links list' do
+        expect(subject).to receive(:update).with(hash_including(links: []))
         subject.update_with_relationships(attrs)
       end
     end
@@ -209,7 +242,7 @@ describe Service do
       end
 
       it 'populates the related links' do
-        expect(subject).to receive(:update).with(attrs.merge(links: [service_link]))
+        expect(subject).to receive(:update).with(hash_including(links: [service_link]))
         subject.update_with_relationships(attrs_with_links)
       end
     end
