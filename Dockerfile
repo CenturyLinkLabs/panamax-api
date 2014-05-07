@@ -6,5 +6,4 @@ ADD . /var/app/panamax-api
 
 WORKDIR /var/app/panamax-api
 RUN bundle install
-RUN bundle exec rake db:create && bundle exec rake db:migrate && bundle exec rake db:seed
-CMD bundle exec rails s
+CMD bundle exec rake db:create && bundle exec rake db:migrate && bundle exec rake db:seed && bundle exec rails s
