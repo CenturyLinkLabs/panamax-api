@@ -45,11 +45,11 @@ class Service < ActiveRecord::Base
   end
 
   def shutdown
-    manager.destroy
+    manager.destroy rescue nil
   end
 
   def restart
-    self.shutdown rescue nil
+    self.shutdown
     self.submit
     self.start
   end
