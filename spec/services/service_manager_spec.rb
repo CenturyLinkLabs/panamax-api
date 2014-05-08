@@ -91,6 +91,7 @@ describe ServiceManager do
         expect(service_def.exec_stop).to eq "/usr/bin/docker kill #{service_name}"
         expect(service_def.exec_stop_post).to eq "-/usr/bin/docker rm #{service_name}"
         expect(service_def.restart_sec).to eq '10'
+        expect(service_def.timeout_start_sec).to eq '5min'
       end
 
       subject.submit
