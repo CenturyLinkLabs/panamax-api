@@ -43,7 +43,7 @@ rails = Template.create(
     recommended: true
 )
 rails.images.create(
-    name: 'DB',
+    name: 'DB_2',
     repository: 'dharmamike/dc-pgsql',
     tag: 'latest',
     description: 'PostgreSQL',
@@ -54,12 +54,12 @@ rails.images.create(
   repository: 'dharmamike/dc-rails',
   tag: 'latest',
   description: 'welcome to rails',
-  links: [{service: 'DB', alias:'DB_1'}],
+  links: [{service: 'DB_2', alias:'DB_1'}],
   ports: [{host_port: 8088, container_port: 3000}]
 )
 
 Template.create(
   name: 'Apache',
-  description: 'This is a reccomended apache template',
+  description: 'This is a recommended apache template',
   recommended: false
 )
