@@ -1,9 +1,9 @@
-FROM panamax/ruby
-
-RUN apt-get install -y libsqlite3-dev
+FROM 74.201.240.198:5000/ruby:alpha
 
 ADD . /var/app/panamax-api
 
+EXPOSE 3000
+
 WORKDIR /var/app/panamax-api
-RUN bundle install
+RUN bundle
 CMD bundle exec rake db:create && bundle exec rake db:migrate && bundle exec rake db:seed && bundle exec rails s

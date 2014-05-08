@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '4.1.0'
 gem 'sqlite3'
-gem 'faraday_middleware'
+gem 'faraday_middleware', '0.9.0'
 gem 'jbuilder', '~> 2.0'
 gem 'docker-api', '1.9.0', require: 'docker'
 gem 'active_model_serializers'
