@@ -15,7 +15,8 @@ describe PanamaxAgent::Fleet::ServiceDefinition do
       exec_reload: 'exec_reload',
       exec_stop: 'exec_stop',
       exec_stop_post: 'exec_stop_post',
-      restart_sec: 'restart_sec'
+      restart_sec: 'restart_sec',
+      timeout_start_sec: 'timeout_start_sec'
     }
   end
 
@@ -32,6 +33,7 @@ describe PanamaxAgent::Fleet::ServiceDefinition do
   it { should respond_to :exec_stop }
   it { should respond_to :exec_stop_post }
   it { should respond_to :restart_sec }
+  it { should respond_to :timeout_start_sec }
 
   describe '#initialize' do
 
@@ -47,6 +49,7 @@ describe PanamaxAgent::Fleet::ServiceDefinition do
     its(:exec_stop) { should eql attrs[:exec_stop] }
     its(:exec_stop_post) { should eql attrs[:exec_stop_post] }
     its(:restart_sec) { should eql attrs[:restart_sec] }
+    its(:timeout_start_sec) { should eql attrs[:timeout_start_sec] }
 
     context 'when a block is specified' do
 
@@ -81,6 +84,7 @@ describe PanamaxAgent::Fleet::ServiceDefinition do
               'ExecStopPost' => attrs[:exec_stop_post],
               'RestartSec' => attrs[:restart_sec],
               'Restart' => 'always',
+              'TimeoutStartSec' => attrs[:timeout_start_sec]
             }
           }
         }

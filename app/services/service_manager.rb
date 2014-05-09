@@ -54,6 +54,7 @@ class ServiceManager
       sd.exec_stop = "/usr/bin/docker kill #{service.name}"
       sd.exec_stop_post = docker_rm
       sd.restart_sec = '10'
+      sd.timeout_start_sec = '5min'
     end
   end
 end

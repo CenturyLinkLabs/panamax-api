@@ -5,7 +5,7 @@ module PanamaxAgent
       attr_accessor :name
       attr_accessor :description, :after, :requires
       attr_accessor :exec_start_pre, :exec_start, :exec_start_post,
-        :exec_reload, :exec_stop, :exec_stop_post, :restart_sec
+        :exec_reload, :exec_stop, :exec_stop_post, :restart_sec, :timeout_start_sec
 
       def initialize(name, attrs={})
         self.name = name
@@ -21,6 +21,7 @@ module PanamaxAgent
         self.exec_stop = attrs[:exec_stop]
         self.exec_stop_post = attrs[:exec_stop_post]
         self.restart_sec = attrs[:restart_sec]
+        self.timeout_start_sec = attrs[:timeout_start_sec]
 
         yield self if block_given?
       end
@@ -65,6 +66,7 @@ module PanamaxAgent
         block['ExecStopPost'] = exec_stop_post if exec_stop_post
         block['Restart'] = 'always'
         block['RestartSec'] = restart_sec if restart_sec
+        block['TimeoutStartSec'] = timeout_start_sec if timeout_start_sec
 
         block
       end
