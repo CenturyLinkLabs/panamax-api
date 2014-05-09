@@ -251,5 +251,23 @@ describe Service do
       expect(subject.update_with_relationships(attrs)).to eq true
     end
 
+    describe "#name=" do
+
+      let(:service) { Service.new(name:'foo') }
+      let(:attrs_with_bad_name){ { name: 'Foo123_- ~!@#$%&*()+={}|:;"\'<>,?^`][ -890baR'} }
+
+      before do
+        Service.stub(:find).and_return(service)
+      end
+
+      it 'sanitizes names with bad chars' do
+        expected_name = "Foo123_-_____________________________-890baR"
+        service.update_with_relationships(attrs_with_bad_name)
+        service.reload
+        expect(service.name).to eq(expected_name)
+        expect(service.name.length).to eq(expected_name.length)
+      end
+
+    end
   end
 end
