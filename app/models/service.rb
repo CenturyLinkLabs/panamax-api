@@ -24,16 +24,8 @@ class Service < ActiveRecord::Base
     "#{name}.service"
   end
 
-  def load_state
-    service_state['loadState']
-  end
-
-  def active_state
-    service_state['activeState']
-  end
-
-  def sub_state
-    service_state['subState']
+  def service_state
+    manager.get_state
   end
 
   def submit
@@ -108,12 +100,6 @@ class Service < ActiveRecord::Base
     )
   end
 
-  protected
-
-  def fleet_client
-    PanamaxAgent.fleet_client
-  end
-
   private
 
   def manager
@@ -137,15 +123,4 @@ class Service < ActiveRecord::Base
     sanitized_name = sanitize_name(name)
     self.name = increment_name(sanitized_name)
   end
-
-  def service_state
-    if not @service_state
-      fleet_state = fleet_client.get_state(unit_name)
-      @service_state = JSON.parse(fleet_state['node']['value'])
-    end
-    @service_state
-  rescue Exception
-    {}
-  end
-
 end

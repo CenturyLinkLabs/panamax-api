@@ -6,7 +6,8 @@ describe Service do
     double(:dummy_manager,
       submit: true,
       start: true,
-      destroy: true
+      destroy: true,
+      get_state: { load_state: 'loaded' }
     )
   end
 
@@ -30,48 +31,10 @@ describe Service do
     end
   end
 
-  describe 'service states' do
-    let(:fleet_state) do
-      {
-          'node' => {
-              'value' => '{"loadState":"loaded", "activeState":"active","subState":"running"}'
-          }
-      }
+  describe '#service_state' do
+    it 'returns the service state from the service manager' do
+      expect(subject.service_state).to eql({ load_state: 'loaded' })
     end
-
-    let(:fleet_client) do
-      double(:fleet_client, get_state: fleet_state)
-    end
-
-    before do
-      PanamaxAgent.stub(:fleet_client).and_return(fleet_client)
-    end
-
-    [:load_state, :active_state, :sub_state].each do |attr|
-      it 'invokes the Fleet API' do
-        expect(PanamaxAgent.fleet_client).to receive(:get_state).with(subject.unit_name)
-        subject.send(attr)
-      end
-    end
-
-    describe 'load_state' do
-      it 'returns loadState from Fleet' do
-        expect(subject.load_state).to eq 'loaded'
-      end
-    end
-
-    describe 'active_state' do
-      it 'returns activeState from Fleet' do
-        expect(subject.active_state).to eq 'active'
-      end
-    end
-
-    describe 'sub_state' do
-      it 'returns subState from Fleet' do
-        expect(subject.sub_state).to eq 'running'
-      end
-    end
-
   end
 
   describe '.new_from_image' do
