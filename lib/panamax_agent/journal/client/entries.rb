@@ -11,11 +11,14 @@ module PanamaxAgent
         #             : 1  - show entries from the first boot
         #             : 99999 - special value to show entries from all boots
         ###
-        def get_entries_by_fields(fieldpairs={}, boot_offset=0)
+        def get_entries_by_fields(fieldpairs={}, cursor=nil, boot_offset=0)
+          headers = {}
+          headers['Range'] = "entries=#{cursor}" if cursor
+
           opts = remove_invalid_fieldpairs(fieldpairs)
           opts['boot'] = boot_offset unless boot_offset == 99999
 
-          get(entries_path, opts)
+          get(entries_path, opts, headers)
         end
 
         private
@@ -32,6 +35,7 @@ module PanamaxAgent
               opts[key] = value
             end
           end
+          return opts
         end
 
       end
