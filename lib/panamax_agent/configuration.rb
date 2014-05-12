@@ -11,6 +11,8 @@ module PanamaxAgent
       :etcd_api_url,
       :etcd_api_version,
       :journal_api_url,
+      :pmx_registry_api_url,
+      :pmx_registry_api_version,
       :open_timeout,
       :read_timeout,
       :ssl_options,
@@ -24,6 +26,8 @@ module PanamaxAgent
     DEFAULT_ETCD_API_URL = ENV['FLEETCTL_ENDPOINT']
     DEFAULT_ETCD_API_VERSION = 'v2'
     DEFAULT_JOURNAL_API_URL = ENV['JOURNAL_ENDPOINT']
+    DEFAULT_PMX_REGISTRY_API_URL = 'http://74.201.240.198:5000'
+    DEFAULT_PMX_REGISTRY_API_VERSION = 'v1'
     DEFAULT_OPEN_TIMEOUT = 2
     DEFAULT_READ_TIMEOUT = 5
     DEFAULT_SSL_OPTIONS = { verify: false }
@@ -47,6 +51,8 @@ module PanamaxAgent
       self.etcd_api_url = DEFAULT_ETCD_API_URL
       self.etcd_api_version = DEFAULT_ETCD_API_VERSION
       self.journal_api_url = DEFAULT_JOURNAL_API_URL
+      self.pmx_registry_api_url = DEFAULT_PMX_REGISTRY_API_URL
+      self.pmx_registry_api_version = DEFAULT_PMX_REGISTRY_API_VERSION
       self.open_timeout = DEFAULT_OPEN_TIMEOUT
       self.read_timeout = DEFAULT_READ_TIMEOUT
       self.ssl_options = DEFAULT_SSL_OPTIONS
