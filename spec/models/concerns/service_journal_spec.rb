@@ -24,12 +24,23 @@ describe ServiceJournal do
 
     it 'invokes get_entries_by_fields on journal client' do
       expect(journal_client).to receive(:get_entries_by_fields)
-        .with({ '_SYSTEMD_UNIT' => subject.unit_name })
+        .with({ '_SYSTEMD_UNIT' => subject.unit_name }, nil)
       subject.journal
     end
 
     it 'returns the service journal' do
       expect(subject.journal).to eq journal
+    end
+
+    context 'when a cursor is supplied' do
+      let(:cursor) { 'c2' }
+
+      it 'passes the cursor to the journal_client' do
+
+        expect(journal_client).to receive(:get_entries_by_fields)
+          .with({ '_SYSTEMD_UNIT' => subject.unit_name }, cursor)
+        subject.journal(cursor)
+      end
     end
   end
 end

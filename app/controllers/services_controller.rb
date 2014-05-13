@@ -18,7 +18,7 @@ class ServicesController < ApplicationController
   end
 
   def journal
-    respond_with app.services.find(params[:id]).journal
+    respond_with app.services.find(params[:id]).journal(params[:cursor])
   end
 
   def destroy

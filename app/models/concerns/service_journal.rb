@@ -1,8 +1,11 @@
 module ServiceJournal
   extend ActiveSupport::Concern
 
-  def journal
-    journal_client.get_entries_by_fields({ '_SYSTEMD_UNIT' => unit_name })
+  def journal(cursor=nil)
+    journal_client.get_entries_by_fields(
+      { '_SYSTEMD_UNIT' => unit_name },
+      cursor
+    )
   end
 
   private
