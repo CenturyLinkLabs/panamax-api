@@ -13,7 +13,7 @@ wp = Template.create(
   icon: 'http://panamax.ca.tier3.io/template_logos/wordpress.png'
 )
 web_cat = TemplateCategory.create(
-  name: 'Web Tier',
+  name: 'Web Containers',
   template: wp
 )
 wp.images.create(
