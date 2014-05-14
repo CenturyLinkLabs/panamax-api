@@ -93,7 +93,8 @@ class Service < ActiveRecord::Base
       ports: image.ports,
       expose: image.expose,
       environment: image.environment,
-      volumes: image.volumes
+      volumes: image.volumes,
+      icon: image.icon
     )
   end
 
@@ -104,7 +105,8 @@ class Service < ActiveRecord::Base
       ports: image_create_params[:ports],
       expose: image_create_params[:expose],
       environment: image_create_params[:environment],
-      volumes: image_create_params[:volumes]
+      volumes: image_create_params[:volumes],
+      icon: image_create_params[:icon]
     )
   end
 

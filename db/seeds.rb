@@ -25,7 +25,8 @@ wp.images.create(
   ports: [{host_port: 8080, container_port: 80}],
   expose: [80],
   environment: { 'DB_PASSWORD' => 'pass@word01' },
-  categories: [web_cat]
+  categories: [web_cat],
+  icon: 'http://panamax.ca.tier3.io/service_icons/icon_service_wp_grey.png'
 )
 wp.images.create(
   name: 'DB_1',
@@ -34,20 +35,24 @@ wp.images.create(
   description: 'MySQL',
   expose: [3306],
   environment: { 'MYSQL_ROOT_PASSWORD' => 'pass@word01'},
-  ports: [{host_port: 3306, container_port: 3306}]
+  ports: [{host_port: 3306, container_port: 3306}],
+  icon: 'http://panamax.ca.tier3.io/service_icons/icon_service_db_grey.png'
 )
 
 rails = Template.create(
     name: 'Rails',
     description: 'This is a Rails app template',
-    recommended: true
+    recommended: true,
+    icon: 'http://panamax.ca.tier3.io/template_logos/default.png'
+
 )
 rails.images.create(
     name: 'DB_2',
     repository: 'dharmamike/dc-pgsql',
     tag: 'latest',
     description: 'PostgreSQL',
-    ports: [{host_port: 5432, container_port: 5432}]
+    ports: [{host_port: 5432, container_port: 5432}],
+    icon: 'http://panamax.ca.tier3.io/service_icons/icon_service_db_grey.png'
 )
 rails.images.create(
   name: 'APP',
@@ -55,11 +60,14 @@ rails.images.create(
   tag: 'latest',
   description: 'welcome to rails',
   links: [{service: 'DB_2', alias:'DB_1'}],
-  ports: [{host_port: 8088, container_port: 3000}]
+  ports: [{host_port: 8088, container_port: 3000}],
+  icon: 'http://panamax.ca.tier3.io/service_icons/icon_service_docker_grey.png'
+
 )
 
 Template.create(
   name: 'Apache',
   description: 'This is a recommended apache template',
-  recommended: false
+  recommended: false,
+
 )

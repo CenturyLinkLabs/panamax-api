@@ -9,7 +9,8 @@ describe ServiceLiteSerializer do
       :id,
       :name,
       :categories,
-      :errors
+      :errors,
+      :icon
     ]
     expect(serialized.keys).to match_array expected_keys
   end

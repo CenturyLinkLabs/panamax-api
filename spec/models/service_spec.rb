@@ -84,7 +84,8 @@ describe Service do
           ports: [{host_interface: '', host_port: '', container_port: '', proto: ''}],
           expose: [''],
           environment: {'SOME_KEY' => ''},
-          volumes: [{host_path: '', container_path: ''}]
+          volumes: [{host_path: '', container_path: ''}],
+          icon: 'someicon.png'
         }
       )
     end
@@ -98,6 +99,7 @@ describe Service do
       expect(result.expose).to eq ['']
       expect(result.environment).to eq({'SOME_KEY' => ''})
       expect(result.volumes).to eq [{host_path: '', container_path: ''}]
+      expect(result.icon).to eq 'someicon.png'
     end
   end
 
