@@ -98,6 +98,7 @@ ActiveRecord::Schema.define(version: 20140425195310) do
     t.text    "expose"
     t.text    "environment"
     t.text    "volumes"
+    t.string  "icon"
     t.integer "app_id"
   end
 

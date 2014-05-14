@@ -43,6 +43,7 @@ class ServicesController < ApplicationController
     params.permit(
       :name,
       :description,
+      :icon,
       :ports => [[:host_interface, :host_port, :container_port, :proto]],
       :expose => [],
       :volumes => [[:host_path, :container_path]],
@@ -57,6 +58,7 @@ class ServicesController < ApplicationController
       :name,
       :description,
       :from,
+      :icon,
       :categories => [[:id]],
       :ports => [[:host_interface, :host_port, :container_port, :proto]],
       :expose => [],
