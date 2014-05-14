@@ -8,6 +8,11 @@ class Service < ActiveRecord::Base
   has_many :links, class_name: 'ServiceLink', foreign_key: 'linked_from_service_id',
     dependent: :destroy
 
+  # Only here for the dependent destroy. Want to remove any service link joins that may point
+  # to this model as the 'linked_to_service'
+  has_many :linked_from_links, class_name: 'ServiceLink', foreign_key: 'linked_to_service_id',
+    dependent: :destroy
+
   serialize :ports, Array
   serialize :expose, Array
   serialize :environment, Hash
