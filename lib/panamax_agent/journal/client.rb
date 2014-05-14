@@ -14,10 +14,11 @@ module PanamaxAgent
           'ERRNO',             # low-level Unix error number
           'SYSLOG_IDENTIFIER',
           '_PID',              # process id for service
-          '_SYSTEMD_UNIT',     # by service_name.service
+          '_SYSTEMD_UNIT',     # only journal logs by service_name.service
           '_SYSTEMD_CGROUP',   # the cgroup for the service '/system.slice/update-engine.service'
           '_MACHINE_ID',
           '_HOSTNAME',
+          'UNIT',              # only systemd logs by service_name.service
           '_TRANSPORT'         # ['driver', 'syslog', 'journal', 'stdout', 'kernel']
       ]
 

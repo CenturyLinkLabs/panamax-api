@@ -18,6 +18,7 @@ describe PanamaxAgent::Journal::Client::Entries do
       '_SYSTEMD_CGROUP' => '/system.slice/update-engine.service',
       '_MACHINE_ID' => 'ad688e42fbbb4d6b8a8f804147245d7b',
       '_HOSTNAME' => 'coreos-alpha',
+      'UNIT' => 'update_engine.service',
       '_TRANSPORT' => 'stdout'
     }
   end
