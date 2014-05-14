@@ -206,4 +206,42 @@ describe ServicesController do
 
   end
 
+  describe '#start' do
+    let(:dummy_app) { double(:app) }
+    let(:dummy_service) { Service.first }
+
+    before do
+      App.stub(:find).and_return(dummy_app)
+      dummy_app.stub_chain(:services, :find).and_return(dummy_service)
+      dummy_service.stub(:started?).and_return(false)
+      dummy_service.stub(:start).and_return(true)
+    end
+
+    context 'when service is not started' do
+      it 'starts the service' do
+        expect(dummy_service).to receive(:start)
+        post :start, { app_id: app.id, id: dummy_service.id, format: :json }
+      end
+      it 'returns the service in json as a response' do
+        post :start, { app_id: app.id, id: dummy_service.id, format: :json }
+        expect(response.body).to eq (ServiceSerializer.new(dummy_service)).to_json
+      end
+    end
+
+    context 'when service is already started' do
+      before do
+        dummy_service.stub(:started?).and_return(true)
+      end
+      it 'does nothing' do
+        expect(dummy_service).to_not receive(:start)
+        post :start, { app_id: app.id, id: dummy_service.id, format: :json }
+      end
+      it 'returns the service in json as a response' do
+        post :start, { app_id: app.id, id: dummy_service.id, format: :json }
+        expect(response.body).to eq (ServiceSerializer.new(dummy_service)).to_json
+      end
+    end
+
+
+  end
 end

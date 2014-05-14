@@ -8,6 +8,7 @@ PanamaxApi::Application.routes.draw do
     resources :services, only: [:index, :show, :create, :update, :destroy] do
       member do
         get :journal
+        post :start
       end
     end
   end

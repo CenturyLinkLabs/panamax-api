@@ -46,6 +46,10 @@ class Service < ActiveRecord::Base
     self.start
   end
 
+  def started?
+    !service_state.empty?
+  end
+
   def copy_categories_from_image(image, app_categories)
     image.categories.each do |image_cat|
       self.categories << app_categories.find { |app_cat| app_cat.name == image_cat.name }
