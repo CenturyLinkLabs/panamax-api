@@ -10,7 +10,8 @@ wp = Template.create(
   name: 'Wordpress',
   description: 'This is a wordpress template',
   recommended: true,
-  icon: 'http://panamax.ca.tier3.io/template_logos/wordpress.png'
+  icon: 'http://panamax.ca.tier3.io/template_logos/wordpress.png',
+  documentation: "# Wordpress\r\nThis is a WordPress template based on the [panamax/panamax-docker-wordpress](https://index.docker.io/u/panamax/panamax-docker-wordpress/) and [panamax/panamax-docker-mysql](https://index.docker.io/u/panamax/panamax-docker-mysql/) images.\r\nThe template exposes port 80 in the container to port 8080 on the Docker host.  In order to view the WordPress admin console after running the template, ensure that the virtual machine serving as the Docker host is forwarding a port to port 8080 on the host."
 )
 web_cat = TemplateCategory.create(
   name: 'Web Tier',

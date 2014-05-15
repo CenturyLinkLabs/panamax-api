@@ -13,6 +13,7 @@ describe App do
         result.reload
         expect(result.name).to eq template.name
         expect(result.from).to eq "Template: #{template.name}"
+        expect(result.documentation).to eq template.documentation
       end
 
       it 'when using the same template again, has a unique name' do

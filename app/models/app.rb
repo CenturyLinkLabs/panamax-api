@@ -7,7 +7,7 @@ class App < ActiveRecord::Base
   def self.create_from_template(t)
     categories = t.categories.map { |cat| AppCategory.new(name: cat.name) }
 
-    app = self.create(name: t.name, from: "Template: #{t.name}")
+    app = self.create(name: t.name, from: "Template: #{t.name}", documentation: t.documentation)
     app.categories = categories
     app.services = create_services(t, categories)
     app.save
