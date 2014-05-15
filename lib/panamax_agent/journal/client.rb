@@ -26,6 +26,16 @@ module PanamaxAgent
       include PanamaxAgent::Journal::Client::Machine
       include PanamaxAgent::Journal::Client::Entries
       include PanamaxAgent::Journal::Client::Fields
+
+      def list_journal_entries(services, cursor=nil)
+        services = [*services]
+        journal_lines = get_entries_by_fields({}, cursor)
+
+        journal_lines.select do |journal_line|
+          services.include?(journal_line['UNIT']) ||
+            services.include?(journal_line['_SYSTEMD_UNIT'])
+        end
+      end
     end
   end
 end
