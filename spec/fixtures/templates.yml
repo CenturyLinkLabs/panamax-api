@@ -4,3 +4,4 @@ wordpress:
   keywords: 'wordpress, wp'
   recommended: true
   icon: '/some/path/to/an/icon.png'
+  documentation: "# Title\r\nSome *markdown*"
