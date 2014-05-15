@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 20140425195310) do
   create_table "apps", force: true do |t|
     t.string "name"
     t.string "from"
+    t.text   "documentation"
   end
 
   create_table "image_categories", force: true do |t|

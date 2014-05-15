@@ -1,7 +1,7 @@
 class AppSerializer < ActiveModel::Serializer
   self.root = false
 
-  attributes :id, :name, :from, :errors
+  attributes :id, :name, :from, :errors, :documentation
 
   has_many :categories, serializer: CategorySerializer
   has_many :services, serializer: ServiceLiteSerializer
