@@ -9,12 +9,20 @@ describe PanamaxAgent::Fleet::Client do
     let(:service_def) { PanamaxAgent::Fleet::ServiceDefinition.new('foo.service') }
 
     before do
-      subject.stub(:receive_payload).and_return(nil)
+      subject.stub(:create_unit).and_return(nil)
+      subject.stub(:create_job).and_return(nil)
     end
 
     it 'invokes #create_payload' do
-      expect(subject).to receive(:create_payload)
-        .with(service_def.name, service_def.to_hash)
+      expect(subject).to receive(:create_unit)
+        .with(service_def.sha1, service_def.unit_def)
+
+      subject.submit(service_def)
+    end
+
+    it 'invokes #create_job' do
+      expect(subject).to receive(:create_job)
+        .with(service_def.name, service_def.job_def)
 
       subject.submit(service_def)
     end
@@ -107,15 +115,11 @@ describe PanamaxAgent::Fleet::Client do
 
     before do
       subject.stub(:delete_job).and_return(nil)
-      subject.stub(:delete_payload).and_return(nil)
     end
 
     it 'invokes #delete_job' do
 
       expect(subject).to receive(:delete_job)
-                         .with(service_name)
-                         .and_return(nil)
-      expect(subject).to receive(:delete_payload)
                          .with(service_name)
                          .and_return(nil)
 

@@ -3,6 +3,7 @@ require 'panamax_agent/client'
 require 'panamax_agent/fleet/client/payload'
 require 'panamax_agent/fleet/client/job'
 require 'panamax_agent/fleet/client/state'
+require 'panamax_agent/fleet/client/unit'
 
 
 module PanamaxAgent
@@ -21,9 +22,11 @@ module PanamaxAgent
       include PanamaxAgent::Fleet::Client::Payload
       include PanamaxAgent::Fleet::Client::Job
       include PanamaxAgent::Fleet::Client::State
+      include PanamaxAgent::Fleet::Client::Unit
 
       def submit(service_def)
-        create_payload(service_def.name, service_def.to_hash)
+        create_unit(service_def.sha1, service_def.unit_def)
+        create_job(service_def.name, service_def.job_def)
       end
 
       def start(service_name)
@@ -47,7 +50,6 @@ module PanamaxAgent
 
       def destroy(service_name)
         delete_job(service_name)
-        delete_payload(service_name)
       end
 
       protected
