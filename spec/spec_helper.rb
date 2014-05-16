@@ -59,7 +59,7 @@ RSpec.configure do |config|
   config.before(:each) do
     # Stub methods on PanamaxAgent::Journal::Client
     journal_client = double(:journal_client)
-    journal_client.stub(get_entries_by_fields: hash_from_fixture('journal'))
+    journal_client.stub(list_journal_entries: hash_from_fixture('journal'))
 
     PanamaxAgent.stub(journal_client: journal_client)
   end
