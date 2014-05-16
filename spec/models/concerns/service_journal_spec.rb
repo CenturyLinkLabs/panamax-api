@@ -18,13 +18,13 @@ describe ServiceJournal do
     let(:journal) { hash_from_fixture('journal') }
 
     before do
-      journal_client.stub(get_entries_by_fields: journal)
+      journal_client.stub(list_journal_entries: journal)
       PanamaxAgent.stub(journal_client: journal_client)
     end
 
     it 'invokes get_entries_by_fields on journal client' do
-      expect(journal_client).to receive(:get_entries_by_fields)
-        .with({ '_SYSTEMD_UNIT' => subject.unit_name }, nil)
+      expect(journal_client).to receive(:list_journal_entries)
+        .with(subject.unit_name, nil)
       subject.journal
     end
 
@@ -37,8 +37,8 @@ describe ServiceJournal do
 
       it 'passes the cursor to the journal_client' do
 
-        expect(journal_client).to receive(:get_entries_by_fields)
-          .with({ '_SYSTEMD_UNIT' => subject.unit_name }, cursor)
+        expect(journal_client).to receive(:list_journal_entries)
+          .with(subject.unit_name, cursor)
         subject.journal(cursor)
       end
     end

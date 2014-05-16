@@ -11,6 +11,7 @@ VALID_FIELDS = [
     '_SYSTEMD_CGROUP',   # the cgroup for the service '/system.slice/update-engine.service'
     '_MACHINE_ID',
     '_HOSTNAME',
+    'UNIT',
     '_TRANSPORT'         # ['driver', 'syslog', 'journal', 'stdout', 'kernel']
 ]
 
