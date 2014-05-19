@@ -1,6 +1,5 @@
 require 'json'
 require 'panamax_agent/client'
-require 'panamax_agent/fleet/client/payload'
 require 'panamax_agent/fleet/client/job'
 require 'panamax_agent/fleet/client/state'
 require 'panamax_agent/fleet/client/unit'
@@ -19,7 +18,6 @@ module PanamaxAgent
 
       include PanamaxAgent::Fleet::Connection
 
-      include PanamaxAgent::Fleet::Client::Payload
       include PanamaxAgent::Fleet::Client::Job
       include PanamaxAgent::Fleet::Client::State
       include PanamaxAgent::Fleet::Client::Unit
@@ -30,18 +28,6 @@ module PanamaxAgent
       end
 
       def start(service_name)
-        payload_json = get_payload(service_name)
-        payload = json_to_hash(payload_json['node']['value'])
-
-        # Wrap payload in a job
-        job = {
-          "Name" => service_name,
-          "JobRequirements" => {},
-          "Payload" => payload,
-          "State" => nil
-        }
-
-        create_job(service_name, job)
       end
 
       def stop(service_name)
