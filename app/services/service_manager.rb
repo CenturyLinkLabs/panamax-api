@@ -1,7 +1,7 @@
 class ServiceManager
 
-  def self.submit(service)
-    new(service).submit
+  def self.load(service)
+    new(service).load
   end
 
   def self.start(service)
@@ -12,8 +12,8 @@ class ServiceManager
     @service = service
   end
 
-  def submit
-    fleet_client.submit(service_def_from_service(@service))
+  def load
+    fleet_client.load(service_def_from_service(@service))
   end
 
   def start
