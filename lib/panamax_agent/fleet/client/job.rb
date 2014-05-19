@@ -30,6 +30,12 @@ module PanamaxAgent
           delete(job_path(service_name), opts)
         end
 
+        # Valid values for state - :loaded, :launched, :inactive
+        def update_job_target_state(service_name, state)
+          opts = { value: state }
+          put(job_path(service_name, 'target-state'), opts)
+        end
+
         private
 
         def job_path(*parts)

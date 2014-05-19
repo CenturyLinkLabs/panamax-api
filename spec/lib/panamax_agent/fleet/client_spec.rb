@@ -30,65 +30,16 @@ describe PanamaxAgent::Fleet::Client do
 
   describe '#start' do
     let(:service_name) { 'foo.service' }
-    let(:payload) do
-      {
-        'node' => {
-          'value' => "{ \"name\": \"#{service_name}\" }"
-        }
-      }
-    end
 
     before do
-      subject.stub(:get_payload).and_return(payload)
-      subject.stub(:create_job).and_return(nil)
+      subject.stub(:update_job_target_state)
     end
 
-    it 'invokes #get_payload' do
-      expect(subject).to receive(:get_payload)
-        .with(service_name)
-        .and_return(payload)
+    it 'invokes #update_job_target_state' do
+      expect(subject).to receive(:update_job_target_state)
+        .with(service_name, :launched)
 
       subject.start(service_name)
-    end
-
-    it 'invokes #create_job' do
-      expected_job = {
-        "Name" => service_name,
-        "JobRequirements" => {},
-        "Payload" => JSON.parse(payload['node']['value']),
-        "State" => nil
-      }
-
-      expect(subject).to receive(:create_job)
-        .with(service_name, expected_job)
-        .and_return(nil)
-
-      subject.start(service_name)
-    end
-
-    context 'with bad stuff' do
-      before do
-        subject.stub(:get_payload).and_return({
-          'node' => {
-            'value' => "{ kaplow! Good luck pars'n this! }\" }"
-          }
-        })
-      end
-
-      it 'receives an empty thingy' do
-        expected_job = {
-          "Name" => service_name,
-          "JobRequirements" => {},
-          "Payload" => {},
-          "State" => nil
-        }
-
-        expect(subject).to receive(:create_job)
-          .with(service_name, expected_job)
-          .and_return(nil)
-
-        subject.start(service_name)
-      end
     end
   end
 
@@ -96,16 +47,30 @@ describe PanamaxAgent::Fleet::Client do
     let(:service_name) { 'foo.service' }
 
     before do
-      subject.stub(:delete_job).and_return(nil)
+      subject.stub(:update_job_target_state)
     end
 
-    it 'invokes #delete_job' do
-
-      expect(subject).to receive(:delete_job)
-                         .with(service_name)
-                         .and_return(nil)
+    it 'invokes #update_job_target_state' do
+      expect(subject).to receive(:update_job_target_state)
+                         .with(service_name, :loaded)
 
       subject.stop(service_name)
+    end
+
+  end
+
+  describe '#unload' do
+    let(:service_name) { 'foo.service' }
+
+    before do
+      subject.stub(:update_job_target_state)
+    end
+
+    it 'invokes #update_job_target_state' do
+      expect(subject).to receive(:update_job_target_state)
+                         .with(service_name, :inactive)
+
+      subject.unload(service_name)
     end
 
   end

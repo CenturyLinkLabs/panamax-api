@@ -96,4 +96,28 @@ describe PanamaxAgent::Fleet::Client::Job do
       expect(subject.delete_job(service_name)).to eql(response)
     end
   end
+
+  describe '#update_job_target_state' do
+
+    let(:service_name) { 'foo.service' }
+    let(:state) { :foobared }
+
+    before do
+      subject.stub(put: response)
+    end
+
+    it 'PUTs the state to the Fleet job state key' do
+      opts = { value: state }
+
+      expect(subject).to receive(:put)
+        .with("v2/keys/_coreos.com/fleet/job/#{service_name}/target-state", opts)
+        .and_return(response)
+
+      subject.update_job_target_state(service_name, state)
+    end
+
+    it 'returns the job response' do
+      expect(subject.update_job_target_state(service_name, state)).to eql(response)
+    end
+  end
 end

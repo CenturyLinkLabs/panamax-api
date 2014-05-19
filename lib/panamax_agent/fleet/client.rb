@@ -28,10 +28,15 @@ module PanamaxAgent
       end
 
       def start(service_name)
+        update_job_target_state(service_name, :launched)
       end
 
       def stop(service_name)
-        delete_job(service_name)
+        update_job_target_state(service_name, :loaded)
+      end
+
+      def unload(service_name)
+        update_job_target_state(service_name, :inactive)
       end
 
       def destroy(service_name)

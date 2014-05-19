@@ -27,4 +27,3 @@ module PanamaxAgent
     end
   end
 end
-
