@@ -197,11 +197,28 @@ describe App do
 
     before do
       subject.services = [s1, s2]
+      subject.services.each do |s|
+        s.stub(:shutdown)
+        s.stub(:submit)
+        s.stub(:start)
+      end
     end
 
-    it 'restarts each service' do
-      expect(s1).to receive(:restart)
-      expect(s2).to receive(:restart)
+    it 'shutsdown each service' do
+      expect(s1).to receive(:shutdown)
+      expect(s2).to receive(:shutdown)
+      subject.restart
+    end
+
+    it 'submits each service' do
+      expect(s1).to receive(:submit)
+      expect(s2).to receive(:submit)
+      subject.restart
+    end
+
+    it 'starts each service' do
+      expect(s1).to receive(:start)
+      expect(s2).to receive(:start)
       subject.restart
     end
   end

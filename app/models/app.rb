@@ -28,7 +28,9 @@ class App < ActiveRecord::Base
   end
 
   def restart
-    services.each(&:restart)
+    services.each(&:shutdown)
+    services.each(&:submit)
+    services.each(&:start)
   end
 
   def add_service(service_create_params)
