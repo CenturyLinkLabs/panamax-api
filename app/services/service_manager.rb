@@ -47,9 +47,11 @@ class ServiceManager
       sd.description = service.description
 
       # Collect service dependencies
-      dep_services = service.links.map { |link| link.linked_to_service.unit_name }.join(' ')
-      sd.after = dep_services
-      sd.requires = dep_services
+      if service.links.any?
+        dep_services = service.links.map { |link| link.linked_to_service.unit_name }.join(' ')
+        sd.after = dep_services
+        sd.requires = dep_services
+      end
 
       # The '-' prefix in the docker rm command causes the return value to be
       # ignored. We want to try and remove the container if it has exited, but
