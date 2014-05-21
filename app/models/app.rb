@@ -1,4 +1,6 @@
 class App < ActiveRecord::Base
+  include AppJournal
+
   has_many :services, dependent: :destroy
   has_many :categories, class_name: 'AppCategory'
 
