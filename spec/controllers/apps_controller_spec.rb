@@ -185,7 +185,16 @@ describe AppsController do
       delete :destroy, { id: app.id, format: :json }
       expect(response.body).to be_empty
     end
+  end
 
+  describe '#journal' do
+
+    let(:app) { apps(:app1) } # load from fixture to get services assoc
+
+    it 'returns the service journal' do
+      get :journal, { id: app.id, format: :json }
+      expect(response.body).to eql fixture_data('journal')
+    end
   end
 
 end

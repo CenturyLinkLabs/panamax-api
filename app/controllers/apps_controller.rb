@@ -34,6 +34,9 @@ class AppsController < ApplicationController
     render json: @app, status: :unprocessable_entity
   end
 
+  def journal
+    respond_with App.find(params[:id]).journal(params[:cursor])
+  end
 
   private
 
