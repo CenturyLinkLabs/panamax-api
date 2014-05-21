@@ -1,8 +1,9 @@
 require 'json'
 require 'panamax_agent/client'
-require 'panamax_agent/fleet/client/payload'
+require 'panamax_agent/error'
 require 'panamax_agent/fleet/client/job'
 require 'panamax_agent/fleet/client/state'
+require 'panamax_agent/fleet/client/unit'
 
 
 module PanamaxAgent
@@ -18,50 +19,44 @@ module PanamaxAgent
 
       include PanamaxAgent::Fleet::Connection
 
-      include PanamaxAgent::Fleet::Client::Payload
       include PanamaxAgent::Fleet::Client::Job
       include PanamaxAgent::Fleet::Client::State
+      include PanamaxAgent::Fleet::Client::Unit
 
-      def submit(service_def)
-        create_payload(service_def.name, service_def.to_hash)
+      def load(service_def)
+        begin
+          create_unit(service_def.sha1, service_def.unit_def)
+        rescue PanamaxAgent::PreconditionFailed
+        end
+
+        begin
+          create_job(service_def.name, service_def.job_def)
+        rescue PanamaxAgent::PreconditionFailed
+        end
+
+        update_job_target_state(service_def.name, :loaded)
       end
 
       def start(service_name)
-        payload_json = get_payload(service_name)
-        payload = json_to_hash(payload_json['node']['value'])
-
-        # Wrap payload in a job
-        job = {
-          "Name" => service_name,
-          "JobRequirements" => {},
-          "Payload" => payload,
-          "State" => nil
-        }
-
-        create_job(service_name, job)
+        update_job_target_state(service_name, :launched)
       end
 
       def stop(service_name)
-        delete_job(service_name)
+        update_job_target_state(service_name, :loaded)
+      end
+
+      def unload(service_name)
+        update_job_target_state(service_name, :inactive)
       end
 
       def destroy(service_name)
         delete_job(service_name)
-        delete_payload(service_name)
       end
 
       protected
 
       def resource_path(resource, *parts)
         parts.unshift(resource).unshift(@base_path).join('/')
-      end
-
-      def json_to_hash(json)
-        begin
-          JSON.parse(json)
-        rescue Exception
-          {}
-        end
       end
 
     end

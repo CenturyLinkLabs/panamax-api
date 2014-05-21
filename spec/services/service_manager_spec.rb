@@ -15,7 +15,7 @@ describe ServiceManager do
 
   let(:fake_fleet_client) do
     double(:fake_fleet_client,
-      submit: true,
+      load: true,
       start: true,
       stop: true,
       destroy: true
@@ -36,9 +36,9 @@ describe ServiceManager do
     PanamaxAgent.stub(:fleet_client).and_return(fake_fleet_client)
   end
 
-  describe '.submit' do
+  describe '.load' do
 
-    let(:dummy_manager) { double(:dummy_manager, submit: true) }
+    let(:dummy_manager) { double(:dummy_manager, load: true) }
 
     before do
       described_class.stub(new: dummy_manager)
@@ -46,12 +46,12 @@ describe ServiceManager do
 
     it 'news an instance of itself' do
       expect(described_class).to receive(:new).with(service).and_return(dummy_manager)
-      described_class.submit(service)
+      described_class.load(service)
     end
 
-    it 'invokes submit on manager instance' do
-      expect(dummy_manager).to receive(:submit)
-      described_class.submit(service)
+    it 'invokes load on manager instance' do
+      expect(dummy_manager).to receive(:load)
+      described_class.load(service)
     end
   end
 
@@ -68,14 +68,14 @@ describe ServiceManager do
       described_class.start(service)
     end
 
-    it 'invokes submit on manager instance' do
+    it 'invokes start on manager instance' do
       expect(dummy_manager).to receive(:start)
       described_class.start(service)
     end
   end
 
 
-  describe '#submit' do
+  describe '#load' do
 
     let(:linked_to_service) { Service.new(name: 'linked_to_service') }
     let(:docker_run_string) { 'docker run some stuff' }
@@ -89,7 +89,7 @@ describe ServiceManager do
     end
 
     it 'submits a service definition to the fleet service' do
-      expect(fake_fleet_client).to receive(:submit) do |service_def|
+      expect(fake_fleet_client).to receive(:load) do |service_def|
         expect(service_def.description).to eq service_description
         expect(service_def.after).to eq linked_to_service.unit_name
         expect(service_def.requires).to eq linked_to_service.unit_name
@@ -102,11 +102,11 @@ describe ServiceManager do
         expect(service_def.timeout_start_sec).to eq '5min'
       end
 
-      subject.submit
+      subject.load
     end
 
     it 'returns the result of the fleet call' do
-      expect(subject.submit).to eql true
+      expect(subject.load).to eql true
     end
   end
 

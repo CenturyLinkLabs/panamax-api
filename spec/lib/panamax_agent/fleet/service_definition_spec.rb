@@ -61,57 +61,52 @@ describe PanamaxAgent::Fleet::ServiceDefinition do
     end
   end
 
-  describe '#to_hash' do
+  describe '#unit_def' do
 
     subject { described_class.new(name, attrs) }
 
-    it 'provides a JSON formatted service definition' do
+    it 'provides a fleet formatted unit definition' do
+      raw = <<UNIT_FILE
+[Unit]
+Description=#{attrs[:description]}
+After=#{attrs[:after]}
+Requires=#{attrs[:requires]}
+
+[Service]
+ExecStartPre=#{attrs[:exec_start_pre]}
+ExecStart=#{attrs[:exec_start]}
+ExecStartPost=#{attrs[:exec_start_post]}
+ExecReload=#{attrs[:exec_reload]}
+ExecStop=#{attrs[:exec_stop]}
+ExecStopPost=#{attrs[:exec_stop_post]}
+Restart=always
+RestartSec=#{attrs[:restart_sec]}
+TimeoutStartSec=#{attrs[:timeout_start_sec]}
+UNIT_FILE
+
       expected = {
-        'Name' => name,
-        'Unit' => {
-          'Contents' => {
-            'Unit' => {
-              'Description' => attrs[:description],
-              'After' => attrs[:after],
-              'Requires' => attrs[:requires]
-            },
-            'Service' => {
-              'ExecStartPre' => attrs[:exec_start_pre],
-              'ExecStart' => attrs[:exec_start],
-              'ExecStartPost' => attrs[:exec_start_post],
-              'ExecReload' => attrs[:exec_reload],
-              'ExecStop' => attrs[:exec_stop],
-              'ExecStopPost' => attrs[:exec_stop_post],
-              'RestartSec' => attrs[:restart_sec],
-              'Restart' => 'always',
-              'TimeoutStartSec' => attrs[:timeout_start_sec]
-            }
+        'Contents' => {
+          'Unit' => {
+            'Description' => [attrs[:description]],
+            'After' => [attrs[:after]],
+            'Requires' => [attrs[:requires]]
+          },
+          'Service' => {
+            'ExecStartPre' => [attrs[:exec_start_pre]],
+            'ExecStart' => [attrs[:exec_start]],
+            'ExecStartPost' => [attrs[:exec_start_post]],
+            'ExecReload' => [attrs[:exec_reload]],
+            'ExecStop' => [attrs[:exec_stop]],
+            'ExecStopPost' => [attrs[:exec_stop_post]],
+            'Restart' => ['always'],
+            'RestartSec' => [attrs[:restart_sec]],
+            'TimeoutStartSec' => [attrs[:timeout_start_sec]]
           }
-        }
+        },
+        'Raw' => raw
       }
 
-      expect(subject.to_hash).to eq expected
-    end
-
-    context 'when the service name does not end in .service' do
-
-      subject { described_class.new('foo') }
-
-      it 'appends .service to the service name' do
-        expected = {
-          'Name' => 'foo.service',
-          'Unit' => {
-            'Contents' => {
-              'Unit' => {},
-              'Service' => {
-                'Restart' => 'always'
-              }
-            }
-          }
-        }
-
-        expect(subject.to_hash).to eq expected
-      end
+      expect(subject.unit_def).to eq expected
     end
 
     context 'when the after attribute is an enumerable' do
@@ -122,20 +117,17 @@ describe PanamaxAgent::Fleet::ServiceDefinition do
 
       it 'generates a space-delimited list of after requirements' do
         expected = {
-          'Name' => 'foo.service',
-          'Unit' => {
-            'Contents' => {
-              'Unit' => {
-                'After' => after.join(' ')
-              },
-              'Service' => {
-                'Restart' => 'always'
-              }
+          'Contents' => {
+            'Unit' => {
+              'After' => [after.join(' ')]
+            },
+            'Service' => {
+              'Restart' => ['always']
             }
           }
-        }.to_hash
+        }
 
-        expect(subject.to_hash).to eq expected
+        expect(subject.unit_def).to include expected
       end
     end
 
@@ -147,21 +139,43 @@ describe PanamaxAgent::Fleet::ServiceDefinition do
 
       it 'generates a space-delimited list of requires requirements' do
         expected = {
-          'Name' => 'foo.service',
-          'Unit' => {
-            'Contents' => {
-              'Unit' => {
-                'Requires' => requires.join(' ')
-              },
-              'Service' => {
-                'Restart' => 'always'
-              }
+          'Contents' => {
+            'Unit' => {
+              'Requires' => [requires.join(' ')]
+            },
+            'Service' => {
+              'Restart' => ['always']
             }
           }
         }
 
-        expect(subject.to_hash).to eq expected
+        expect(subject.unit_def).to include expected
       end
+    end
+  end
+
+  describe '#job_def' do
+
+    subject { described_class.new(name, attrs) }
+
+    it 'generates the appropriate job definition' do
+
+      expected = {
+        'Name' => name,
+        'UnitHash' => [233, 172, 244, 146, 29, 162, 149, 234, 49, 88, 53, 82, 252, 40, 2, 57, 31, 67, 218, 225]
+      }
+
+      expect(subject.job_def).to eq expected
+    end
+  end
+
+  describe '#sha1' do
+
+    subject { described_class.new(name, attrs) }
+
+    it 'generates the appropriate sha1 hash' do
+
+      expect(subject.sha1).to eq "e9acf4921da295ea31583552fc2802391f43dae1"
     end
   end
 end

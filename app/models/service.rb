@@ -34,7 +34,7 @@ class Service < ActiveRecord::Base
   end
 
   def submit
-    manager.submit
+    manager.load
   end
 
   def start

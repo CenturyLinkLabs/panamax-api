@@ -12,7 +12,7 @@ class ServicesController < ApplicationController
   def update
     service = app.services.find(params[:id])
     if service.update_with_relationships(service_update_params)
-      service.restart
+      app.restart
     end
     respond_with service
   end

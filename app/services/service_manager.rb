@@ -1,7 +1,7 @@
 class ServiceManager
 
-  def self.submit(service)
-    new(service).submit
+  def self.load(service)
+    new(service).load
   end
 
   def self.start(service)
@@ -12,8 +12,8 @@ class ServiceManager
     @service = service
   end
 
-  def submit
-    fleet_client.submit(service_def_from_service(@service))
+  def load
+    fleet_client.load(service_def_from_service(@service))
   end
 
   def start
@@ -47,9 +47,11 @@ class ServiceManager
       sd.description = service.description
 
       # Collect service dependencies
-      dep_services = service.links.map { |link| link.linked_to_service.unit_name }.join(' ')
-      sd.after = dep_services
-      sd.requires = dep_services
+      if service.links.any?
+        dep_services = service.links.map { |link| link.linked_to_service.unit_name }.join(' ')
+        sd.after = dep_services
+        sd.requires = dep_services
+      end
 
       # The '-' prefix in the docker rm command causes the return value to be
       # ignored. We want to try and remove the container if it has exited, but
