@@ -18,6 +18,10 @@ unless Template.where(name: 'Wordpress').present?
     name: 'Web Tier',
     template: wp
   )
+  db_cat = TemplateCategory.create(
+    name: 'DB Tier',
+    template: wp
+  )
   wp.images.create(
     name: 'DB_1',
     repository: 'panamax/panamax-docker-mysql',
@@ -26,6 +30,7 @@ unless Template.where(name: 'Wordpress').present?
     expose: [3306],
     environment: { 'MYSQL_ROOT_PASSWORD' => 'pass@word01'},
     ports: [{host_port: 3306, container_port: 3306}],
+    categories: [db_cat],
     icon: 'http://panamax.ca.tier3.io/service_icons/icon_service_db_grey.png'
   )
   wp.images.create(
