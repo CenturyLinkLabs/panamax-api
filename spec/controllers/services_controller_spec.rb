@@ -46,7 +46,7 @@ describe ServicesController do
       App.stub(:find).and_return(dummy_app)
       dummy_app.stub_chain(:services, :find).and_return(dummy_service)
       dummy_service.stub(:update_with_relationships).and_return(true)
-      dummy_service.stub(:restart)
+      dummy_app.stub(:restart)
     end
 
     it 'updates attributes on the service' do
@@ -62,7 +62,7 @@ describe ServicesController do
     context 'when the service update succeeds' do
 
       it 'restarts the service' do
-        expect(dummy_service).to receive(:restart)
+        expect(dummy_app).to receive(:restart)
 
         put :update, params.merge(
           app_id: '1',
@@ -78,8 +78,8 @@ describe ServicesController do
         dummy_service.stub(:update_with_relationships).and_return(false)
       end
 
-      it 'restarts the service' do
-        expect(dummy_service).to_not receive(:restart)
+      it 'restarts the app' do
+        expect(dummy_app).to_not receive(:restart)
 
         put :update, params.merge(
           app_id: '1',
