@@ -29,6 +29,7 @@ class App < ActiveRecord::Base
 
   def restart
     services.each(&:shutdown)
+    sleep(1)
     services.each(&:submit)
     services.each(&:start)
   end

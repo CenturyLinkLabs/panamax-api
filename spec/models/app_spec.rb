@@ -196,6 +196,7 @@ describe App do
     let(:s2) { Service.new(name: 's2') }
 
     before do
+      subject.stub(:sleep)
       subject.services = [s1, s2]
       subject.services.each do |s|
         s.stub(:shutdown)
@@ -207,6 +208,11 @@ describe App do
     it 'shutsdown each service' do
       expect(s1).to receive(:shutdown)
       expect(s2).to receive(:shutdown)
+      subject.restart
+    end
+
+    it 'does some sleeping' do
+      expect(subject).to receive(:sleep).with(1)
       subject.restart
     end
 
