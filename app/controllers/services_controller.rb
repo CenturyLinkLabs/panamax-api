@@ -33,6 +33,14 @@ class ServicesController < ApplicationController
     render json: service
   end
 
+  def start
+    service = app.services.find(params[:id])
+    if service && !service.started?
+      service.start
+    end
+    render json: service
+  end
+
   private
 
   def app

@@ -38,6 +38,12 @@ describe Service do
     end
   end
 
+  describe '#started?' do
+    it 'service should be started' do
+      expect(subject.started?).to eql(true)
+    end
+  end
+
   describe '.new_from_image' do
     let(:fake_image) do
       double(:fake_image, {

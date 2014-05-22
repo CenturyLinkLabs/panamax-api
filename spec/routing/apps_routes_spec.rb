@@ -91,5 +91,14 @@ describe 'apps routes' do
                                )
     end
 
+    it 'routes post start to the app services controller start action' do
+      expect(post: '/apps/1/services/1/start').to route_to(
+                                                       controller: 'services',
+                                                       action: 'start',
+                                                       app_id: '1',
+                                                       id: '1'
+                                                   )
+    end
+
   end
 end
