@@ -3,6 +3,9 @@ require 'spec_helper'
 describe ServiceLink do
   it { should belong_to(:linked_to_service) }
 
+  it { should validate_presence_of :alias }
+  it { should validate_uniqueness_of(:linked_to_service_id).scoped_to(:linked_from_service_id) }
+
   describe '#link_string' do
     let(:linked_to_service) { Service.new(name: 'mysql') }
 

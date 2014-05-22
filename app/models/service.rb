@@ -21,7 +21,7 @@ class Service < ActiveRecord::Base
   before_save   :resolve_name_conflicts
   after_destroy :shutdown
 
-  validates_presence_of   :name
+  validates_presence_of :name
 
   attr_writer :manager
 

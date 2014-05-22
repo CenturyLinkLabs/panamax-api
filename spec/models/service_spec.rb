@@ -23,7 +23,7 @@ describe Service do
   it { should have_many(:links).dependent(:destroy) }
   it { should have_many(:linked_from_links).dependent(:destroy) }
 
-  it_behaves_like "a docker runnable model"
+  it_behaves_like 'a docker runnable model'
 
   describe '#unit_name' do
     it 'postfixes the name with .service' do

@@ -61,7 +61,7 @@ describe ServicesController do
 
     context 'when the service update succeeds' do
 
-      it 'restarts the service' do
+      it 'restarts the app' do
         expect(dummy_app).to receive(:restart)
 
         put :update, params.merge(
@@ -76,9 +76,10 @@ describe ServicesController do
 
       before do
         dummy_service.stub(:update_with_relationships).and_return(false)
+        dummy_service.stub(:errors).and_return(['some errors'])
       end
 
-      it 'restarts the app' do
+      it 'does not restart the app' do
         expect(dummy_app).to_not receive(:restart)
 
         put :update, params.merge(
@@ -87,16 +88,26 @@ describe ServicesController do
           format: :json
         )
       end
+
+      it 'returns a unprocessable entity status' do
+        put :update, params.merge(
+          app_id: '1',
+          id: '2',
+          format: :json
+        )
+
+        expect(response.status).to eq 422
+      end
     end
 
-    it 'returns an empty response body' do
+    it 'returns a successful status' do
       put :update, params.merge(
         app_id: '1',
         id: '2',
         format: :json
       )
 
-      expect(response.body).to be_empty
+      expect(response.status).to eq 204
     end
   end
 

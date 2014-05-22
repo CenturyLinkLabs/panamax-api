@@ -20,7 +20,8 @@ describe ServiceSerializer do
       :active_state,
       :load_state,
       :sub_state,
-      :icon
+      :icon,
+      :errors
     ]
     expect(serialized.keys).to match_array expected_keys
   end
