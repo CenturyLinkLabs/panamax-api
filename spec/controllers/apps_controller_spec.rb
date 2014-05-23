@@ -136,7 +136,7 @@ describe AppsController do
 
       it 'returns no errors' do
         post :create, params.merge(format: :json)
-        expect(response.status).to eq 200
+        expect(response.status).to eq 201
       end
 
     end

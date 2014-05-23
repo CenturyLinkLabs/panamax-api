@@ -22,16 +22,16 @@ class AppsController < ApplicationController
 
     if @app.valid?
       @app.run
-      render json: @app
     else
       logger.error("app validation failed: #{@app.errors.to_hash}")
-      render json: @app, status: :unprocessable_entity
     end
+
+    respond_with @app
   rescue => ex
     logger.error("app creation failed: #{ex.message}")
     @app.destroy
     @app.errors[:base] << ex.message
-    render json: @app, status: :unprocessable_entity
+    respond_with @app
   end
 
   def journal
