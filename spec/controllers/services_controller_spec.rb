@@ -136,74 +136,48 @@ describe ServicesController do
   end
 
   describe '#create' do
-    let(:some_app) { double(:app) }
-    let(:new_service) do
-      {
-          id: 1,
-          name: 'foo_bar',
-          description: 'my foo service',
-          from: 'some image',
-          links:[],
-          ports: [],
-          expose: [],
-          volumes: [],
-          environment: { 'SOME_KEY' => ''},
-          app: { id: 1},
-          categories: [{ id: 1, id: 2}]
-      }
-    end
+    let(:app) { apps(:app1) }
 
     let(:params) do
       {
-          name: 'foo_bar',
-          description: 'my foo service',
-          from: 'some image',
-          :categories => [{ id: 1, id: 2}],
-          ports: [{host_interface: '', host_port: '', container_port: '', proto: ''}],
-          expose: [''],
-          links:[],
-          volumes: [{host_path: '', container_path: ''}],
-          environment: { 'SOME_KEY' => ''}
+        name: 'foo_bar',
+        description: 'my foo service',
+        from: 'some image'
       }
     end
 
     before do
-      App.stub(:find).and_return(some_app)
-      some_app.stub(:add_service).and_return(new_service)
-      some_app.stub(:restart).with(no_args())
+      App.any_instance.stub(:restart)
     end
 
-    it 'creates a service with category' do
-      expect(some_app).to receive(:add_service).with(params.stringify_keys!).and_return(new_service)
-      post :create, params.merge(
-        app_id: '1',
-        format: :json)
+    it 'adds a new service' do
+      expect {
+        post :create, params.merge(app_id: app, format: :json)
+      }.to change(Service, :count).by(1)
+
     end
 
-    it 'creates a service without category' do
-      params.delete(:categories)
-      some_app.stub(:restart).with(no_args())
-      expect(some_app).to receive(:add_service).with(params.stringify_keys!).and_return(new_service)
-      post :create, params.merge(
-          app_id: '1',
-          format: :json)
+    it 'initializes the new service with the specified params' do
+      post :create, params.merge(app_id: app, format: :json)
+
+      expect(Service.last.name).to eq params[:name]
+      expect(Service.last.description).to eq params[:description]
     end
 
-    it 'creates a service and then restarts the app' do
-      expect(some_app).to receive(:add_service).with(params.stringify_keys!).and_return(new_service).ordered
-      expect(some_app).to receive(:restart).with(no_args()).ordered
-      post :create, params.merge(
-          app_id: '1',
-          format: :json)
+    it 'restarts the app' do
+      expect_any_instance_of(App).to receive(:restart)
+      post :create, params.merge(app_id: app, format: :json)
     end
 
-    it 'returns the jsonified service in response' do
-      post :create, params.merge(
-          app_id: '1',
-          format: :json)
-      expect(response.body).to eq(new_service.to_json)
+    it 'returns the service' do
+      post :create, params.merge(app_id: app, format: :json)
+      expect(response.body).to eq ServiceSerializer.new(Service.last).to_json
     end
 
+    it 'returns a 201 status code' do
+      post :create, params.merge(app_id: app, format: :json)
+      expect(response.status).to eq 201
+    end
   end
 
 end
