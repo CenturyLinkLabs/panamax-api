@@ -36,25 +36,27 @@ class App < ActiveRecord::Base
     services.each(&:start)
   end
 
-  def add_service(service_create_params)
-    links = service_create_params.delete(:links)
-    categories = service_create_params.delete(:categories)
-    service = Service.new(service_create_params)
-    # add categories
-    if categories
-      categories.each do |cat|
-        category = AppCategory.find(cat[:id])
-        service.categories << category if category
-      end
+  def add_service(params)
+    links = Array(params.delete(:links))
+    categories = Array(params.delete(:categories))
+    service = Service.new(params)
+
+    categories.each do |cat|
+      category = self.categories.detect { |app_cat| app_cat.id == cat[:id] }
+      service.categories << category if category
     end
-    # add links
-    if links
-      links.each do |link|
-        linked_to_service = services.find(link[:service_id])
-        service.links << ServiceLink.new(linked_to_service: linked_to_service, alias: link[:alias])
+
+    links.each do |link|
+      linked_to_service = self.services.detect do |service|
+        service.id == link[:service_id]
       end
+
+      service.links << ServiceLink.new(
+        linked_to_service: linked_to_service,
+        alias: link[:alias]) if linked_to_service
     end
-    services << service
+
+    self.services << service
     self.save
     service
   end

@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe App do
+  subject { apps(:app1) }
   it { should have_many(:services) }
   it { should have_many(:categories).class_name('AppCategory').dependent(:destroy) }
 
@@ -230,57 +231,54 @@ describe App do
   end
 
   describe '#add_service' do
-    let(:some_app) {App.new}
-    let(:category) {AppCategory.find(1)}
+
+    fixtures :app_categories
+
+    let(:category) { subject.categories.first }
+
     let(:params) do
       {
-          name: 'foo_bar',
-          description: 'my foo service',
-          from: 'some image',
-          categories: [{ id: 1, id: 2}],
-          ports: [{host_interface: '', host_port: '', container_port: '', proto: ''}],
-          expose: [''],
-          links:[],
-          volumes: [{host_path: '', container_path: ''}],
-          environment: { 'SOME_KEY' => ''}
+        name: 'foo_bar',
+        description: 'my foo service',
+        from: 'some image',
+        categories: [{ id: category.id }]
       }
     end
+
     before do
-      App.stub(:find).and_return(some_app)
-      some_app.stub(:resolve_name_conflicts).and_return(true)
-      AppCategory.stub(:find).and_return(category)
+      subject.stub(:resolve_name_conflicts).and_return(true)
     end
 
     it 'creates a new service' do
-      result = some_app.add_service(params)
-      expect(result.name).to eq 'foo_bar'
-      expect(result.from).to eq 'some image'
+      result = subject.add_service(params)
+      expect(result.name).to eq params[:name]
+      expect(result.from).to eq params[:from]
     end
 
     it 'increments the service count' do
       expect {
-        some_app.add_service(params)
+        subject.add_service(params)
       }.to change { Service.count }.by(1)
     end
 
     it 'adds the service to the existing app' do
-      some_app.add_service(params)
-      some_app.reload
-      expect(Service.last.app).to eq some_app
+      subject.add_service(params)
+      subject.reload
+      expect(Service.last.app).to eq subject
     end
 
     it 'increments the app services count' do
       expect {
-        some_app.add_service(params)
-        some_app.reload
-      }.to change { some_app.services.count }.by(1)
+        subject.add_service(params)
+        subject.reload
+      }.to change { subject.services.count }.by(1)
     end
 
     it 'associates the service to the correct category' do
-      some_app.add_service(params)
-      some_app.reload
+      subject.add_service(params)
+      subject.reload
       expect(Service.last.categories.first).to eq category
     end
-
   end
+
 end
