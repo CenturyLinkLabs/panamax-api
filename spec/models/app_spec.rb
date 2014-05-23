@@ -48,7 +48,7 @@ describe App do
             repository: 'foo',
             tag: 'bar',
             links: [],
-            ports: ['8080'],
+            ports: [{ 'container_port' => '8080' }],
             expose: ['expose this'],
             environment: {var: 'val'},
             volumes: ['volumes']
@@ -131,7 +131,7 @@ describe App do
       {
           image: 'foo/bar:baz',
           links: [{service: 'MYSQL', alias: 'DB'}],
-          ports: [{host_interface: '', host_port: '', container_port: '', proto: ''}],
+          ports: [{ host_interface: '', host_port: '', 'container_port' => '90', proto: '' }],
           expose: ['3306'],
           environment: {'SOME_KEY' => ''},
           volumes: [{host_path: '', container_path: ''}]
@@ -241,7 +241,12 @@ describe App do
         name: 'foo_bar',
         description: 'my foo service',
         from: 'some image',
-        categories: [{ id: category.id }]
+        categories: [{ id: category.id }],
+        ports: [{ host_interface: '', host_port: '', 'container_port' => 90, proto: '' }],
+        expose: [''],
+        links: [],
+        volumes: [{ host_path: '', container_path: '' }],
+        environment: { 'SOME_KEY' => '' }
       }
     end
 

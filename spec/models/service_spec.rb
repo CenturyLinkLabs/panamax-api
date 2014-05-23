@@ -17,11 +17,42 @@ describe Service do
     subject.manager = dummy_manager
   end
 
-  it { should belong_to(:app) }
-  it { should have_many(:service_categories) }
-  it { should have_many(:categories).dependent(:destroy).class_name('ServiceCategory') }
-  it { should have_many(:links).dependent(:destroy) }
-  it { should have_many(:linked_from_links).dependent(:destroy) }
+  describe 'validations' do
+    it { should belong_to(:app) }
+    it { should have_many(:service_categories) }
+    it { should have_many(:categories).dependent(:destroy).class_name('ServiceCategory') }
+    it { should have_many(:links).dependent(:destroy) }
+    it { should have_many(:linked_from_links).dependent(:destroy) }
+
+    it 'can be valid' do
+      subject.name = 'valid'
+      subject.ports = [
+        { 'host_port' => 80, 'container_port' => 8080 },
+        { 'host_port' => 81, 'container_port' => 7070 }
+      ]
+
+      expect(subject.valid?).to be_true
+      expect(subject.errors).to be_empty
+    end
+
+    it 'validates presence of container_port' do
+      subject.ports = [
+        { host_port: 80 },
+        { host_port: 70 }
+      ]
+      expect(subject.valid?).to be_false
+      expect(subject.errors[:ports]).to eq ["container port can't be blank"]
+    end
+
+    it 'validates uniqueness of host_ports' do
+      subject.ports = [
+        { 'host_port' => 80, 'container_port' => 8080 },
+        { 'host_port' => 80, 'container_port' => 7070 }
+      ]
+      expect(subject.valid?).to be_false
+      expect(subject.errors[:ports]).to eq ['host ports must be unique']
+    end
+  end
 
   it_behaves_like 'a docker runnable model'
 
