@@ -9,6 +9,8 @@ PanamaxApi::Application.routes.draw do
       get :journal
     end
 
+    resources :categories, only: [:index, :create, :update, :destroy]
+
     resources :services, only: [:index, :show, :create, :update, :destroy] do
       member do
         get :journal

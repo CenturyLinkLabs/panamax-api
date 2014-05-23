@@ -2,7 +2,7 @@ class App < ActiveRecord::Base
   include AppJournal
 
   has_many :services, dependent: :destroy
-  has_many :categories, class_name: 'AppCategory'
+  has_many :categories, class_name: 'AppCategory', dependent: :destroy
 
   before_save :resolve_name_conflicts
 

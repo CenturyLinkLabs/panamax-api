@@ -3,4 +3,8 @@ class AppCategory < ActiveRecord::Base
 
   validates :name, uniqueness: { scope: :app_id }
   validates :app_id, presence: true
+
+  def self.model_name
+    ActiveModel::Name.new(self, nil, 'Category')
+  end
 end

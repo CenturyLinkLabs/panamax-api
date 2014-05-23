@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe App do
   it { should have_many(:services) }
-  it { should have_many(:categories).class_name('AppCategory') }
+  it { should have_many(:categories).class_name('AppCategory').dependent(:destroy) }
 
   describe '.create_from_template' do
     let(:template) { templates(:wordpress) }
