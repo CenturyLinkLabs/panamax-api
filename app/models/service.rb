@@ -4,7 +4,10 @@ class Service < ActiveRecord::Base
 
   belongs_to :app
   has_many :service_categories
-  has_many :categories, through: :service_categories, source: :app_category
+  has_many :categories,
+    class_name: 'ServiceCategory',
+    foreign_key: 'service_id',
+    dependent: :destroy
   has_many :links, class_name: 'ServiceLink', foreign_key: 'linked_from_service_id',
     dependent: :destroy
 
@@ -53,7 +56,10 @@ class Service < ActiveRecord::Base
 
   def copy_categories_from_image(image, app_categories)
     image.categories.each do |image_cat|
-      self.categories << app_categories.find { |app_cat| app_cat.name == image_cat.name }
+      app_category = app_categories.find { |app_cat| app_cat.name == image_cat.name }
+      self.categories << ServiceCategory.new(
+        app_category_id: app_category.id,
+        position: image_cat[:position])
     end
   end
 
