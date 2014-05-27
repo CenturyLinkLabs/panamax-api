@@ -135,6 +135,25 @@ describe Image do
     end
   end
 
+  describe '.find_local_for' do
+
+    let(:image_list) do
+      [
+        double(:image, info: { 'RepoTags' => ['joshhartnett/rails:foo'] }),
+        double(:image, info: { 'RepoTags' => ['timothydalton/ubuntu:foo'] }),
+      ]
+    end
+
+    before do
+      Docker::Image.stub(:all).and_return(image_list)
+    end
+
+    it 'returns all local images that match the given repo name' do
+      result = described_class.find_local_for('joshhartnett/rails')
+      expect(result).to match_array([image_list.first])
+    end
+  end
+
   describe '#recommended' do
     it 'defaults to false if not set' do
       expect(subject.recommended).to eq false

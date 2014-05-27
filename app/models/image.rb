@@ -53,6 +53,10 @@ class Image < ActiveRecord::Base
     self.all_local.find_all{ |image| image.repository =~ /#{search_term}/ }.compact
   end
 
+  def self.find_local_for(name)
+    Docker::Image.all.select { |i| i.info['RepoTags'].first.start_with? "#{name}:" }
+  end
+
   def recommended
     self[:recommended] || false
   end

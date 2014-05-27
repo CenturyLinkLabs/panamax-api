@@ -6,7 +6,7 @@ describe RepositoriesController do
 
     let(:repository) { 'name/repo' }
 
-    let(:tags) { [{ layer: 'abc123', name: 'foo' }] }
+    let(:tags) { [{ 'layer' => 'abc123', 'name' => 'foo' }] }
 
     let(:client) { double(:client, list_repository_tags: tags) }
 
@@ -19,9 +19,22 @@ describe RepositoriesController do
       get :list_tags, repository: repository, format: :json
     end
 
-    it 'returns the tag list' do
-      get :list_tags, repository: repository, format: :json
-      expect(response.body).to eql(tags.to_json)
+    context 'for a local image' do
+      let(:image_list) do
+        [double(:image, info: { 'RepoTags' => ['joshhartnett/rails:foo'] })]
+      end
+
+      it 'returns the array of tag names' do
+        get :list_tags, repository: repository, local_image: true, format: :json
+        expect(response.body).to eql(['foo'].to_json)
+      end
+    end
+
+    context 'for a remote image' do
+      it 'returns the array of tag names' do
+        get :list_tags, repository: repository, format: :json
+        expect(response.body).to eql(['foo'].to_json)
+      end
     end
   end
 end
