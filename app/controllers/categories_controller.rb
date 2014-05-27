@@ -5,6 +5,10 @@ class CategoriesController < ApplicationController
     respond_with app.categories, each_serializer: CategorySerializer
   end
 
+  def show
+    respond_with app.categories.find(params[:id]), serializer: CategorySerializer
+  end
+
   def create
     category = app.categories.create(category_params)
     respond_with app, category, serializer: CategorySerializer
