@@ -19,7 +19,7 @@ describe Service do
 
   it { should belong_to(:app) }
   it { should have_many(:service_categories) }
-  it { should have_many(:categories).through(:service_categories).source(:app_category) }
+  it { should have_many(:categories).dependent(:destroy).class_name('ServiceCategory') }
   it { should have_many(:links).dependent(:destroy) }
   it { should have_many(:linked_from_links).dependent(:destroy) }
 
@@ -210,6 +210,42 @@ describe Service do
       it 'populates the related links' do
         expect(subject).to receive(:update).with(hash_including(links: [service_link]))
         subject.update_with_relationships(attrs_with_links)
+      end
+    end
+
+    context 'when categories are not provided' do
+      it 'updates with an empty categories list' do
+        expect(subject).to receive(:update).with(hash_including(categories: []))
+        subject.update_with_relationships(attrs)
+      end
+    end
+
+    context 'when categories are provided' do
+
+      let(:attrs_with_categories) do
+        attrs.merge(
+          categories: [{ id: 1, position: 5 }]
+        )
+      end
+
+      let(:service_category) { ServiceCategory.new }
+
+      before do
+        subject.stub_chain(:categories, :find_or_initialize_by).and_return(service_category)
+      end
+
+      it 'looks for matching ServiceCategory' do
+        expect(subject.categories).to receive(:find_or_initialize_by).with(
+          app_category_id: 1,
+          position: 5
+        )
+
+        subject.update_with_relationships(attrs_with_categories)
+      end
+
+      it 'populates the related categories' do
+        expect(subject).to receive(:update).with(hash_including(categories: [service_category]))
+        subject.update_with_relationships(attrs_with_categories)
       end
     end
 
