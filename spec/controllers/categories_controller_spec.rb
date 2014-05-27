@@ -17,6 +17,17 @@ describe CategoriesController do
     end
   end
 
+  describe '#show' do
+
+    let(:category) { app_categories(:category1) }
+
+    it 'returns the specified app category' do
+      get :show, { app_id: app, id: category, format: :json }
+
+      expect(response.body).to eq CategorySerializer.new(category).to_json
+    end
+  end
+
   describe '#create' do
 
     let(:params) { { name: 'cat1', position: 10 } }
