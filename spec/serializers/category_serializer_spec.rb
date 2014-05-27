@@ -7,7 +7,8 @@ describe CategorySerializer do
     serialized = described_class.new(category_model).as_json
     expected_keys = [
       :id,
-      :name
+      :name,
+      :position
     ]
     expect(serialized.keys).to match_array expected_keys
   end
