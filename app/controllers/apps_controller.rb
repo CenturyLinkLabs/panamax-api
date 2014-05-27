@@ -25,7 +25,6 @@ class AppsController < ApplicationController
     else
       logger.error("app validation failed: #{@app.errors.to_hash}")
     end
-
     respond_with @app
   rescue => ex
     logger.error("app creation failed: #{ex.message}")
