@@ -102,7 +102,12 @@ describe AppsController do
 
       it 'returns 422 error' do
         post :create, params.merge(format: :json)
-        expect(response.status).to eq(422) # :unprocessable_entity
+        expect(response.status).to eq(500) # :internal_server_error
+      end
+
+      it 'returns the exception message' do
+        post :create, params.merge(format: :json)
+        expect(JSON.parse(response.body)).to eq('errors' => 'boom')
       end
 
       it 'renders the error in the json body' do

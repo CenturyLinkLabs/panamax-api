@@ -29,9 +29,8 @@ class AppsController < ApplicationController
     respond_with @app
   rescue => ex
     logger.error("app creation failed: #{ex.message}")
-    @app.destroy
-    @app.errors[:base] << ex.message
-    respond_with @app
+    @app.try(:destroy)
+    render json: { errors: ex.message }, status: :internal_server_error
   end
 
   def journal
