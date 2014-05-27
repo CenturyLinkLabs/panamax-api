@@ -224,7 +224,7 @@ describe Service do
 
       let(:attrs_with_categories) do
         attrs.merge(
-          categories: [ { id: 1, position: 5 } ]
+          categories: [{ id: 1, position: 5 }]
         )
       end
 
@@ -235,10 +235,10 @@ describe Service do
       end
 
       it 'looks for matching ServiceCategory' do
-        expect(subject.categories).to receive(:find_or_initialize_by).with({ 
-          app_category_id: 1, 
+        expect(subject.categories).to receive(:find_or_initialize_by).with(
+          app_category_id: 1,
           position: 5
-        })
+        )
 
         subject.update_with_relationships(attrs_with_categories)
       end
