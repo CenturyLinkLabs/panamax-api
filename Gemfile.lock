@@ -29,6 +29,7 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
+    addressable (2.3.6)
     archive-tar-minitar (0.5.2)
     arel (5.0.1.20140414130214)
     builder (3.2.2)
@@ -64,6 +65,8 @@ GEM
     minitest (5.3.3)
     multi_json (1.9.2)
     multipart-post (1.2.0)
+    octokit (3.1.0)
+      sawyer (~> 0.5.3)
     polyglot (0.3.4)
     rack (1.5.2)
     rack-test (0.6.2)
@@ -100,6 +103,9 @@ GEM
       rspec-core (~> 2.14.0)
       rspec-expectations (~> 2.14.0)
       rspec-mocks (~> 2.14.0)
+    sawyer (0.5.4)
+      addressable (~> 2.3.5)
+      faraday (~> 0.8, < 0.10)
     sdoc (0.4.0)
       json (~> 1.8)
       rdoc (~> 4.0, < 5.0)
@@ -142,6 +148,7 @@ DEPENDENCIES
   docker-api (= 1.9.0)
   faraday_middleware
   jbuilder (~> 2.0)
+  octokit (~> 3.0)
   rails (= 4.1.0)
   rspec-rails
   sdoc

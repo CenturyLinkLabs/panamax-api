@@ -13,6 +13,7 @@ module PanamaxAgent
       :journal_api_url,
       :pmx_registry_api_url,
       :pmx_registry_api_version,
+      :github_access_token,
       :open_timeout,
       :read_timeout,
       :ssl_options,
