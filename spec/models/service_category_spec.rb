@@ -1,5 +1,5 @@
 require 'spec_helper'
 
 describe ServiceCategory do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it { should delegate_method(:name).to(:app_category) }
 end

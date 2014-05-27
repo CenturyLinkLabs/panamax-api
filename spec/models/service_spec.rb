@@ -19,7 +19,7 @@ describe Service do
 
   it { should belong_to(:app) }
   it { should have_many(:service_categories) }
-  it { should have_many(:categories).through(:service_categories).source(:app_category) }
+  it { should have_many(:categories).dependent(:destroy).class_name('ServiceCategory') }
   it { should have_many(:links).dependent(:destroy) }
   it { should have_many(:linked_from_links).dependent(:destroy) }
 
