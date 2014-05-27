@@ -213,6 +213,42 @@ describe Service do
       end
     end
 
+    context 'when categories are not provided' do
+      it 'updates with an empty categories list' do
+        expect(subject).to receive(:update).with(hash_including(categories: []))
+        subject.update_with_relationships(attrs)
+      end
+    end
+
+    context 'when categories are provided' do
+
+      let(:attrs_with_categories) do
+        attrs.merge(
+          categories: [ { id: 1, position: 5 } ]
+        )
+      end
+
+      let(:service_category) { ServiceCategory.new }
+
+      before do
+        subject.stub_chain(:categories, :find_or_initialize_by).and_return(service_category)
+      end
+
+      it 'looks for matching ServiceCategory' do
+        expect(subject.categories).to receive(:find_or_initialize_by).with({ 
+          app_category_id: 1, 
+          position: 5
+        })
+
+        subject.update_with_relationships(attrs_with_categories)
+      end
+
+      it 'populates the related categories' do
+        expect(subject).to receive(:update).with(hash_including(categories: [service_category]))
+        subject.update_with_relationships(attrs_with_categories)
+      end
+    end
+
     it 'returns the result of the update' do
       expect(subject.update_with_relationships(attrs)).to eq true
     end

@@ -54,7 +54,7 @@ class Service < ActiveRecord::Base
 
   def copy_categories_from_image(image, app_categories)
     image.categories.each do |image_cat|
-      app_category = app_categories.find { |app_cat| app_cat.name == image_cat.name }
+      app_category = app_categories.detect { |app_cat| app_cat.name == image_cat.name }
       self.categories << ServiceCategory.new(
         app_category_id: app_category.id,
         position: image_cat[:position])
@@ -78,10 +78,16 @@ class Service < ActiveRecord::Base
       )
     end
 
+    attributes[:categories] ||= []
+    attributes[:categories].map! do |category|
+      self.categories.find_or_initialize_by(
+        app_category_id: category[:id],
+        position: category[:position]
+      )
+    end
+
     attributes[:ports] ||= []
     attributes[:environment] ||= {}
-
-    # Do same as above w/ categories here
 
     self.update(attributes)
   end
