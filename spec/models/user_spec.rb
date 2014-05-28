@@ -34,4 +34,66 @@ describe User do
       end
     end
   end
+
+  describe 'access token validations' do
+
+    it 'does not validate the access token on new instances' do
+      expect(User.new).to be_valid
+    end
+
+    context 'when the access token has "user" scope' do
+
+      before do
+        Octokit::Client.any_instance.stub(:scopes).and_return(['user'])
+        subject.update(github_access_token: 'token')
+      end
+
+      it { should be_valid }
+      it { should have(:no).error_on(:github_access_token) }
+    end
+
+    context 'when the access token has "user:email" scope' do
+
+      before do
+        Octokit::Client.any_instance.stub(:scopes).and_return(['user:email'])
+        subject.update(github_access_token: 'token')
+      end
+
+      it { should be_valid }
+      it { should have(:no).error_on(:github_access_token) }
+    end
+
+    context 'when the access token has none of the required scopes' do
+
+      before do
+        Octokit::Client.any_instance.stub(:scopes).and_return(['foo'])
+        subject.update(github_access_token: 'token')
+      end
+
+      it { should_not be_valid }
+      it { should have(1).error_on(:github_access_token) }
+
+      it 'returns a "token too restrictive" message' do
+        expect(subject.errors_on(:github_access_token)).to include(
+          'token too restrictive')
+      end
+    end
+
+    context 'when the access token is no good at all' do
+
+      before do
+        Octokit::Client.any_instance.stub(:scopes)
+          .and_raise(Octokit::Unauthorized)
+        subject.update(github_access_token: 'token')
+      end
+
+      it { should_not be_valid }
+      it { should have(1).error_on(:github_access_token) }
+
+      it 'returns an "invalid token" message' do
+        expect(subject.errors_on(:github_access_token)).to include(
+          'invalid token')
+      end
+    end
+  end
 end

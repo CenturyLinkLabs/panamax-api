@@ -4,6 +4,11 @@ describe UsersController do
 
   describe '#update' do
 
+    before do
+      # Neuter model validations
+      User.any_instance.stub(:access_token_scope)
+    end
+
     let(:params) { { github_access_token: 'token' } }
 
     it 'changes the user attributes' do
