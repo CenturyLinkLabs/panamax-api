@@ -43,7 +43,10 @@ class App < ActiveRecord::Base
 
     categories.each do |cat|
       category = self.categories.detect { |app_cat| app_cat.id == cat[:id] }
-      service.categories << category if category
+
+      service.categories << ServiceCategory.new(
+        app_category_id: category.id,
+        position: cat[:position]) if category
     end
 
     links.each do |link|

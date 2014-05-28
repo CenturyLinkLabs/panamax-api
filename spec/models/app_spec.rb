@@ -78,9 +78,9 @@ describe App do
         new_app = App.create_from_template(template)
         expect(new_app.categories.map(&:name)).to match_array ['cat 1', 'cat 2']
         expect(new_app.services.first.categories.first.name).to eq 'cat 1'
-        expect(new_app.services.first.categories.first.app_id).to eq new_app.id
+        expect(new_app.services.first.categories.first.app_category.app_id).to eq new_app.id
         expect(new_app.services.last.categories.first.name).to eq 'cat 2'
-        expect(new_app.services.last.categories.first.app_id).to eq new_app.id
+        expect(new_app.services.last.categories.first.app_category.app_id).to eq new_app.id
       end
     end
 
@@ -103,7 +103,7 @@ describe App do
         new_app = App.create_from_template(template)
         s1, s2 = new_app.services
         expect(s1.categories.count).to eq 1
-        expect(s1.categories.first).to eq s2.categories.first
+        expect(s1.categories.first.app_category_id).to eq s2.categories.first.app_category_id
       end
     end
 
@@ -277,7 +277,7 @@ describe App do
     it 'associates the service to the correct category' do
       subject.add_service(params)
       subject.reload
-      expect(Service.last.categories.first).to eq category
+      expect(Service.last.categories.first.app_category_id).to eq category.id
     end
   end
 
