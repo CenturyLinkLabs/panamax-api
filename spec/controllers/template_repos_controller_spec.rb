@@ -9,7 +9,9 @@ describe TemplateReposController do
     it 'returns the template repos' do
       get :index, format: :json
 
-      expected = [template_repo].to_json
+      expected = ActiveModel::ArraySerializer.new(
+        [template_repo],
+        each_serializer: TemplateRepoSerializer).to_json
       expect(response.body).to eq expected
     end
 
@@ -36,7 +38,8 @@ describe TemplateReposController do
 
     it 'returns the category' do
       post :create, params.merge(format: :json)
-      expect(response.body).to eq TemplateRepo.last.to_json
+      expected = TemplateRepoSerializer.new(TemplateRepo.last).to_json
+      expect(response.body).to eq expected
     end
 
     it 'returns a 201 status code' do
