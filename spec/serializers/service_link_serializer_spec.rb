@@ -13,7 +13,8 @@ describe ServiceLinkSerializer do
     expected_keys = [
       :service_id,
       :service_name,
-      :alias
+      :alias,
+      :errors
     ]
     expect(serialized.keys).to match_array expected_keys
   end
