@@ -1,4 +1,6 @@
 class Template < ActiveRecord::Base
+  include TemplateGithub
+
   has_and_belongs_to_many :images
   has_many :categories, class_name: 'TemplateCategory'
 
@@ -8,4 +10,5 @@ class Template < ActiveRecord::Base
   def as_json(options={})
     super(options).merge(image_count: images.count)
   end
+
 end
