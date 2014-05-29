@@ -31,4 +31,20 @@ describe 'template routes' do
                                        id: '1'
                                    )
   end
+
+  it 'routes post with an id to the templates controller save' do
+    expect(post: '/templates/1/save').to route_to(
+                                       controller: 'templates',
+                                       action: 'save',
+                                       id: '1'
+                                   )
+  end
+
+  it 'has a named route for the templates controller save action' do
+    expect(post: save_template_path(1)).to route_to(
+                                         controller: 'templates',
+                                         action: 'save',
+                                         id: '1'
+                                     )
+  end
 end
