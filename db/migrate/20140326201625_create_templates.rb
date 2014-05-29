@@ -4,6 +4,7 @@ class CreateTemplates < ActiveRecord::Migration
       t.string :name
       t.text :description
       t.string :keywords
+      t.text :authors
       t.boolean :recommended
       t.string :icon
       t.text :documentation
@@ -11,6 +12,7 @@ class CreateTemplates < ActiveRecord::Migration
       t.timestamps
     end
 
+    add_index :templates, :keywords
     add_index :templates, :name
 
     create_table :images do |t|
@@ -19,7 +21,6 @@ class CreateTemplates < ActiveRecord::Migration
       t.string :repository
       t.string :tag
       t.text :description
-      t.string :keywords
       t.string :categories
       t.boolean :recommended
       t.string :icon
