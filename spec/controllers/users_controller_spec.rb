@@ -4,9 +4,13 @@ describe UsersController do
 
   describe '#show' do
 
+    before do
+      Octokit::Client.any_instance.stub(:repos).and_return([])
+    end
+
     it 'returns the user instance' do
       get :show, format: :json
-      expect(response.body).to eq User.instance.to_json
+      expect(response.body).to eq UserSerializer.new(User.instance).to_json
     end
 
     it 'returns a 200 status code' do
