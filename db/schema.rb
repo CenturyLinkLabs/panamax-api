@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140425195310) do
+ActiveRecord::Schema.define(version: 20140528170649) do
 
   create_table "app_categories", force: true do |t|
     t.string   "name"
@@ -129,5 +129,10 @@ ActiveRecord::Schema.define(version: 20140425195310) do
   end
 
   add_index "templates", ["name"], name: "index_templates_on_name"
+
+  create_table "users", force: true do |t|
+    t.string "email"
+    t.string "github_access_token"
+  end
 
 end
