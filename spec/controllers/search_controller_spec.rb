@@ -35,6 +35,27 @@ describe SearchController do
       end
     end
 
+    context 'when searching for local images only' do
+      let(:query) { 'wordpress' }
+
+      it 'only returns templates' do
+        get :index, q: "#{query}", type: 'local_image', format: 'json'
+        parsed_results = JSON.parse(response.body)
+        expect(parsed_results.keys).to match_array ['local_images', 'q']
+      end
+
+      it 'does not search remote images' do
+        expect(Image).to_not receive(:search_remote_index)
+        get :index, q: "#{query}", type: 'local_image', format: 'json'
+      end
+
+      it 'does not search templates' do
+        expect(Template).to_not receive(:recommended)
+        get :index, q: "#{query}", type: 'local_image', format: 'json'
+      end
+    end
+
+
     context 'when type is not supplied' do
       it 'passes the query to the Image when searching the remote index' do
         expect(Image).to receive(:search_remote_index).with(term: query)

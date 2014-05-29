@@ -14,6 +14,8 @@ class SearchController < ApplicationController
       case type
       when 'template'
         results[:templates] = Template.recommended.named_like(q)
+      when 'local_image'
+        results[:local_images] = Image.local_with_repo_like(q)
       else
         results[:remote_images] = Image.search_remote_index(term: q)
         results[:local_images] = Image.local_with_repo_like(q)
