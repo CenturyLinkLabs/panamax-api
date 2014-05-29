@@ -74,7 +74,7 @@ describe PanamaxAgent::Response::RaiseError do
       let(:env) do
         {
           status: 499,
-          body: "FOO BAR"
+          body: 'FOO BAR'
         }
       end
 

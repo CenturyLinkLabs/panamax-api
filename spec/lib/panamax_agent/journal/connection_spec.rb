@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe PanamaxAgent::Journal::Connection do
 
-  describe "registered middleware" do
+  describe 'registered middleware' do
 
     subject { PanamaxAgent::Journal::Client.new.connection }
 

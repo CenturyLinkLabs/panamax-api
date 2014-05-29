@@ -31,7 +31,4 @@ describe 'template routes' do
                                        id: '1'
                                    )
   end
-
-
-
 end

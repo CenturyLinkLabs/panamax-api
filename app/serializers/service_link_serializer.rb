@@ -12,4 +12,3 @@ class ServiceLinkSerializer < ActiveModel::Serializer
   end
 
 end
-

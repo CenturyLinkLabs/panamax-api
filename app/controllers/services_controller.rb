@@ -11,17 +11,13 @@ class ServicesController < ApplicationController
 
   def create
     service = app.add_service(service_create_params)
-    if service
-      app.restart
-    end
+    app.restart if service
     respond_with app, service
   end
 
   def update
     service = app.services.find(params[:id])
-    if service.update_with_relationships(service_params)
-      app.restart
-    end
+    service.update_with_relationships(service_params) && app.restart
     respond_with service
   end
 
@@ -45,11 +41,11 @@ class ServicesController < ApplicationController
       :name,
       :description,
       :icon,
-      :categories => [[:id]],
-      :ports => [[:host_interface, :host_port, :container_port, :proto]],
-      :expose => [],
-      :volumes => [[:host_path, :container_path]],
-      :links => [[:service_id, :alias]]
+      categories: [[:id]],
+      ports: [[:host_interface, :host_port, :container_port, :proto]],
+      expose: [],
+      volumes: [[:host_path, :container_path]],
+      links: [[:service_id, :alias]]
     ).tap do |whitelisted|
       whitelisted[:environment] = params[:environment]
     end

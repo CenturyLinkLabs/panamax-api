@@ -42,7 +42,7 @@ class App < ActiveRecord::Base
     service = Service.new(params)
 
     categories.each do |cat|
-      category = self.categories.detect { |app_cat| app_cat.id == cat[:id] }
+      category = self.categories.find { |app_cat| app_cat.id == cat[:id] }
 
       service.categories << ServiceCategory.new(
         app_category_id: category.id,
@@ -50,7 +50,7 @@ class App < ActiveRecord::Base
     end
 
     links.each do |link|
-      linked_to_service = self.services.detect do |service|
+      linked_to_service = self.services.find do |service|
         service.id == link[:service_id]
       end
 
@@ -74,20 +74,18 @@ class App < ActiveRecord::Base
     end
 
     template.images.each do |image|
-      if image.links?
-        linked_from_service = services.find { |service| service.name == image.name }
-        linked_from_service.copy_links_from_image(image, services)
-      end
+      next unless image.links?
+      linked_from_service = services.find { |service| service.name == image.name }
+      linked_from_service.copy_links_from_image(image, services)
     end
 
     services
   end
 
   def resolve_name_conflicts
-      unless persisted?
-        sanitized_name = name.gsub('/', '_')
-        count = App.where('name LIKE ?', "#{sanitized_name}%").count
-        self.name = (count > 0) ? "#{sanitized_name}_#{count}" : sanitized_name
-      end
+    return if persisted?
+    sanitized_name = name.gsub('/', '_')
+    count = App.where('name LIKE ?', "#{sanitized_name}%").count
+    self.name = (count > 0) ? "#{sanitized_name}_#{count}" : sanitized_name
   end
 end

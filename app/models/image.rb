@@ -36,7 +36,7 @@ class Image < ActiveRecord::Base
 
       # Arbitrarily pick the first tag since the part we care about should
       # be the same for all of them anyway.
-      repo, tag = repotags.first.split(':')
+      repo, _tag = repotags.first.split(':')
 
       if repo != EMPTY_REPO
         new(repository: repo)
@@ -50,7 +50,7 @@ class Image < ActiveRecord::Base
   end
 
   def self.local_with_repo_like(search_term)
-    self.all_local.find_all{ |image| image.repository =~ /#{search_term}/ }.compact
+    self.all_local.select { |image| image.repository =~ /#{search_term}/ }.compact
   end
 
   def self.find_local_for(name)

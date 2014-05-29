@@ -12,4 +12,3 @@ module AppJournal
     PanamaxAgent.journal_client
   end
 end
-

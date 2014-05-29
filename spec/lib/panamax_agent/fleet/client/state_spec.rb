@@ -15,7 +15,7 @@ describe PanamaxAgent::Fleet::Client::State do
     it 'GETs the Fleet state key' do
       opts = { consistent: true, recursive: true, sorted: false }
       expect(subject).to receive(:get)
-        .with("v2/keys/_coreos.com/fleet/state", opts)
+        .with('v2/keys/_coreos.com/fleet/state', opts)
         .and_return(response)
 
       subject.list_states

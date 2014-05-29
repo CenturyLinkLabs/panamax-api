@@ -21,7 +21,7 @@ describe SearchController do
       it 'only returns templates' do
         get :index, q: "#{query}", type: 'template', format: 'json'
         parsed_results = JSON.parse(response.body)
-        expect(parsed_results.keys).to match_array ['templates', 'q']
+        expect(parsed_results.keys).to match_array %w(templates q)
       end
 
       it 'does not search remote images' do
@@ -41,7 +41,7 @@ describe SearchController do
       it 'only returns templates' do
         get :index, q: "#{query}", type: 'local_image', format: 'json'
         parsed_results = JSON.parse(response.body)
-        expect(parsed_results.keys).to match_array ['local_images', 'q']
+        expect(parsed_results.keys).to match_array %w(local_images q)
       end
 
       it 'does not search remote images' do
@@ -61,7 +61,7 @@ describe SearchController do
       it 'only returns templates' do
         get :index, q: "#{query}", type: 'remote_image', format: 'json'
         parsed_results = JSON.parse(response.body)
-        expect(parsed_results.keys).to match_array ['remote_images', 'q']
+        expect(parsed_results.keys).to match_array %w(remote_images q)
       end
 
       it 'does not search remote images' do
@@ -98,7 +98,7 @@ describe SearchController do
 
       it 'includes the original query in the response' do
         get :index, q: 'fake', format: 'json'
-        expect(JSON.parse(response.body)).to include({'q'=>'fake'})
+        expect(JSON.parse(response.body)).to include('q' => 'fake')
       end
 
       context 'recommending a template' do

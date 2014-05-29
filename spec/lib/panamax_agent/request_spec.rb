@@ -7,8 +7,12 @@ describe PanamaxAgent::Request do
   let(:path) { '/path' }
 
   let(:request) do
-    double(:request, options: {}, headers: {}, params: {},
-           'headers=' => nil, 'path=' => nil)
+    double(:request,
+      options: {},
+      headers: {},
+      params: {},
+      'headers=' => nil,
+      'path=' => nil)
   end
 
   let(:response) do
@@ -34,7 +38,7 @@ describe PanamaxAgent::Request do
       it 'sets the headers' do
         headers = { foo: :bar }
         expect(request).to receive(:headers=).with(hash_including(headers))
-        subject.send(method, path, options={}, headers)
+        subject.send(method, path, {}, headers)
       end
 
       it 'returns the response body' do

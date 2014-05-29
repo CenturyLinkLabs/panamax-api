@@ -28,14 +28,10 @@ module PanamaxAgent
         end
 
         def remove_invalid_fieldpairs(fieldpairs)
-          opts = {}
-          fieldpairs.each do |key,value|
-            key = key.upcase
-            if VALID_JOURNAL_FIELDS.include?(key)
-              opts[key] = value
-            end
+          fieldpairs.each_with_object({}) do |(key, value), opts|
+            next unless VALID_JOURNAL_FIELDS.include?(key)
+            opts[key.upcase] = value
           end
-          return opts
         end
 
       end

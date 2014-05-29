@@ -11,7 +11,7 @@ describe Service do
     )
   end
 
-  subject{ described_class.new(name:'foo') }
+  subject { described_class.new(name: 'foo') }
 
   before do
     subject.manager = dummy_manager
@@ -65,23 +65,22 @@ describe Service do
 
   describe '#service_state' do
     it 'returns the service state from the service manager' do
-      expect(subject.service_state).to eql({ load_state: 'loaded' })
+      expect(subject.service_state).to eql(load_state: 'loaded')
     end
   end
 
   describe '.new_from_image' do
     let(:fake_image) do
-      double(:fake_image, {
-          name: 'Apache',
-          description: 'a webserver',
-          repository: 'ApacheFoundation/Apache',
-          tag: 'latest',
-          ports: [{host_interface: '', host_port: '', container_port: '', proto: ''}],
-          expose: [''],
-          environment: {'SOME_KEY' => ''},
-          volumes: [{host_path: '', container_path: ''}],
-          icon: 'someicon.png'
-        }
+      double(:fake_image,
+        name: 'Apache',
+        description: 'a webserver',
+        repository: 'ApacheFoundation/Apache',
+        tag: 'latest',
+        ports: [{ host_interface: '', host_port: '', container_port: '', proto: '' }],
+        expose: [''],
+        environment: { 'SOME_KEY' => '' },
+        volumes: [{ host_path: '', container_path: '' }],
+        icon: 'someicon.png'
       )
     end
 
@@ -90,20 +89,20 @@ describe Service do
       expect(result.name).to eq 'Apache'
       expect(result.description).to eq 'a webserver'
       expect(result.from).to eq 'ApacheFoundation/Apache:latest'
-      expect(result.ports).to eq [{host_interface: '', host_port: '', container_port: '', proto: ''}]
+      expect(result.ports).to eq [{ host_interface: '', host_port: '', container_port: '', proto: '' }]
       expect(result.expose).to eq ['']
-      expect(result.environment).to eq({'SOME_KEY' => ''})
-      expect(result.volumes).to eq [{host_path: '', container_path: ''}]
+      expect(result.environment).to eq('SOME_KEY' => '')
+      expect(result.volumes).to eq [{ host_path: '', container_path: '' }]
       expect(result.icon).to eq 'someicon.png'
     end
   end
 
-  describe "after initialization" do
+  describe 'after initialization' do
 
-    describe "#name=" do
+    describe '#name=' do
 
-      let(:image_name){ 'foo/bar' }
-      let(:bad_name){ 'Foo123_- ~!@#$%&*()+={}|:;"\'<>,?^`][ -890baR' }
+      let(:image_name) { 'foo/bar' }
+      let(:bad_name) { 'Foo123_- ~!@#$%&*()+={}|:;"\'<>,?^`][ -890baR' }
 
       it 'replaces slashes with underscores' do
         result = described_class.create(name: image_name)
@@ -117,7 +116,7 @@ describe Service do
       end
 
       it 'sanitizes names with bad chars' do
-        expected_name = "Foo123_-_____________________________-890baR"
+        expected_name = 'Foo123_-_____________________________-890baR'
         result = described_class.create(name: bad_name)
         expect(result.name).to eq(expected_name)
         expect(result.name.length).to eq(expected_name.length)
@@ -228,7 +227,7 @@ describe Service do
 
       let(:attrs_with_links) do
         attrs.merge(
-          links: [ { service_id: 1, alias: 'DB' } ]
+          links: [{ service_id: 1, alias: 'DB' }]
         )
       end
 
@@ -284,13 +283,13 @@ describe Service do
       expect(subject.update_with_relationships(attrs)).to eq true
     end
 
-    describe "#name=" do
+    describe '#name=' do
 
-      let(:service) { Service.create(name:'foo') }
-      let(:attrs_with_bad_name){ { name: 'Foo123_- ~!@#$%&*()+={}|:;"\'<>,?^`][ -890baR'} }
+      let(:service) { Service.create(name: 'foo') }
+      let(:attrs_with_bad_name) { { name: 'Foo123_- ~!@#$%&*()+={}|:;"\'<>,?^`][ -890baR' } }
 
       it 'sanitizes names with bad chars' do
-        expected_name = "Foo123_-_____________________________-890baR"
+        expected_name = 'Foo123_-_____________________________-890baR'
         service.update_with_relationships(attrs_with_bad_name)
         service.reload
         expect(service.name).to eq(expected_name)
@@ -299,15 +298,15 @@ describe Service do
 
       it 'appends an incremented count when service with updated name already exists' do
         # simulate existing service
-        Service.create({ name: 'foo_bar' })
+        Service.create(name: 'foo_bar')
         # update service name from 'foo' to 'foo_bar' which already exists
-        service.update_with_relationships({ name: 'foo_bar' })
+        service.update_with_relationships(name: 'foo_bar')
         service.reload
         expect(service.name).to eq('foo_bar_1')
       end
 
       it 'appends an incremented count only if name is updated' do
-        service.update_with_relationships({ description: 'description for foo' })
+        service.update_with_relationships(description: 'description for foo')
         service.reload
         expect(service.name).to eq('foo')
       end

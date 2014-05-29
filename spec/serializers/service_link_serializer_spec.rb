@@ -19,4 +19,3 @@ describe ServiceLinkSerializer do
     expect(serialized.keys).to match_array expected_keys
   end
 end
-

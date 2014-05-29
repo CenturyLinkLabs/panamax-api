@@ -19,10 +19,10 @@ describe App do
 
       it 'when using the same template again, has a unique name' do
         result = ''
-        2.times {
+        2.times do
           result = App.create_from_template(template)
           result.reload
-        }
+        end
         expect(result.name).to eq "#{template.name}_1"
         expect(result.from).to eq "Template: #{template.name}"
       end
@@ -43,15 +43,15 @@ describe App do
     context 'with an associated image' do
       let(:associated_image) do
         image_params = {
-            name: 'MySql',
-            description: 'a database',
-            repository: 'foo',
-            tag: 'bar',
-            links: [],
-            ports: [{ 'container_port' => '8080' }],
-            expose: ['expose this'],
-            environment: {var: 'val'},
-            volumes: ['volumes']
+          name: 'MySql',
+          description: 'a database',
+          repository: 'foo',
+          tag: 'bar',
+          links: [],
+          ports: [{ 'container_port' => '8080' }],
+          expose: ['expose this'],
+          environment: { var: 'val' },
+          volumes: ['volumes']
         }
         Image.new(image_params)
       end
@@ -61,9 +61,9 @@ describe App do
       end
 
       it 'creates a service for each image' do
-        expect {
+        expect do
           App.create_from_template(template)
-        }.to change { Service.count }.by(1)
+        end.to change { Service.count }.by(1)
       end
     end
 
@@ -71,7 +71,7 @@ describe App do
       before do
         i1 = Image.create(name: 'image 1', categories: [TemplateCategory.create(name: 'cat 1', template: template)])
         i2 = Image.create(name: 'image 2', categories: [TemplateCategory.create(name: 'cat 2', template: template)])
-        template.images = [i1,i2]
+        template.images = [i1, i2]
       end
 
       it 'copies the categories over like a boss' do
@@ -89,7 +89,7 @@ describe App do
         c = TemplateCategory.create(name: 'cat 1', template: template)
         i1 = Image.create(name: 'image 1', categories: [c])
         i2 = Image.create(name: 'image 2', categories: [c])
-        template.images = [i1,i2]
+        template.images = [i1, i2]
       end
 
       it 'creates category associated with the app' do
@@ -129,12 +129,12 @@ describe App do
 
     let(:params) do
       {
-          image: 'foo/bar:baz',
-          links: [{service: 'MYSQL', alias: 'DB'}],
-          ports: [{ host_interface: '', host_port: '', 'container_port' => '90', proto: '' }],
-          expose: ['3306'],
-          environment: {'SOME_KEY' => ''},
-          volumes: [{host_path: '', container_path: ''}]
+        image: 'foo/bar:baz',
+        links: [{ service: 'MYSQL', alias: 'DB' }],
+        ports: [{ host_interface: '', host_port: '', 'container_port' => '90', proto: '' }],
+        expose: ['3306'],
+        environment: { 'SOME_KEY' => '' },
+        volumes: [{ host_path: '', container_path: '' }]
       }
     end
 
@@ -147,18 +147,18 @@ describe App do
 
     it 'creates a new app from the same image again' do
       result = ''
-      2.times {
+      2.times do
         result = App.create_from_image(params)
         result.reload
-      }
+      end
       expect(result.name).to eq 'foo_bar:baz_1'
       expect(result.from).to eq 'Image: foo/bar:baz'
     end
 
     it 'creates a service from the params' do
-      expect {
+      expect do
         App.create_from_image(params)
-      }.to change { Service.count }.by(1)
+      end.to change { Service.count }.by(1)
     end
 
     it 'associates the service with the app' do
@@ -261,9 +261,9 @@ describe App do
     end
 
     it 'increments the service count' do
-      expect {
+      expect do
         subject.add_service(params)
-      }.to change { Service.count }.by(1)
+      end.to change { Service.count }.by(1)
     end
 
     it 'adds the service to the existing app' do
@@ -273,10 +273,10 @@ describe App do
     end
 
     it 'increments the app services count' do
-      expect {
+      expect do
         subject.add_service(params)
         subject.reload
-      }.to change { subject.services.count }.by(1)
+      end.to change { subject.services.count }.by(1)
     end
 
     it 'associates the service to the correct category' do

@@ -9,7 +9,9 @@ module PanamaxAgent
 
       def initialize(options={})
         super
-        @registry_client = PanamaxAgent::Registry::Client.new(:registry_api_url => pmx_registry_api_url, :registry_api_version => pmx_registry_api_version)
+        @registry_client = PanamaxAgent::Registry::Client.new(
+          registry_api_url: pmx_registry_api_url,
+          registry_api_version: pmx_registry_api_version)
       end
 
       include PanamaxAgent::Panamax::Client::Components

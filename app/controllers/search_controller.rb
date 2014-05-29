@@ -10,7 +10,7 @@ class SearchController < ApplicationController
   private
 
   def perform_search(q, *types)
-    types = ['template', 'local_image', 'remote_image'] if types.compact.empty?
+    types = %w(template local_image remote_image) if types.compact.empty?
     {}.tap do |results|
       results[:templates] = Template.recommended.named_like(q) if types.include? 'template'
       results[:local_images] = Image.local_with_repo_like(q) if types.include? 'local_image'

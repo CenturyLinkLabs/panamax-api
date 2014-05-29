@@ -111,7 +111,7 @@ UNIT_FILE
 
     context 'when the after attribute is an enumerable' do
 
-      let(:after) { ['a', 'b'] }
+      let(:after) { %w(a b) }
 
       subject { described_class.new('foo', after: after) }
 
@@ -133,7 +133,7 @@ UNIT_FILE
 
     context 'when the requires attribute is an enumerable' do
 
-      let(:requires) { ['a', 'b'] }
+      let(:requires) { %w(a b) }
 
       subject { described_class.new('foo', requires: requires) }
 
@@ -175,7 +175,7 @@ UNIT_FILE
 
     it 'generates the appropriate sha1 hash' do
 
-      expect(subject.sha1).to eq "e9acf4921da295ea31583552fc2802391f43dae1"
+      expect(subject.sha1).to eq 'e9acf4921da295ea31583552fc2802391f43dae1'
     end
   end
 end

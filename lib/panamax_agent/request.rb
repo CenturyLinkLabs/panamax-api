@@ -26,7 +26,7 @@ module PanamaxAgent
         when :delete, :get, :head
           request.params = options unless options.empty?
         when :post, :put
-          if options.has_key?(:querystring)
+          if options.key?(:querystring)
             request.params = options[:querystring]
             request.body = options[:body]
           else

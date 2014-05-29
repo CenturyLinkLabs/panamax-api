@@ -15,7 +15,7 @@ describe PanamaxAgent::Fleet::Client::Job do
     it 'GETs the Fleet job key' do
       opts = { consistent: true, recursive: true, sorted: true }
       expect(subject).to receive(:get)
-        .with("v2/keys/_coreos.com/fleet/job", opts)
+        .with('v2/keys/_coreos.com/fleet/job', opts)
         .and_return(response)
 
       subject.list_jobs

@@ -9,13 +9,13 @@ describe AppSerializer do
   it 'exposes the attributes to be jsonified' do
     serialized = described_class.new(app_model).as_json
     expected_keys = [
-        :id,
-        :name,
-        :from,
-        :categories,
-        :errors,
-        :services,
-        :documentation
+      :id,
+      :name,
+      :from,
+      :categories,
+      :errors,
+      :services,
+      :documentation
     ]
     expect(serialized.keys).to match_array expected_keys
   end

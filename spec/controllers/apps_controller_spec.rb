@@ -12,13 +12,13 @@ describe AppsController do
   end
 
   describe '#show' do
-    it "returns a specific app" do
-      get :show, { id: App.first.id, format: :json }
-      expect(response.body).to eq (AppSerializer.new(App.first)).to_json
+    it 'returns a specific app' do
+      get :show, id: App.first.id, format: :json
+      expect(response.body).to eq AppSerializer.new(App.first).to_json
     end
 
     it 'returns app representations with an array of services in the services attribute' do
-      get :show, { id: App.first.id, format: :json }
+      get :show, id: App.first.id, format: :json
       expect(JSON.parse(response.body)).to have_key('services')
       expect(JSON.parse(response.body)['services']).to be_an Array
     end
@@ -28,9 +28,9 @@ describe AppsController do
   describe '#create' do
 
     context 'when the request contains a template id' do
-      let(:app){ App.new }
-      let(:params){ { template_id: 1 } }
-      let(:template){ double(:template, name: 'my_template') }
+      let(:app) { App.new }
+      let(:params) { { template_id: 1 } }
+      let(:template) { double(:template, name: 'my_template') }
 
       before do
         App.stub(:create_from_template).and_return(app)
@@ -40,12 +40,12 @@ describe AppsController do
 
       it 'fetches the template for the given template id' do
         expect(Template).to receive(:find).with(params[:template_id]).and_return(template)
-        post :create, { template_id: 1, format: :json }
+        post :create, template_id: 1, format: :json
       end
 
       it 'creates the application from the template' do
         expect(App).to receive(:create_from_template).with(template)
-        post :create, { template_id: 1, format: :json }
+        post :create, template_id: 1, format: :json
       end
 
     end
@@ -54,17 +54,17 @@ describe AppsController do
 
       let(:params) do
         {
-            image: 'foo/bar:baz',
-            links: [{service: '1', alias: '1'}, {service: '1', alias: '1'}],
-            ports: [{host_interface: '', host_port: '', container_port: '', proto: ''}],
-            expose: [''],
-            environment: { 'SOME_KEY' => ''},
-            volumes: [{host_path: '', container_path: ''}],
-            tag: 'latest'
+          image: 'foo/bar:baz',
+          links: [{ service: '1', alias: '1' }, { service: '1', alias: '1' }],
+          ports: [{ host_interface: '', host_port: '', container_port: '', proto: '' }],
+          expose: [''],
+          environment: { 'SOME_KEY' => '' },
+          volumes: [{ host_path: '', container_path: '' }],
+          tag: 'latest'
         }
       end
 
-      let(:app){ App.new }
+      let(:app) { App.new }
 
       before do
         App.stub(:create_from_image).and_return(app)
@@ -119,9 +119,9 @@ describe AppsController do
 
     context 'when the app name is already in use' do
 
-      let(:app){ App.create(name: apps(:app1).name) }
-      let(:params){ { template_id: 1 } }
-      let(:template){ double(:template, name: 'my_template') }
+      let(:app) { App.create(name: apps(:app1).name) }
+      let(:params) { { template_id: 1 } }
+      let(:template) { double(:template, name: 'my_template') }
 
       before do
         App.stub(:create_from_template).and_return(app)
@@ -136,7 +136,7 @@ describe AppsController do
 
       it 'the app has a new name' do
         post :create, params.merge(format: :json)
-        expect(app.name).to eq("App 1_1")
+        expect(app.name).to eq('App 1_1')
       end
 
       it 'returns no errors' do
@@ -147,9 +147,9 @@ describe AppsController do
     end
 
     context 'when the app is updated with a category' do
-      let(:app){ App.create(name: apps(:app1).name) }
-      let(:params){ { template_id: 1 } }
-      let(:template){ double(:template, name: 'my_template') }
+      let(:app) { App.create(name: apps(:app1).name) }
+      let(:params) { { template_id: 1 } }
+      let(:template) { double(:template, name: 'my_template') }
 
       before do
         App.stub(:create_from_template).and_return(app)
@@ -162,32 +162,32 @@ describe AppsController do
         app.categories = [AppCategory.new(name: 'My Category')]
         app.save
         app.reload
-        expect(app.name).to eq("App 1_1")
+        expect(app.name).to eq('App 1_1')
       end
 
     end
   end
 
   describe '#destroy' do
-    let(:app){ apps(:app1) } # load from fixture to get services assoc
-    let(:service_name) {app.services.first.name}
+    let(:app) { apps(:app1) } # load from fixture to get services assoc
+    let(:service_name) { app.services.first.name }
 
     before do
       ServiceManager.any_instance.stub(:destroy).and_return(true)
     end
 
     it 'deletes the app' do
-      delete :destroy, { id: app.id, format: :json }
+      delete :destroy, id: app.id, format: :json
       expect(App.where(id: app.id).first).to be_nil
     end
 
     it 'destroys the app services' do
-      delete :destroy, { id: app.id, format: :json }
+      delete :destroy, id: app.id, format: :json
       expect(Service.where(app_id: app.id)).to be_empty
     end
 
-    it "returns no content in response body" do
-      delete :destroy, { id: app.id, format: :json }
+    it 'returns no content in response body' do
+      delete :destroy, id: app.id, format: :json
       expect(response.body).to be_empty
     end
   end
@@ -197,7 +197,7 @@ describe AppsController do
     let(:app) { apps(:app1) } # load from fixture to get services assoc
 
     it 'returns the service journal' do
-      get :journal, { id: app.id, format: :json }
+      get :journal, id: app.id, format: :json
       expect(response.body).to eql fixture_data('journal')
     end
   end

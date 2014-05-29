@@ -7,8 +7,8 @@ describe PanamaxAgent::Response::FixBadJson do
     context 'when response body is empty' do
       let(:env) do
         {
-            headers: {accept: 'application/json'},
-            body: ''
+          headers: { accept: 'application/json' },
+          body: ''
         }
       end
 
@@ -19,10 +19,10 @@ describe PanamaxAgent::Response::FixBadJson do
 
     context 'when response body returns well-formatted json' do
       let(:env) do
-      {
-          headers: {accept: 'application/json'},
+        {
+          headers: { accept: 'application/json' },
           body: '[ { "SOME_KEY_1" : "VALUE-1" }, { "SOME_KEY_1" : "VALUE-2" } ]'
-      }
+        }
       end
 
       it 'raises no errors' do
@@ -34,8 +34,8 @@ describe PanamaxAgent::Response::FixBadJson do
     context 'when response body returns bad-formatted json' do
       let(:env) do
         {
-            headers: {accept: 'application/json'},
-            body: '{ "SOME_KEY_1" : "VALUE-1" } { "SOME_KEY_1" : "VALUE-2" }'
+          headers: { accept: 'application/json' },
+          body: '{ "SOME_KEY_1" : "VALUE-1" } { "SOME_KEY_1" : "VALUE-2" }'
         }
       end
 
@@ -43,7 +43,5 @@ describe PanamaxAgent::Response::FixBadJson do
         expect { subject.parse(env[:body]) }.to_not raise_error
       end
     end
-
   end
-
 end

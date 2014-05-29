@@ -74,7 +74,6 @@ describe ServiceManager do
     end
   end
 
-
   describe '#load' do
 
     let(:linked_to_service) { Service.new(name: 'linked_to_service') }

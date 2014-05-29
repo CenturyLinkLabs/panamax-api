@@ -19,7 +19,7 @@ describe PanamaxAgent::Journal::Client do
         {
           'MESSAGE' => 'foo is running',
           '_SYSTEMD_UNIT' => 'foo.service'
-        },
+        }
       ]
     end
 

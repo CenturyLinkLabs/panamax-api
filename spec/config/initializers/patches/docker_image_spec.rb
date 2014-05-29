@@ -23,7 +23,6 @@ describe 'Docker::Image patch' do
       Docker::Image.new(connection, body.merge('id' => body['name']))
     end
 
-
     it 'adds Docker index search result data to Docker::Image instances' do
       result = Docker::Image.search('blah', connection)
       expect(result.first.info).to eq image.info

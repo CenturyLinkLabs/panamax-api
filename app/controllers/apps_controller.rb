@@ -39,16 +39,17 @@ class AppsController < ApplicationController
   private
 
   def image_create_params
-    params.permit(:image,
-                  :tag,
-                  :icon,
-                  links: [[:service, :alias]],
-                  ports: [[:host_interface, :host_port, :container_port, :proto]],
-                  expose: [],
-                  volumes: [[:host_path, :container_path]]
-                 ).tap do |whitelisted|
-                    whitelisted[:environment] = params[:environment]
-                  end
+    params.permit(
+      :image,
+      :tag,
+      :icon,
+      links: [[:service, :alias]],
+      ports: [[:host_interface, :host_port, :container_port, :proto]],
+      expose: [],
+      volumes: [[:host_path, :container_path]]
+    ).tap do |whitelisted|
+      whitelisted[:environment] = params[:environment]
+    end
   end
 
 end

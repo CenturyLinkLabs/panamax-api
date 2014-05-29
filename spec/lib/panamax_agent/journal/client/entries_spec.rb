@@ -55,7 +55,7 @@ describe PanamaxAgent::Journal::Client::Entries do
       it 'does not pass invalid fields to API' do
         expect(subject).to(
           receive(:get)
-            .with('entries', hash_not_including({ 'foo' => 'bar' }), {})
+            .with('entries', hash_not_including('foo' => 'bar'), {})
             .and_return(response)
         )
 
@@ -70,7 +70,7 @@ describe PanamaxAgent::Journal::Client::Entries do
       it 'passes cursor in range header to API' do
         expect(subject).to(
           receive(:get)
-            .with('entries', hash_including(opts), { 'Range' => "entries=#{cursor}" })
+            .with('entries', hash_including(opts), 'Range' => "entries=#{cursor}")
             .and_return(response)
         )
 
@@ -83,7 +83,7 @@ describe PanamaxAgent::Journal::Client::Entries do
       it 'passes boot=0 to API' do
         expect(subject).to(
           receive(:get)
-            .with('entries', hash_including({ 'boot' => 0 }), {})
+            .with('entries', hash_including('boot' => 0), {})
             .and_return(response)
         )
 
@@ -96,11 +96,11 @@ describe PanamaxAgent::Journal::Client::Entries do
       it 'passes boot param to API' do
         expect(subject).to(
           receive(:get)
-            .with('entries', hash_including({ 'boot' => 1 }), {})
+            .with('entries', hash_including('boot' => 1), {})
             .and_return(response)
         )
 
-        subject.get_entries_by_fields(opts, cursor=nil, boot_offset=1)
+        subject.get_entries_by_fields(opts, nil, 1)
       end
     end
 
@@ -109,11 +109,11 @@ describe PanamaxAgent::Journal::Client::Entries do
       it 'it does not pass boot parameter to API' do
         expect(subject).to(
           receive(:get)
-            .with('entries', hash_not_including({ 'boot' => 99999 }), {})
+            .with('entries', hash_not_including('boot' => 99_999), {})
             .and_return(response)
         )
 
-        subject.get_entries_by_fields(opts, cursor=nil, boot_offset=99999)
+        subject.get_entries_by_fields(opts, nil, 99_999)
       end
     end
 

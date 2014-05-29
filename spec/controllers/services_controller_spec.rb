@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 describe ServicesController do
-  let(:app){ App.first }
+  let(:app) { App.first }
 
   describe '#index' do
 
     it 'returns an array' do
-      get :index, {app_id: app.id, format: :json}
+      get :index, app_id: app.id, format: :json
       expect(JSON.parse(response.body)).to be_an Array
     end
 
@@ -14,13 +14,13 @@ describe ServicesController do
 
   describe '#show' do
 
-    it "returns a specific app" do
-      get :show, { app_id: app.id, id: Service.first.id, format: :json }
-      expect(response.body).to eq (ServiceSerializer.new(Service.first)).to_json
+    it 'returns a specific app' do
+      get :show, app_id: app.id, id: Service.first.id, format: :json
+      expect(response.body).to eq ServiceSerializer.new(Service.first).to_json
     end
 
     it 'returns service representations with an app representation in the app attribute' do
-      get :show, { id: Service.first.id, app_id: app.id, format: :json }
+      get :show, id: Service.first.id, app_id: app.id, format: :json
       expect(JSON.parse(response.body)).to have_key('app')
       expect(JSON.parse(response.body)['app']).to eq JSON.parse(AppLiteSerializer.new(app).to_json)
     end
@@ -35,10 +35,10 @@ describe ServicesController do
       {
         name: 'servicename',
         description: 'servicedescription',
-        ports: [{ host_port: '80', container_port: '80', proto: 'tcp'}],
-        expose: ['80', '443'],
-        environment: { 'SOME_KEY' => 'some_value'},
-        volumes: [{ host_path: '/tmp/foo', container_path: '/tmp/bar' }],
+        ports: [{ host_port: '80', container_port: '80', proto: 'tcp' }],
+        expose: %w(80 443),
+        environment: { 'SOME_KEY' => 'some_value' },
+        volumes: [{ host_path: '/tmp/foo', container_path: '/tmp/bar' }]
       }
     end
 
@@ -122,17 +122,17 @@ describe ServicesController do
     end
 
     it 'calls destroy on the service' do
-      delete :destroy, { app_id: '1', id: '2', format: :json }
+      delete :destroy, app_id: '1', id: '2', format: :json
       expect(dummy_service).to have_received(:destroy)
     end
 
     it 'returns an empty response body' do
-      delete :destroy, { app_id: '1', id: '2', format: :json }
+      delete :destroy, app_id: '1', id: '2', format: :json
       expect(response.body).to be_empty
     end
 
     it 'returns an response code 204' do
-      delete :destroy, { app_id: '1', id: '2', format: :json }
+      delete :destroy, app_id: '1', id: '2', format: :json
       expect(response.status).to eq 204
     end
 
@@ -141,7 +141,7 @@ describe ServicesController do
   describe '#journal' do
 
     it 'returns the service journal' do
-      get :journal, { app_id: app.id, id: Service.first.id, format: :json }
+      get :journal, app_id: app.id, id: Service.first.id, format: :json
       expect(response.body).to eq fixture_data('journal')
     end
   end
@@ -162,9 +162,9 @@ describe ServicesController do
     end
 
     it 'adds a new service' do
-      expect {
+      expect do
         post :create, params.merge(app_id: app, format: :json)
-      }.to change(Service, :count).by(1)
+      end.to change(Service, :count).by(1)
 
     end
 

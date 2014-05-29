@@ -41,7 +41,7 @@ module PanamaxAgent
 
     # Return a has of all the current config options
     def options
-      VALID_OPTIONS_KEYS.inject({}) { |o,k| o.merge!(k => send(k)) }
+      VALID_OPTIONS_KEYS.each_with_object({}) { |k, o| o[k] = send(k) }
     end
 
     def reset

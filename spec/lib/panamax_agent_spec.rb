@@ -39,5 +39,4 @@ describe PanamaxAgent do
     end
   end
 
-
 end

@@ -5,7 +5,6 @@ require 'panamax_agent/fleet/client/job'
 require 'panamax_agent/fleet/client/state'
 require 'panamax_agent/fleet/client/unit'
 
-
 module PanamaxAgent
   module Fleet
     class Client < PanamaxAgent::Client

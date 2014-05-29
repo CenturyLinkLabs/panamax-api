@@ -140,7 +140,7 @@ describe Image do
     let(:image_list) do
       [
         double(:image, info: { 'RepoTags' => ['joshhartnett/rails:foo'] }),
-        double(:image, info: { 'RepoTags' => ['timothydalton/ubuntu:foo'] }),
+        double(:image, info: { 'RepoTags' => ['timothydalton/ubuntu:foo'] })
       ]
     end
 
