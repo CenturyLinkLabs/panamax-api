@@ -2,6 +2,19 @@ require 'spec_helper'
 
 describe UsersController do
 
+  describe '#show' do
+
+    it 'returns the user instance' do
+      get :show, format: :json
+      expect(response.body).to eq User.instance.to_json
+    end
+
+    it 'returns a 200 status code' do
+      get :show, format: :json
+      expect(response.status).to eq 200
+    end
+  end
+
   describe '#update' do
 
     before do

@@ -18,5 +18,5 @@ PanamaxApi::Application.routes.draw do
     end
   end
 
-  resource :user, only: [:update]
+  resource :user, only: [:show, :update]
 end
