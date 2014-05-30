@@ -21,23 +21,47 @@ describe UsersController do
 
   describe '#update' do
 
-    before do
-      # Neuter model validations
-      User.any_instance.stub(:access_token_scope)
-    end
-
     let(:params) { { github_access_token: 'token' } }
 
-    it 'changes the user attributes' do
-      put :update, params.merge(format: :json)
+    context 'when the user is successfully updated' do
 
-      expect(User.instance.github_access_token).to eq(
-        params[:github_access_token])
+      before do
+        # Neuter model validations
+        User.any_instance.stub(:access_token_scope)
+      end
+
+      it 'changes the user attributes' do
+        put :update, params.merge(format: :json)
+
+        expect(User.instance.github_access_token).to eq(
+          params[:github_access_token])
+      end
+
+      it 'returns a 204 status code' do
+        put :update, params.merge(format: :json)
+        expect(response.status).to eq 204
+      end
     end
 
-    it 'returns a 204 status code' do
-      put :update, params.merge(format: :json)
-      expect(response.status).to eq 204
+    context 'when the user fails validation' do
+
+      before do
+        user = User.new
+        user.stub(:update)
+        user.errors.add(:base, 'boom')
+
+        User.stub(:instance).and_return(user)
+      end
+
+      it 'returns the error message' do
+        put :update, params.merge(format: :json)
+        expect(response.body).to include 'boom'
+      end
+
+      it 'returns a 422 status code' do
+        put :update, params.merge(format: :json)
+        expect(response.status).to eq 422
+      end
     end
   end
 

@@ -6,7 +6,9 @@ class UsersController < ApplicationController
   end
 
   def update
-    respond_with User.instance.update(user_params)
+    user = User.instance
+    user.update(user_params)
+    respond_with user
   end
 
   private
