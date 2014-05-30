@@ -29,7 +29,7 @@ unless Template.where(name: 'Wordpress').present?
     description: 'MySQL',
     expose: [3306],
     environment: { 'MYSQL_ROOT_PASSWORD' => 'pass@word01'},
-    ports: [{host_port: 3306, container_port: 3306}],
+    ports: [{'host_port' => 3306, 'container_port' => 3306}],
     categories: [db_cat],
     icon: 'http://panamax.ca.tier3.io/service_icons/icon_service_db_grey.png'
   )
@@ -38,8 +38,8 @@ unless Template.where(name: 'Wordpress').present?
       repository: 'panamax/panamax-docker-wordpress',
       tag: 'latest',
       description: 'Wordpress',
-      links: [{service: 'DB_1', alias:'DB_1'}],
-      ports: [{host_port: 8080, container_port: 80}],
+      links: [{'service' => 'DB_1', 'alias' => 'DB_1'}],
+      ports: [{'host_port' => 8080, 'container_port' => 80}],
       expose: [80],
       environment: { 'DB_PASSWORD' => 'pass@word01' },
       categories: [web_cat],
@@ -68,8 +68,8 @@ unless Template.where(name: 'Rails').present?
     repository: 'dharmamike/dc-rails',
     tag: 'latest',
     description: 'welcome to rails',
-    links: [{service: 'DB_2', alias:'DB_1'}],
-    ports: [{host_port: 8088, container_port: 3000}],
+    links: [{'service' => 'DB_2', 'alias' =>'DB_1'}],
+    ports: [{'host_port' => 8088, 'container_port' => 3000}],
     icon: 'http://panamax.ca.tier3.io/service_icons/icon_service_docker_grey.png'
 
   )

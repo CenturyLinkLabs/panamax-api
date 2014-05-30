@@ -67,8 +67,8 @@ class Service < ActiveRecord::Base
 
   def copy_links_from_image(image, services)
     image.links.each do |link|
-      linked_to_service = services.find { |service| service.name == link[:service] }
-      self.links << ServiceLink.new(linked_to_service: linked_to_service, alias: link[:alias])
+      linked_to_service = services.find { |service| service.name == link['service'] }
+      self.links << ServiceLink.new(linked_to_service: linked_to_service, alias: link['alias'])
     end
   end
 

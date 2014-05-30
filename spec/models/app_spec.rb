@@ -110,7 +110,7 @@ describe App do
     context 'with linked images' do
 
       before do
-        i1 = Image.create(name: 'WP', links: [{ service: 'MYSQL', alias: 'DB' }])
+        i1 = Image.create(name: 'WP', links: [{ 'service' => 'MYSQL', 'alias' => 'DB' }])
         i2 = Image.create(name: 'MYSQL')
         template.images = [i1, i2]
       end
