@@ -3,7 +3,7 @@ class AppSerializer < ActiveModel::Serializer
 
   attributes :id, :name, :from, :errors, :documentation
 
-  has_many :categories, serializer: CategorySerializer
+  has_many :categories, serializer: AppCategorySerializer
   has_many :services, serializer: ServiceLiteSerializer
 
   def errors

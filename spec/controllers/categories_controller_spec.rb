@@ -11,7 +11,7 @@ describe CategoriesController do
 
       expected = ActiveModel::ArraySerializer.new(
         [app_categories(:category1)],
-        each_serializer: CategorySerializer).to_json
+        each_serializer: AppCategorySerializer).to_json
 
       expect(response.body).to eq expected
     end
@@ -24,7 +24,7 @@ describe CategoriesController do
     it 'returns the specified app category' do
       get :show, { app_id: app, id: category, format: :json }
 
-      expect(response.body).to eq CategorySerializer.new(category).to_json
+      expect(response.body).to eq AppCategorySerializer.new(category).to_json
     end
   end
 
@@ -47,7 +47,7 @@ describe CategoriesController do
 
     it 'returns the category' do
       post :create, params.merge({ app_id: app, format: :json })
-      expect(response.body).to eq CategorySerializer.new(AppCategory.last).to_json
+      expect(response.body).to eq AppCategorySerializer.new(AppCategory.last).to_json
     end
 
     it 'returns a 201 status code' do

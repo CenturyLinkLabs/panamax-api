@@ -7,5 +7,5 @@ class ServiceLiteSerializer < ActiveModel::Serializer
     object.errors if object.errors.present?
   end
 
-  has_many :categories, serializer: CategorySerializer
+  has_many :categories, serializer: ServiceCategorySerializer
 end

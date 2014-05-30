@@ -6,7 +6,7 @@ class ServiceSerializer < ActiveModel::Serializer
 
   has_one :app, serializer: AppLiteSerializer
 
-  has_many :categories, serializer: CategorySerializer
+  has_many :categories, serializer: ServiceCategorySerializer
 
   has_many :links, serializer: ServiceLinkSerializer
 

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe CategorySerializer do
+describe AppCategorySerializer do
   let(:category_model) { AppCategory.new }
 
   it 'exposes the attributes to be jsonified' do

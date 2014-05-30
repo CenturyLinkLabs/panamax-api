@@ -2,16 +2,16 @@ class CategoriesController < ApplicationController
   respond_to :json
 
   def index
-    respond_with app.categories, each_serializer: CategorySerializer
+    respond_with app.categories
   end
 
   def show
-    respond_with app.categories.find(params[:id]), serializer: CategorySerializer
+    respond_with app.categories.find(params[:id])
   end
 
   def create
     category = app.categories.create(category_params)
-    respond_with app, category, serializer: CategorySerializer
+    respond_with app, category
   end
 
   def update
