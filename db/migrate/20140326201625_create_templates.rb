@@ -6,6 +6,7 @@ class CreateTemplates < ActiveRecord::Migration
       t.string :keywords
       t.text :authors
       t.boolean :recommended
+      t.string :from
       t.string :icon
       t.text :documentation
 

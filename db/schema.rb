@@ -108,6 +108,7 @@ ActiveRecord::Schema.define(version: 20140528192410) do
     t.string   "keywords"
     t.text     "authors"
     t.boolean  "recommended"
+    t.string   "from"
     t.string   "icon"
     t.text     "documentation"
     t.datetime "created_at"
