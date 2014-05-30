@@ -8,6 +8,12 @@ class User < ActiveRecord::Base
     User.first || User.create
   end
 
+  def repos
+    github_client.repos.map(&:full_name)
+  rescue Octokit::Unauthorized
+    []
+  end
+
   private
 
   def access_token_scope

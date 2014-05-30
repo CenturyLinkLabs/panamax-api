@@ -96,4 +96,32 @@ describe User do
       end
     end
   end
+
+  describe '#repos' do
+
+    let(:repo) { double(:repo, full_name: 'foo/bar') }
+
+    context 'when the github token is valid' do
+
+      before do
+        Octokit::Client.any_instance.stub(:repos).and_return([repo])
+      end
+
+      it 'returns a list of repo full names' do
+        expect(subject.repos).to include(repo.full_name)
+      end
+    end
+
+    context 'when the github token is invalid' do
+
+      before do
+        Octokit::Client.any_instance.stub(:repos)
+          .and_raise(Octokit::Unauthorized)
+      end
+
+      it 'returns an empty list' do
+        expect(subject.repos).to eq []
+      end
+    end
+  end
 end
