@@ -7,3 +7,11 @@ service1:
   expose: '3306'
   environment: 'MYSQL_ROOT_PASSWORD=pass@word01'
   volumes: '/var/panamax:/var/app/panamax'
+
+service2:
+  app: app1
+  name: 'my-other-service'
+  description: 'just some service I ran'
+  from: 'panamax/panamax-docker-rails'
+  ports: '3000:3000'
+  expose: '3000'

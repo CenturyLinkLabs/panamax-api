@@ -235,6 +235,7 @@ describe App do
     fixtures :app_categories
 
     let(:category) { subject.categories.first }
+    let(:linked_to_service) { subject.services.last }
 
     let(:params) do
       {
@@ -244,7 +245,7 @@ describe App do
         categories: [{ id: category.id }],
         ports: [{ host_interface: '', host_port: '', 'container_port' => 90, proto: '' }],
         expose: [''],
-        links: [],
+        links: [{ service_id: linked_to_service.id, alias: 'DEP' }],
         volumes: [{ host_path: '', container_path: '' }],
         environment: { 'SOME_KEY' => '' }
       }
@@ -277,6 +278,12 @@ describe App do
         subject.add_service(params)
         subject.reload
       end.to change { subject.services.count }.by(1)
+    end
+
+    it 'increments the service link count' do
+      expect do
+        subject.add_service(params)
+      end.to change { ServiceLink.count }.by(1)
     end
 
     it 'associates the service to the correct category' do
