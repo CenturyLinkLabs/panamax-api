@@ -78,6 +78,22 @@ describe AppsController do
 
     end
 
+    context 'when app is invalid' do
+      let(:params) { { image: 'foo/bar:baz' } }
+
+      let(:app) { App.new }
+
+      before do
+        app.stub(:valid?).and_return(false)
+        App.stub(:create_from_image).and_return(app)
+      end
+
+      it 'logs an error' do
+        expect(subject.logger).to receive(:error)
+        post :create, params.merge(format: :json)
+      end
+    end
+
     context 'when attempting to run the application raises an exception' do
       let(:app) { apps(:app1) } # load from fixture to get services assoc
       let(:params) { { template_id: 1 } }

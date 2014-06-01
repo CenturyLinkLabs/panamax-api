@@ -82,6 +82,10 @@ describe PanamaxAgent::Panamax::Client::Components do
 
   describe '#get_component' do
 
+    it 'returns the metadata info for the panamax agent' do
+      expect(subject.get_component('panamax-agent')).to eq expected_components[0]['panamax-agent']
+    end
+
     it 'returns the metadata info for the panamax ui component' do
       expect(subject.get_component('panamax-ui')).to eql(expected_components[1]['panamax-ui'])
     end
