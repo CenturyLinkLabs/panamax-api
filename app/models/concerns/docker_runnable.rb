@@ -27,13 +27,13 @@ module DockerRunnable
     return unless ports
     ports.map do |port|
       option = '-p '
-      if port[:host_interface] || port[:host_port]
-        option << "#{port[:host_interface]}:" if port[:host_interface]
-        option << "#{port[:host_port]}" if port[:host_port]
+      if port['host_interface'] || port['host_port']
+        option << "#{port['host_interface']}:" if port['host_interface']
+        option << "#{port['host_port']}" if port['host_port']
         option << ':'
       end
-      option << "#{port[:container_port]}"
-      option << "/#{port[:proto]}" if port[:proto]
+      option << "#{port['container_port']}"
+      option << "/#{port['proto']}" if port['proto']
       option
     end
   end
@@ -51,7 +51,7 @@ module DockerRunnable
   def volume_flags
     return unless volumes
     volumes.map do |volume|
-      "-v #{volume[:host_path]}:#{volume[:container_path]}"
+      "-v #{volume['host_path']}:#{volume['container_path']}"
     end
   end
 
