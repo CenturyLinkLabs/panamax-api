@@ -60,7 +60,7 @@ unless Template.where(name: 'Rails').present?
       repository: 'dharmamike/dc-pgsql',
       tag: 'latest',
       description: 'PostgreSQL',
-      ports: [{host_port: 5432, container_port: 5432}],
+      ports: [{ 'host_port' => 5432, 'container_port' => 5432 }],
       icon: 'http://panamax.ca.tier3.io/service_icons/icon_service_db_grey.png'
   )
   rails.images.create(

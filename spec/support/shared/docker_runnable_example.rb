@@ -32,10 +32,10 @@ shared_examples 'a docker runnable model' do
 
     before do
       model.ports = [{
-        host_interface: '0.0.0.0',
-        host_port: '8000',
-        container_port: '3000',
-        proto: 'tcp'
+        'host_interface' => '0.0.0.0',
+        'host_port' => '8000',
+        'container_port' => '3000',
+        'proto' => 'tcp'
       }]
     end
 
@@ -72,7 +72,7 @@ shared_examples 'a docker runnable model' do
   context 'when volumes are specified' do
 
     before do
-      model.volumes = [{ host_path: '/tmp/foo', container_path: '/tmp/bar' }]
+      model.volumes = [{ 'host_path' => '/tmp/foo', 'container_path' => '/tmp/bar' }]
     end
 
     it 'generates a docker command with -v' do
