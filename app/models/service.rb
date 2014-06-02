@@ -128,12 +128,14 @@ class Service < ActiveRecord::Base
   private
 
   def presence_of_container_ports
+    return unless ports
     ports.each do |port|
       return errors.add(:ports, "container port can't be blank") unless port['container_port'].present?
     end
   end
 
   def uniqueness_of_ports
+    return unless ports
     host_ports.each do |host_port|
       if host_ports.count(host_port) > 1
         return errors.add(:ports, 'host ports must be unique')

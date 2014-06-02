@@ -52,6 +52,15 @@ describe Service do
       expect(subject.valid?).to be_false
       expect(subject.errors[:ports]).to eq ['host ports must be unique']
     end
+
+    context 'when ports are nil' do
+
+      before do
+        subject.ports = nil
+      end
+
+      it { should be_valid }
+    end
   end
 
   it_behaves_like 'a docker runnable model'
