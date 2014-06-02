@@ -9,7 +9,7 @@ describe UserSerializer do
 
   it 'exposes the attributes to be jsonified' do
     serialized = described_class.new(user_model).as_json
-    expected_keys = [:repos]
+    expected_keys = [:email, :repos, :github_access_token_present]
     expect(serialized.keys).to match_array expected_keys
   end
 end
