@@ -29,18 +29,6 @@ ActiveRecord::Schema.define(version: 20140528192410) do
     t.text   "documentation"
   end
 
-  create_table "image_categories", force: true do |t|
-    t.integer  "image_id"
-    t.integer  "template_category_id"
-    t.integer  "position"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "image_categories", ["image_id", "template_category_id"], name: "index_image_categories_on_image_id_and_template_category_id", unique: true
-  add_index "image_categories", ["image_id"], name: "index_image_categories_on_image_id"
-  add_index "image_categories", ["template_category_id"], name: "index_image_categories_on_template_category_id"
-
   create_table "images", force: true do |t|
     t.string   "image_id"
     t.string   "name"
@@ -48,6 +36,7 @@ ActiveRecord::Schema.define(version: 20140528192410) do
     t.string   "tag"
     t.text     "description"
     t.string   "keywords"
+    t.string   "categories"
     t.boolean  "recommended"
     t.string   "icon"
     t.text     "links"
@@ -105,17 +94,6 @@ ActiveRecord::Schema.define(version: 20140528192410) do
 
   add_index "services", ["app_id"], name: "index_services_on_app_id"
   add_index "services", ["name"], name: "index_services_on_name"
-
-  create_table "template_categories", force: true do |t|
-    t.integer  "template_id"
-    t.string   "name"
-    t.integer  "position"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "template_categories", ["name", "template_id"], name: "index_template_categories_on_name_and_template_id", unique: true
-  add_index "template_categories", ["template_id"], name: "index_template_categories_on_template_id"
 
   create_table "template_repos", force: true do |t|
     t.string   "name"

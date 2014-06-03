@@ -69,8 +69,8 @@ describe App do
 
     context 'with images with multiple categories' do
       before do
-        i1 = Image.create(name: 'image 1', categories: [TemplateCategory.create(name: 'cat 1', template: template)])
-        i2 = Image.create(name: 'image 2', categories: [TemplateCategory.create(name: 'cat 2', template: template)])
+        i1 = Image.create(name: 'image 1', categories: ['cat 1'])
+        i2 = Image.create(name: 'image 2', categories: ['cat 2'])
         template.images = [i1, i2]
       end
 
@@ -86,9 +86,8 @@ describe App do
 
     context 'with images with a shared category' do
       before do
-        c = TemplateCategory.create(name: 'cat 1', template: template)
-        i1 = Image.create(name: 'image 1', categories: [c])
-        i2 = Image.create(name: 'image 2', categories: [c])
+        i1 = Image.create(name: 'image 1', categories: ['cat 1'])
+        i2 = Image.create(name: 'image 2', categories: ['cat 1'])
         template.images = [i1, i2]
       end
 

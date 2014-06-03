@@ -7,7 +7,7 @@ class App < ActiveRecord::Base
   before_save :resolve_name_conflicts
 
   def self.create_from_template(t)
-    categories = t.categories.map { |cat| AppCategory.new(name: cat.name) }
+    categories = t.categories.map { |cat| AppCategory.new(name: cat) }
 
     app = self.create(name: t.name, from: "Template: #{t.name}", documentation: t.documentation)
     app.categories = categories

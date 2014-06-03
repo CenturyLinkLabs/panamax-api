@@ -20,6 +20,7 @@ class CreateTemplates < ActiveRecord::Migration
       t.string :tag
       t.text :description
       t.string :keywords
+      t.string :categories
       t.boolean :recommended
       t.string :icon
       t.text :links

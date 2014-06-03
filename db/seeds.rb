@@ -14,14 +14,6 @@ unless Template.where(name: 'Wordpress').present?
     icon: 'http://panamax.ca.tier3.io/template_logos/wordpress.png',
     documentation: "# Wordpress\r\nThis is a WordPress template based on the [panamax/panamax-docker-wordpress](https://index.docker.io/u/panamax/panamax-docker-wordpress/) and [panamax/panamax-docker-mysql](https://index.docker.io/u/panamax/panamax-docker-mysql/) images.\r\nThe template exposes port 80 in the container to port 8080 on the Docker host.  In order to view the WordPress admin console after running the template, ensure that the virtual machine serving as the Docker host is forwarding a port to port 8080 on the host."
   )
-  web_cat = TemplateCategory.create(
-    name: 'Web Tier',
-    template: wp
-  )
-  db_cat = TemplateCategory.create(
-    name: 'DB Tier',
-    template: wp
-  )
   wp.images.create(
     name: 'DB_1',
     repository: 'panamax/panamax-docker-mysql',
@@ -30,7 +22,7 @@ unless Template.where(name: 'Wordpress').present?
     expose: [3306],
     environment: { 'MYSQL_ROOT_PASSWORD' => 'pass@word01'},
     ports: [{'host_port' => 3306, 'container_port' => 3306}],
-    categories: [db_cat],
+    categories: ['DB Tier'],
     icon: 'http://panamax.ca.tier3.io/service_icons/icon_service_db_grey.png'
   )
   wp.images.create(
@@ -42,7 +34,7 @@ unless Template.where(name: 'Wordpress').present?
       ports: [{'host_port' => 8080, 'container_port' => 80}],
       expose: [80],
       environment: { 'DB_PASSWORD' => 'pass@word01' },
-      categories: [web_cat],
+      categories: ['Web Tier'],
       icon: 'http://panamax.ca.tier3.io/service_icons/icon_service_wp_grey.png'
   )
 end

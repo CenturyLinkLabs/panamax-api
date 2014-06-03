@@ -62,16 +62,14 @@ class Service < ActiveRecord::Base
 
   def copy_categories_from_image(image, app_categories)
     image.categories.each do |image_cat|
-      app_category = app_categories.find { |app_cat| app_cat.name == image_cat.name }
-      self.categories << ServiceCategory.new(
-        app_category_id: app_category.id,
-        position: image_cat[:position])
+      app_category = app_categories.detect { |app_cat| app_cat.name == image_cat }
+      self.categories << ServiceCategory.new(app_category_id: app_category.id)
     end
   end
 
   def copy_links_from_image(image, services)
     image.links.each do |link|
-      linked_to_service = services.find { |service| service.name == link['service'] }
+      linked_to_service = services.detect { |service| service.name == link['service'] }
       self.links << ServiceLink.new(linked_to_service: linked_to_service, alias: link['alias'])
     end
   end

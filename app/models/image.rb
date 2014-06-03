@@ -6,6 +6,7 @@ class Image < ActiveRecord::Base
   attr_accessor :is_trusted
   attr_accessor :star_count
 
+  serialize :categories, Array
   serialize :links, Array
   serialize :ports, Array
   serialize :expose, Array
@@ -13,8 +14,6 @@ class Image < ActiveRecord::Base
   serialize :volumes, Array
 
   has_and_belongs_to_many :templates
-  has_many :image_categories
-  has_many :categories, through: :image_categories, source: :template_category
 
   def self.search_remote_index(query={})
     images = Docker::Image.search(query)
