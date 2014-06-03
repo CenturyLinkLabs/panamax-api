@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140528170649) do
+ActiveRecord::Schema.define(version: 20140528192410) do
 
   create_table "app_categories", force: true do |t|
     t.string   "name"
@@ -116,6 +116,14 @@ ActiveRecord::Schema.define(version: 20140528170649) do
 
   add_index "template_categories", ["name", "template_id"], name: "index_template_categories_on_name_and_template_id", unique: true
   add_index "template_categories", ["template_id"], name: "index_template_categories_on_template_id"
+
+  create_table "template_repos", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "template_repos", ["name"], name: "index_template_repos_on_name", unique: true
 
   create_table "templates", force: true do |t|
     t.string   "name"
