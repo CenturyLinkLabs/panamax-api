@@ -14,7 +14,23 @@ describe TemplatesController do
       get :show, id: Template.first.id, format: :json
       expect(response.body).to eq TemplateSerializer.new(Template.first).to_json
     end
+
   end
+
+  describe 'POST templates' do
+    let(:template_params){ YAML.load(fixture_data('wordpress.pmx')) }
+
+    it 'loads the template data' do
+      expect(template_params).to have_key('images')
+    end
+
+    it 'creates a template' do
+      expect{
+        post :create, template_params.merge(format: :json)
+      }.to change(Template, :count).by(1)
+    end
+  end
+
 
   describe '#save' do
     let(:template) { Template.first }

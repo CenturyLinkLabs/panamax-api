@@ -9,6 +9,10 @@ class TemplatesController < ApplicationController
     respond_with Template.find(params[:id])
   end
 
+  def create
+    respond_with TemplateBuilder.create(template_create_params[:template])
+  end
+
   def save
     template = Template.find(params[:id])
     resp = template.save_to_repo(template_save_params)
@@ -20,10 +24,23 @@ class TemplatesController < ApplicationController
 
   private
 
+  def template_create_params
+    params.permit(template: [
+        :app_id,
+        :name,
+        :description,
+        :keywords,
+        :icon,
+        :documentation,
+        authors: []
+    ])
+  end
+
   def template_save_params
     params.permit(
       :repo,
       :file_name
     )
   end
+
 end
