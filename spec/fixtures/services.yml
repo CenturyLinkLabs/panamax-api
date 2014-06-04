@@ -1,17 +1,31 @@
 service1:
   app: app1
-  name: 'my-service'
-  description: 'just some service I ran'
-  from: 'panamax/panamax-docker-mysql'
-  ports: '3306:3306'
-  expose: '3306'
-  environment: 'MYSQL_ROOT_PASSWORD=pass@word01'
-  volumes: '/var/panamax:/var/app/panamax'
+  name: my-service
+  description: just some service I ran
+  from: panamax/panamax-docker-mysql
+  ports: |
+    ---
+    - host_port: 3306
+      container_port: 3306
+  expose: |
+    ---
+    - 3306
+  environment:  |
+    ---
+    MYSQL_ROOT_PASSWORD: pass@word01
+  volumes: |
+    ---
+    - /var/panamax: /var/app/panamax
 
 service2:
   app: app1
-  name: 'my-other-service'
-  description: 'just some service I ran'
-  from: 'panamax/panamax-docker-rails'
-  ports: '3000:3000'
-  expose: '3000'
+  name: my-other-service
+  description: just some service I ran
+  from: panamax/panamax-docker-rails
+  ports: |
+    ---
+    - host_port: 3000
+      container_port: 3000
+  expose: |
+    ---
+    - 3000

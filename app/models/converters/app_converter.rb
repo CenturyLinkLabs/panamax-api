@@ -9,7 +9,7 @@ module Converters
 
     def to_template
       Template.new(name: name, documentation: documentation) do |template|
-        template.images = services.collect{ |service| service_to_image(service)}
+        template.images << services.collect{ |service| service_to_image(service)}
       end
     end
 

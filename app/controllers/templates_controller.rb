@@ -11,6 +11,8 @@ class TemplatesController < ApplicationController
 
   def create
     respond_with TemplateBuilder.create(template_create_params[:template])
+  rescue => ex
+    render(json: { error: ex.message }, status: :internal_server_error)
   end
 
   def save

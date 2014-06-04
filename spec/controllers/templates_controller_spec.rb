@@ -18,17 +18,47 @@ describe TemplatesController do
   end
 
   describe 'POST templates' do
-    let(:template_params){ YAML.load(fixture_data('wordpress.pmx')) }
-
-    it 'loads the template data' do
-      expect(template_params).to have_key('images')
+    let(:template_params) do
+      HashWithIndifferentAccess.new(
+        {
+          template: {
+            name: "new-template",
+            description: "some template",
+            keywords: "foo,baz,bar",
+            recommended: true,
+            icon: "foo.png",
+            documentation: "---\n\nBlah\n\n",
+            app_id: "1"
+          }
+        }
+      )
     end
 
-    it 'creates a template' do
-      expect{
-        post :create, template_params.merge(format: :json)
-      }.to change(Template, :count).by(1)
+    before { TemplateBuilder.stub(:create).and_return templates(:wordpress) }
+
+    it 'calls out to the TemplateBuilder with permitted parameters' do
+      permitted_params = template_params['template'].delete_if{ |k,v| k == 'recommended' }
+      expect(TemplateBuilder).to receive(:create).with(permitted_params)
+      post :create, template_params.merge(format: :json)
     end
+
+    it 'responds with a json representation of the template' do
+      post :create, template_params.merge(format: :json)
+      expect(response.body).to eq(TemplateSerializer.new(templates(:wordpress)).to_json)
+    end
+
+    it 'returns 422 if the template could not be persisted' do
+      TemplateBuilder.stub(:create).and_return templates(:wordpress).tap { |t| t.errors[:base] = 'bad' }
+      post :create, template_params.merge(format: :json)
+      expect(response.status).to eq 422
+    end
+
+    it 'returns 500 if an exception occured during template creation' do
+      TemplateBuilder.stub(:create).and_raise 'boom'
+      post :create, template_params.merge(format: :json)
+      expect(response.status).to eq 500
+    end
+
   end
 
 
