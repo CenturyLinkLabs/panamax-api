@@ -4,7 +4,7 @@ describe TemplateBuilder::FromJson do
 
   let(:template_json) { fixture_data 'wordpress.pmx'  }
 
-  subject{ described_class.new template_json }
+  subject { described_class.new template_json }
 
   it 'creates a template from the json data' do
     expect(subject.create_template).to be_a(Template)
@@ -15,7 +15,7 @@ describe TemplateBuilder::FromJson do
   end
 
   it 'returns the template with errors if the json data is not valid' do
-    invalid_template_json = "{}"
+    invalid_template_json = '{}'
     strategy = described_class.new invalid_template_json
     expect(strategy.create_template).to_not be_valid
     expect(strategy.create_template).to_not be_persisted

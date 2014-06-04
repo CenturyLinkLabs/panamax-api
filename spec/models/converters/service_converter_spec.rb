@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe Converters::ServiceConverter do
 
-  let(:service1){ services(:service1) }
-  subject{ described_class.new(service1) }
+  let(:service1) { services(:service1) }
+  subject { described_class.new(service1) }
 
   it 'creates an Image from the given Service' do
     expect(subject.to_image).to be_a Image
@@ -15,7 +15,7 @@ describe Converters::ServiceConverter do
     end
 
     it 'populates the image links' do
-      expect(subject.to_image.links).to eql [{"service"=>"my-other-service", "alias"=>"DB"}]
+      expect(subject.to_image.links).to eql [{ 'service' => 'my-other-service', 'alias' => 'DB' }]
     end
   end
 

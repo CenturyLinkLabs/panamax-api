@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Converters::AppConverter do
 
-  subject{ described_class.new(apps(:app1)) }
+  subject { described_class.new(apps(:app1)) }
 
   it 'creates a Template from the given App' do
     expect(subject.to_template).to be_a Template

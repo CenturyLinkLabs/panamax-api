@@ -4,25 +4,25 @@ describe TemplateBuilder::FromApp do
 
   let(:options) do
     {
-        description: "some template",
-        keywords: "foo,baz,bar",
-        icon: "foo.png",
-        documentation: "---\n\nBlah\n\n",
+      description: 'some template',
+      keywords: 'foo,baz,bar',
+      icon: 'foo.png',
+      documentation: '---\n\nBlah\n\n',
     }
   end
-  subject{ described_class.new apps(:app1), options }
+  subject { described_class.new apps(:app1), options }
 
   it 'converts an app to a template given the app_id' do
     expect(subject.create_template).to be_a Template
   end
 
   describe 'assigns the options provided to the template' do
-    subject {described_class.new(apps(:app1), options).create_template}
-    its(:name){ should eq apps(:app1).name }
-    its(:description){ should eq options[:description] }
-    its(:keywords){ should eq options[:keywords] }
-    its(:icon){ should eq options[:icon] }
-    its(:documentation){ should eq options[:documentation] }
+    subject { described_class.new(apps(:app1), options).create_template }
+    its(:name) { should eq apps(:app1).name }
+    its(:description) { should eq options[:description] }
+    its(:keywords) { should eq options[:keywords] }
+    its(:icon) { should eq options[:icon] }
+    its(:documentation) { should eq options[:documentation] }
   end
 
   it 'persists the template if valid' do

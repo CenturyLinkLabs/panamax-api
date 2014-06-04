@@ -5,13 +5,11 @@ describe TemplateBuilder do
   describe '.create' do
     let(:options) do
       HashWithIndifferentAccess.new(
-          {
-              description: "some template",
-              keywords: "foo,baz,bar",
-              recommended: true,
-              icon: "foo.png",
-              documentation: "---\n\nBlah\n\n",
-          }
+          description: 'some template',
+          keywords: 'foo,baz,bar',
+          recommended: true,
+          icon: 'foo.png',
+          documentation: '---\n\nBlah\n\n',
       )
     end
 
@@ -26,12 +24,12 @@ describe TemplateBuilder do
     end
 
     context 'when no app_id is provided' do
-      before { options[:name] = "my-new-template" }
+      before { options[:name] = 'my-new-template' }
 
       it 'returns a template' do
         t = described_class.create(options)
         expect(t).to be_a Template
-        expect(t.name).to eq "my-new-template"
+        expect(t.name).to eq 'my-new-template'
       end
     end
 
@@ -39,12 +37,12 @@ describe TemplateBuilder do
       it 'returns a template' do
         t = described_class.create("{'name':'my-new-template'}")
         expect(t).to be_a Template
-        expect(t.name).to eq "my-new-template"
+        expect(t.name).to eq 'my-new-template'
       end
     end
 
     context 'when passed invalid options' do
-      subject{ described_class.create(nil) }
+      subject { described_class.create(nil) }
       it 'returns a template with errors' do
         expect(subject.valid?).to be_false
       end

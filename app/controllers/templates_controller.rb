@@ -27,15 +27,17 @@ class TemplatesController < ApplicationController
   private
 
   def template_create_params
-    params.permit(template: [
-        :app_id,
-        :name,
-        :description,
-        :keywords,
-        :icon,
-        :documentation,
-        authors: []
-    ])
+    params.permit(
+                    template: [
+                                 :app_id,
+                                 :name,
+                                 :description,
+                                 :keywords,
+                                 :icon,
+                                 :documentation,
+                                 authors: []
+                              ]
+                 )
   end
 
   def template_save_params
