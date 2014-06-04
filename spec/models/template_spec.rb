@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe Template do
   it { should have_and_belong_to_many(:images) }
+  it { should validate_presence_of(:name) }
 
   context 'when rendered to json' do
     it 'includes an image count' do

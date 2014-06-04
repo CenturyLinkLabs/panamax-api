@@ -8,6 +8,8 @@ class Template < ActiveRecord::Base
   scope :recommended, -> { where(recommended: true) }
   scope :named_like, -> (name) { where('name LIKE ?', "%#{name}%") }
 
+  validates_presence_of :name
+
   def categories
     images.map(&:categories).flatten.uniq.compact
   end
