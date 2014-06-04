@@ -52,6 +52,14 @@ module PanamaxAgent
         delete_job(service_name)
       end
 
+      def states(service_name)
+        fleet_state = get_state(service_name)
+        service_states = JSON.parse(fleet_state['node']['value'])
+        service_states.each_with_object({}) do |(k, v), hash|
+          hash[k.underscore.to_sym] = v
+        end
+      end
+
       protected
 
       def resource_path(resource, *parts)

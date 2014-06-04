@@ -146,4 +146,26 @@ describe PanamaxAgent::Fleet::Client do
     end
 
   end
+
+  describe '#states' do
+
+    let(:service_name) { 'foo.service' }
+
+    let(:fleet_state) do
+      { 'node' => { 'value' => '{"load": "loaded", "run": "running"}' } }
+    end
+
+    before do
+      subject.stub(:get_state).and_return(fleet_state)
+    end
+
+    it 'retrieves service state from the fleet client' do
+      expect(subject).to receive(:get_state).with(service_name)
+      subject.states(service_name)
+    end
+
+    it 'returns the state hash w/ normalized keys' do
+      expect(subject.states(service_name)).to eq(load: 'loaded', run: 'running')
+    end
+  end
 end
