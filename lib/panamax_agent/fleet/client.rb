@@ -10,6 +10,8 @@ module PanamaxAgent
     class Client < PanamaxAgent::Client
 
       FLEET_PATH = '/keys/_coreos.com/fleet'
+      MAX_RETRIES = 10
+      SLEEP_TIME = (1.0 / 10.0)
 
       def initialize(options={})
         super
@@ -34,6 +36,7 @@ module PanamaxAgent
         end
 
         update_job_target_state(service_def.name, :loaded)
+        wait_for_load_state(service_def.name, 'loaded')
       end
 
       def start(service_name)
@@ -42,14 +45,17 @@ module PanamaxAgent
 
       def stop(service_name)
         update_job_target_state(service_name, :loaded)
+        wait_for_load_state(service_name, 'loaded')
       end
 
       def unload(service_name)
         update_job_target_state(service_name, :inactive)
+        wait_for_load_state(service_name, 'not-found')
       end
 
       def destroy(service_name)
         delete_job(service_name)
+        wait_for_load_state(service_name, :no_state)
       end
 
       def states(service_name)
@@ -64,6 +70,28 @@ module PanamaxAgent
 
       def resource_path(resource, *parts)
         parts.unshift(resource).unshift(@base_path).join('/')
+      end
+
+      def wait_for_load_state(service_name, target_state='loaded')
+        result = MAX_RETRIES.times do
+          begin
+            break target_state if states(service_name)[:load_state] == target_state
+          rescue PanamaxAgent::NotFound
+            # :no_state is a special case of target state that indicates we
+            # expect the state to not be found at all (useful when waiting for
+            # a delete job call)
+            break target_state if target_state == :no_state
+          end
+
+          sleep(SLEEP_TIME)
+        end
+
+        if result == target_state
+          true
+        else
+          fail PanamaxAgent::Error,
+            "Job state '#{target_state}' could not be achieved"
+        end
       end
 
     end
