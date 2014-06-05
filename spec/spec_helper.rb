@@ -62,6 +62,21 @@ RSpec.configure do |config|
     journal_client.stub(list_journal_entries: hash_from_fixture('journal'))
 
     PanamaxAgent.stub(journal_client: journal_client)
+
+    # Stub methods on Octokit::Client
+    fake_github_object = double(:fake_github,
+      repos: [],
+      user: double(:user,
+                   login: 'boom'
+                  ),
+      emails: [
+        double(:email,
+               primary: true,
+               email: 'test@example.com'
+              )
+      ]
+    )
+    Octokit::Client.stub(:new).and_return(fake_github_object)
   end
 end
 

@@ -9,12 +9,31 @@ class User < ActiveRecord::Base
   end
 
   def repos
-    github_client.repos.map(&:full_name)
-  rescue Octokit::Unauthorized
-    []
+    retrieve_from_github(:repos, []) do |repos|
+      repos.map(&:full_name)
+    end
+  end
+
+  def github_username
+    retrieve_from_github(:user) do |user|
+      user.login
+    end
+  end
+
+  def email
+    retrieve_from_github(:emails) do |emails|
+      emails.find(&:primary).email
+    end
   end
 
   private
+
+  def retrieve_from_github(resource, default=nil)
+    result = github_client.send(resource)
+    block_given? ? yield(result) : result
+  rescue Octokit::Unauthorized
+    default
+  end
 
   def access_token_scope
     unless access_token_scoped_for_email?
@@ -29,6 +48,6 @@ class User < ActiveRecord::Base
   end
 
   def github_client
-    Octokit::Client.new(access_token: github_access_token)
+    @github_client ||= Octokit::Client.new(access_token: github_access_token)
   end
 end
