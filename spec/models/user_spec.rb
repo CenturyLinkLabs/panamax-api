@@ -7,14 +7,13 @@ describe User do
     Octokit::Client.stub(:new).and_return(fake_gh_client)
   end
 
-  it { should respond_to :email }
   it { should respond_to :github_access_token }
 
   describe '.instance' do
 
     context 'when a user has already been persisted' do
 
-      let(:user) { User.new(email: 'user@centurylink.com') }
+      let(:user) { User.new(github_access_token: 'foo') }
 
       before do
         user.save
@@ -131,13 +130,46 @@ describe User do
     end
   end
 
+  describe '#email' do
+    context 'when the github token is valid' do
+
+      let(:gh_email1) do
+        double(:gh_email_object, email: 'foo@bar.com', primary: false)
+      end
+      let(:gh_email2) do
+        double(:gh_email_object, email: 'bar@foo.com', primary: true)
+      end
+
+      before do
+        fake_gh_client.stub(:emails)
+          .and_return([gh_email1, gh_email2])
+      end
+
+      it 'returns the primary email retrieved from github' do
+        expect(subject.email).to eq gh_email2.email
+      end
+    end
+
+    context 'when the github token is invalid' do
+
+      before do
+        fake_gh_client.stub(:emails)
+          .and_raise(Octokit::Unauthorized)
+      end
+
+      it 'returns nil' do
+        expect(subject.email).to be_nil
+      end
+    end
+  end
+
   describe '#github_username' do
     context 'when the github token is valid' do
 
       let(:gh_user_object) { double(:gh_user_object, login: 'testuser') }
 
       before do
-        Octokit::Client.any_instance.stub(:user).and_return(gh_user_object)
+        fake_gh_client.stub(:user).and_return(gh_user_object)
       end
 
       it 'returns the username retrieved from github' do
@@ -148,7 +180,7 @@ describe User do
     context 'when the github token is invalid' do
 
       before do
-        Octokit::Client.any_instance.stub(:user)
+        fake_gh_client.stub(:user)
           .and_raise(Octokit::Unauthorized)
       end
 
