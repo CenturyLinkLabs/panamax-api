@@ -130,4 +130,31 @@ describe User do
       end
     end
   end
+
+  describe '#github_username' do
+    context 'when the github token is valid' do
+
+      let(:gh_user_object) { double(:gh_user_object, login: 'testuser') }
+
+      before do
+        Octokit::Client.any_instance.stub(:user).and_return(gh_user_object)
+      end
+
+      it 'returns the username retrieved from github' do
+        expect(subject.github_username).to eq 'testuser'
+      end
+    end
+
+    context 'when the github token is invalid' do
+
+      before do
+        Octokit::Client.any_instance.stub(:user)
+          .and_raise(Octokit::Unauthorized)
+      end
+
+      it 'returns nil' do
+        expect(subject.github_username).to be_nil
+      end
+    end
+  end
 end
