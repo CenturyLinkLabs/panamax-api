@@ -1,0 +1,58 @@
+{
+  "name": "Wordpress",
+  "description": "This is a wordpress template",
+  "keywords": "foo, baz, bar",
+  "authors": ["ctl-labs-futuretech@savvis.com"],
+  "icon": "http://panamax.ca.tier3.io/template_logos/wordpress.png",
+  "documentation": "# Wordpress\n\nThis is a WordPress template based on the [panamax/panamax-docker-wordpress](https://index.docker.io/u/panamax/panamax-docker-wordpress/) and [panamax/panamax-docker-mysql](https://index.docker.io/u/panamax/panamax-docker-mysql/) images.\n\nThe template exposes port 80 in the container to port 8080 on the Docker host.  In order to view the WordPress admin console after running the template, ensure that the virtual machine serving as the Docker host is forwarding a port to port 8080 on the host.",
+  "images": [
+    {
+      "name": "DB_1",
+      "repository": "panamax/panamax-docker-mysql",
+      "tag": "latest",
+      "description": "MySQL",
+      "expose": [3306],
+      "environment": {
+        "MYSQL_ROOT_PASSWORD": "pass@word01"
+      },
+      "ports": [
+        {
+          "host_port": 3306,
+          "container_port": 3306
+        }
+      ],
+      "category": "DB Tier",
+      "icon": "http://panamax.ca.tier3.io/service_icons/icon_service_db_grey.png"
+    },
+    {
+      "name": "WP",
+      "repository": "panamax/panamax-docker-wordpress",
+      "tag": "latest",
+      "description": "Wordpress",
+      "links": [
+        {
+          "service": "DB_1",
+          "alias":"DB_1"
+        }
+      ],
+      "ports": [
+        {
+          "host_port": 8080,
+          "container_port": 80
+        }
+      ],
+      "expose": [80],
+      "environment": {
+        "DB_PASSWORD": "pass@word01"
+      },
+	    "volumes": [
+	    {
+          "host_path": "cache/",
+          "container_path": "/tmp/cache"
+        }
+      ],
+      "category": "Web Tier",
+      "icon": "http://panamax.ca.tier3.io/service_icons/icon_service_wp_grey.png"
+    }
+  ]
+}

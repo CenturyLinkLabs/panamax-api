@@ -113,7 +113,7 @@ describe SearchController do
           get :index, q: "#{query}", format: 'json'
           parsed_results = JSON.parse(response.body)
           expect(parsed_results['templates']).to be_an Array
-          expect(response.body).to include(templates(:wordpress).to_json)
+          expect(response.body).to include(TemplateSerializer.new(templates(:wordpress)).to_json)
         end
       end
     end

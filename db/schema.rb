@@ -35,7 +35,6 @@ ActiveRecord::Schema.define(version: 20140528192410) do
     t.string   "repository"
     t.string   "tag"
     t.text     "description"
-    t.string   "keywords"
     t.string   "categories"
     t.boolean  "recommended"
     t.string   "icon"
@@ -107,13 +106,16 @@ ActiveRecord::Schema.define(version: 20140528192410) do
     t.string   "name"
     t.text     "description"
     t.string   "keywords"
+    t.text     "authors"
     t.boolean  "recommended"
+    t.string   "from"
     t.string   "icon"
     t.text     "documentation"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "templates", ["keywords"], name: "index_templates_on_keywords"
   add_index "templates", ["name"], name: "index_templates_on_name"
 
   create_table "users", force: true do |t|
