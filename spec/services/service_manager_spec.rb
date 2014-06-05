@@ -127,26 +127,26 @@ describe ServiceManager do
   describe '#get_state' do
 
     let(:fleet_state) do
-      { 'node' => { 'value' => '{"load": "loaded", "run": "running"}' } }
+      { load: 'loaded', run: 'running' }
     end
 
     before do
-      fake_fleet_client.stub(:get_state).and_return(fleet_state)
+      fake_fleet_client.stub(:states).and_return(fleet_state)
     end
 
     it 'retrieves service state from the fleet client' do
-      expect(fake_fleet_client).to receive(:get_state).with(service.unit_name)
+      expect(fake_fleet_client).to receive(:states).with(service.unit_name)
       subject.get_state
     end
 
-    it 'returns the state hash w/ normalized keys' do
+    it 'returns the states' do
       expect(subject.get_state).to eq(load: 'loaded', run: 'running')
     end
 
     context 'when an error occurs while querying fleet' do
 
       before do
-        fake_fleet_client.stub(:get_state).and_raise('boom')
+        fake_fleet_client.stub(:states).and_raise('boom')
       end
 
       it 'returns an empty hash' do
