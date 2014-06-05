@@ -9,7 +9,7 @@ SpaceAroundEqualsInParameterDefault:
   EnforcedStyle: no_space
 
 AlignParameters:
-  EnforcedStyle: with_fixed_indentation
+  Enabled: false
 
 DotPosition:
   EnforcedStyle: leading
@@ -19,3 +19,11 @@ EmptyLinesAroundBody:
 
 NumericLiterals:
   Enabled: false
+
+CollectionMethods:
+  PreferredMethods:
+    collect: 'map'
+    collect!: 'map!'
+    inject: 'reduce'
+    detect: 'find'
+    find_all: 'select'
