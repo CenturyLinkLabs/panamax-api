@@ -1,6 +1,12 @@
 require 'spec_helper'
 
 describe User do
+  let(:fake_gh_client) { double(:fake_gh_client) }
+
+  before do
+    Octokit::Client.stub(:new).and_return(fake_gh_client)
+  end
+
   it { should respond_to :email }
   it { should respond_to :github_access_token }
 
@@ -44,7 +50,7 @@ describe User do
     context 'when the access token has "user" scope' do
 
       before do
-        Octokit::Client.any_instance.stub(:scopes).and_return(['user'])
+        fake_gh_client.stub(:scopes).and_return(['user'])
         subject.update(github_access_token: 'token')
       end
 
@@ -55,7 +61,7 @@ describe User do
     context 'when the access token has "user:email" scope' do
 
       before do
-        Octokit::Client.any_instance.stub(:scopes).and_return(['user:email'])
+        fake_gh_client.stub(:scopes).and_return(['user:email'])
         subject.update(github_access_token: 'token')
       end
 
@@ -66,7 +72,7 @@ describe User do
     context 'when the access token has none of the required scopes' do
 
       before do
-        Octokit::Client.any_instance.stub(:scopes).and_return(['foo'])
+        fake_gh_client.stub(:scopes).and_return(['foo'])
         subject.update(github_access_token: 'token')
       end
 
@@ -82,7 +88,7 @@ describe User do
     context 'when the access token is no good at all' do
 
       before do
-        Octokit::Client.any_instance.stub(:scopes)
+        fake_gh_client.stub(:scopes)
           .and_raise(Octokit::Unauthorized)
         subject.update(github_access_token: 'token')
       end
@@ -104,7 +110,7 @@ describe User do
     context 'when the github token is valid' do
 
       before do
-        Octokit::Client.any_instance.stub(:repos).and_return([repo])
+        fake_gh_client.stub(:repos).and_return([repo])
       end
 
       it 'returns a list of repo full names' do
@@ -115,7 +121,7 @@ describe User do
     context 'when the github token is invalid' do
 
       before do
-        Octokit::Client.any_instance.stub(:repos)
+        fake_gh_client.stub(:repos)
           .and_raise(Octokit::Unauthorized)
       end
 
