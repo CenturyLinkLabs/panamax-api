@@ -1,8 +1,7 @@
 module Converters
   class ServiceConverter
 
-    delegate :categories, :name, :description, :repository, :tag, :ports, :expose, :environment, :volumes,
-             :links, :icon, to: :@service
+    attr_reader :service
 
     def initialize(service)
       @service = service
@@ -10,28 +9,28 @@ module Converters
 
     def to_image
       Image.create(
-          name: name,
+          name: service.name,
           categories: service_category_names,
-          description: description,
-          repository: repository,
-          tag: tag,
-          ports: ports,
+          description: service.description,
+          repository: service.repository,
+          tag: service.tag,
+          ports: service.ports,
           links: service_links,
-          expose: expose,
-          environment: environment,
-          volumes: volumes,
-          icon: icon
+          expose: service.expose,
+          environment: service.environment,
+          volumes: service.volumes,
+          icon: service.icon
       )
     end
 
     private
 
     def service_category_names
-      categories.map(&:name)
+      service.categories.map(&:name)
     end
 
     def service_links
-      links.map { |link| { 'service' => link.linked_to_service.name, 'alias' => link.alias } }
+      service.links.map { |link| { 'service' => link.linked_to_service.name, 'alias' => link.alias } }
     end
   end
 end

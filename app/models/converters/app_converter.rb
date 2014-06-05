@@ -1,15 +1,15 @@
 module Converters
   class AppConverter
 
-    delegate :name, :documentation, :services, to: :@app
+    attr_reader :app
 
     def initialize(app)
       @app = app
     end
 
     def to_template
-      Template.new(name: name, documentation: documentation) do |template|
-        template.images << services.map { |service| service_to_image(service) }
+      Template.new(name: app.name, documentation: app.documentation) do |template|
+        template.images << app.services.map { |service| service_to_image(service) }
       end
     end
 
