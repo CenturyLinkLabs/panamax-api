@@ -10,7 +10,7 @@ class TemplatesController < ApplicationController
   end
 
   def create
-    respond_with TemplateBuilder.create(template_create_params[:template])
+    respond_with TemplateBuilder.create(template_create_params[:template]), serializer: TemplateFileSerializer
   rescue => ex
     render(json: { error: ex.message }, status: :internal_server_error)
   end

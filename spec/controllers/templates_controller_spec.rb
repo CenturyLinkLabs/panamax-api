@@ -42,7 +42,7 @@ describe TemplatesController do
 
     it 'responds with a json representation of the template' do
       post :create, template_params.merge(format: :json)
-      expect(response.body).to eq(TemplateSerializer.new(templates(:wordpress)).to_json)
+      expect(response.body).to eq(TemplateFileSerializer.new(templates(:wordpress)).to_json)
     end
 
     it 'returns 422 if the template could not be persisted' do
