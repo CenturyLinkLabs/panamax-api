@@ -14,8 +14,4 @@ class Template < ActiveRecord::Base
     images.map(&:categories).flatten.uniq.compact
   end
 
-  def as_json(options={})
-    super(options).merge(image_count: images.count)
-  end
-
 end
