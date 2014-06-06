@@ -15,6 +15,10 @@ module PanamaxAgent
     PanamaxAgent::Journal::Client.new(options)
   end
 
+  def self.panamax_client(options={})
+    PanamaxAgent::Panamax::Client.new(options)
+  end
+
   def self.configure
     yield self
     true

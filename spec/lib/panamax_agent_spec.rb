@@ -39,4 +39,11 @@ describe PanamaxAgent do
     end
   end
 
+  describe '.panamax_client' do
+
+    it 'returns a Panamax::Client instance' do
+      expect(PanamaxAgent.panamax_client).to be_kind_of(PanamaxAgent::Panamax::Client)
+    end
+  end
+
 end
