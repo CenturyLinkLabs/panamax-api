@@ -4,6 +4,57 @@ describe TemplateGithub do
 
   subject { Template.first }
 
+  describe 'class methods' do
+
+    subject do
+      Class.new do
+        include TemplateGithub
+      end
+    end
+
+    describe '.load_templates_from_template_repo' do
+
+      let(:template_repo) { template_repos(:repo1) }
+      let(:file1) { double(:file, name: 'readme', content: 'hi') }
+      let(:file2) { double(:file, name: 'foo.pmx', content: 'bar') }
+
+      before do
+        TemplateRepo.any_instance.stub(:files).and_return([file1, file2])
+        TemplateBuilder.stub(:create)
+      end
+
+      it 'invokes the TemplateBuilder ONLY for .pmx files' do
+        expect(TemplateBuilder).to receive(:create).once
+        subject.load_templates_from_template_repo(template_repo)
+      end
+
+      it 'invokes the TemplateBuilder with .pmx file contents' do
+        expect(TemplateBuilder).to receive(:create).with(file2.content)
+        subject.load_templates_from_template_repo(template_repo)
+      end
+    end
+
+    describe '.load_templates_from_template_repos' do
+
+      before do
+        subject.stub(:load_templates_from_template_repo)
+      end
+
+      it 'invokes load_template_from_template_repo for each repo' do
+        expect(subject).to receive(:load_templates_from_template_repo)
+          .once
+          .with(template_repos(:repo1))
+
+        expect(subject).to receive(:load_templates_from_template_repo)
+          .once
+          .with(template_repos(:repo2))
+
+        subject.load_templates_from_template_repos
+      end
+    end
+
+  end
+
   describe '#save_to_repo' do
 
     let(:github_client) { double(:github_client) }
