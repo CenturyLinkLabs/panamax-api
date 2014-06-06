@@ -101,7 +101,7 @@ describe SearchController do
         expect(JSON.parse(response.body)).to include('q' => 'fake')
       end
 
-      context 'recommending a template' do
+      context 'querying templates' do
         let(:query) { 'wordpress' }
 
         before do
@@ -109,7 +109,7 @@ describe SearchController do
           Docker::Image.stub(:all).and_return([])
         end
 
-        it 'returns the recommended templates with a name matching the query' do
+        it 'returns the templates with a name matching the query' do
           get :index, q: "#{query}", format: 'json'
           parsed_results = JSON.parse(response.body)
           expect(parsed_results['templates']).to be_an Array
