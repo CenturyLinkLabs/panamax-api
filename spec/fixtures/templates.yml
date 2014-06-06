@@ -5,3 +5,7 @@ wordpress:
   recommended: true
   icon: '/some/path/to/an/icon.png'
   documentation: "# Title\r\nSome *markdown*"
+
+another:
+  name: 'wp-test'
+  keywords: 'blah'

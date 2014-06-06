@@ -25,7 +25,7 @@ class SearchController < ApplicationController
   private
 
   def wrapped_templates(q)
-    Template.named_like(q).map { |t| TemplateSerializer.new(t) }
+    Template.search(q).map { |t| TemplateSerializer.new(t) }
   end
 
 end
