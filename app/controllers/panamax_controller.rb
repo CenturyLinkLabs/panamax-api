@@ -5,6 +5,10 @@ class PanamaxController < ApplicationController
     respond_with panamax_client.list_components
   end
 
+  def metrics
+    respond_with panamax_client.list_host_metrics
+  end
+
   private
 
   def panamax_client

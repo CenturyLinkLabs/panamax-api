@@ -24,5 +24,7 @@ PanamaxApi::Application.routes.draw do
 
   resources :template_repos, only: [:index, :create]
   resource :user, only: [:show, :update]
-  resource :panamax, only: [:show]
+  resource :panamax, only: [:show] do
+    get :metrics
+  end
 end
