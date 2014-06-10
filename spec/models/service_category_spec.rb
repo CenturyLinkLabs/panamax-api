@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe ServiceCategory do
 
-  it { should validate_presence_of(:app_category_id) }
+  it { should validate_presence_of(:app_category_id).on(:update) }
 
   it do
     should validate_numericality_of(:position)
