@@ -78,34 +78,6 @@ describe Service do
     end
   end
 
-  describe '.new_from_image' do
-    let(:fake_image) do
-      double(:fake_image,
-        name: 'Apache',
-        description: 'a webserver',
-        repository: 'ApacheFoundation/Apache',
-        tag: 'latest',
-        ports: [{ host_interface: '', host_port: '', container_port: '', proto: '' }],
-        expose: [''],
-        environment: { 'SOME_KEY' => '' },
-        volumes: [{ host_path: '', container_path: '' }],
-        icon: 'someicon.png'
-      )
-    end
-
-    it 'instantiates a new model with values from the image' do
-      result = described_class.new_from_image(fake_image)
-      expect(result.name).to eq 'Apache'
-      expect(result.description).to eq 'a webserver'
-      expect(result.from).to eq 'ApacheFoundation/Apache:latest'
-      expect(result.ports).to eq [{ host_interface: '', host_port: '', container_port: '', proto: '' }]
-      expect(result.expose).to eq ['']
-      expect(result.environment).to eq('SOME_KEY' => '')
-      expect(result.volumes).to eq [{ host_path: '', container_path: '' }]
-      expect(result.icon).to eq 'someicon.png'
-    end
-  end
-
   describe 'after initialization' do
 
     describe '#name=' do

@@ -68,20 +68,6 @@ class Service < ActiveRecord::Base
     self.start
   end
 
-  def copy_categories_from_image(image, app_categories)
-    image.categories.each do |image_cat|
-      app_category = app_categories.detect { |app_cat| app_cat.name == image_cat }
-      self.categories << ServiceCategory.new(app_category_id: app_category.id)
-    end
-  end
-
-  def copy_links_from_image(image, services)
-    image.links.each do |link|
-      linked_to_service = services.detect { |service| service.name == link['service'] }
-      self.links << ServiceLink.new(linked_to_service: linked_to_service, alias: link['alias'])
-    end
-  end
-
   # Works just like ActiveRecord::Persistence#update but will also update relations
   def update_with_relationships(attributes)
     attributes[:links] ||= []
@@ -104,31 +90,6 @@ class Service < ActiveRecord::Base
     attributes[:environment] ||= {}
 
     self.update(attributes)
-  end
-
-  def self.new_from_image(image)
-    self.new(
-      name: image.name,
-      description: image.description,
-      from: "#{image.repository}:#{image.tag}",
-      ports: image.ports,
-      expose: image.expose,
-      environment: image.environment,
-      volumes: image.volumes,
-      icon: image.icon
-    )
-  end
-
-  def self.new_from_params(image_create_params)
-    self.new(
-      name: "#{image_create_params[:image]}",
-      from: "#{image_create_params[:image]}:#{image_create_params[:tag]}",
-      ports: image_create_params[:ports],
-      expose: image_create_params[:expose],
-      environment: image_create_params[:environment],
-      volumes: image_create_params[:volumes],
-      icon: image_create_params[:icon]
-    )
   end
 
   private
