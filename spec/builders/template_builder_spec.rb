@@ -5,11 +5,11 @@ describe TemplateBuilder do
   describe '.create' do
     let(:options) do
       HashWithIndifferentAccess.new(
-          description: 'some template',
-          keywords: 'foo,baz,bar',
-          recommended: true,
-          icon: 'foo.png',
-          documentation: '---\n\nBlah\n\n',
+        description: 'some template',
+        keywords: 'foo,baz,bar',
+        recommended: true,
+        icon: 'foo.png',
+        documentation: '---\n\nBlah\n\n'
       )
     end
 

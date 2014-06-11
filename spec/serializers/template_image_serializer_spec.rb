@@ -6,18 +6,18 @@ describe TemplateImageSerializer do
   it 'exposes the attributes to be jsonified' do
     serialized = described_class.new(image_model).as_json
     expected_keys = [
-                      :category,
-                      :name,
-                      :repository,
-                      :tag,
-                      :description,
-                      :icon,
-                      :expose,
-                      :ports,
-                      :links,
-                      :environment,
-                      :volumes
-                    ]
+      :category,
+      :name,
+      :repository,
+      :tag,
+      :description,
+      :icon,
+      :expose,
+      :ports,
+      :links,
+      :environment,
+      :volumes
+    ]
     expect(serialized.keys).to match_array expected_keys
   end
 

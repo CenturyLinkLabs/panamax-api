@@ -55,15 +55,11 @@ class Service < ActiveRecord::Base
   end
 
   def repository
-    if from
-      from.split(':')[0]
-    end
+    from && from.split(':')[0]
   end
 
   def tag
-    if from
-      from.split(':')[1] || 'latest'
-    end
+    (from && from.split(':')[1]) || 'latest'
   end
 
   def restart

@@ -5,7 +5,7 @@ module TemplateBuilder
 
     if options.kind_of?(String)
       strategy = TemplateBuilder::FromJson.new(options)
-    elsif options.has_key?(:app_id)
+    elsif options.key?(:app_id)
       app_id = options.delete(:app_id)
       strategy = TemplateBuilder::FromApp.new(app_id, options)
     else

@@ -7,7 +7,7 @@ describe TemplateBuilder::FromApp do
       description: 'some template',
       keywords: 'foo,baz,bar',
       icon: 'foo.png',
-      documentation: '---\n\nBlah\n\n',
+      documentation: '---\n\nBlah\n\n'
     }
   end
   subject { described_class.new apps(:app1), options }
