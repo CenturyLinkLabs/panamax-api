@@ -7,7 +7,7 @@ describe TemplateRepoSerializer do
     serialized = described_class.new(repo_model).as_json
     expected_keys = [
       :id,
-      :name,
+      :name
     ]
     expect(serialized.keys).to match_array expected_keys
   end

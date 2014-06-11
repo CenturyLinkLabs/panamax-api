@@ -27,3 +27,12 @@ CollectionMethods:
     inject: 'reduce'
     detect: 'find'
     find_all: 'select'
+
+CyclomaticComplexity:
+  Enabled: false
+
+MethodLength:
+  Enabled: false
+
+ClassLength:
+  Enabled: false

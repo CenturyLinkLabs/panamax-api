@@ -15,7 +15,9 @@ describe Template do
       expect(described_class.search('wordpress')).to match_array([templates(:wordpress)])
     end
     it 'matches all terms' do
-      expect(described_class.search('asdf, wordpress, blah')).to match_array([templates(:wordpress), templates(:another)])
+      expect(described_class.search('asdf, wordpress, blah')).to(
+        match_array([templates(:wordpress), templates(:another)])
+      )
     end
   end
 
