@@ -18,7 +18,7 @@ module TemplateBuilder
 
     def create_images(images_hash)
       images_hash.map do |image_hash|
-        image_hash['categories'] = [image_hash.delete('category')]
+        image_hash['categories'] = Array(image_hash.delete('category'))
         Image.new(image_hash)
       end
     end
