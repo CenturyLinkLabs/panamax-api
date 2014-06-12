@@ -17,6 +17,7 @@ describe PanamaxAgent::Configuration do
     its(:etcd_api_url) { should eql PanamaxAgent::Configuration::DEFAULT_ETCD_API_URL }
     its(:etcd_api_version) { should eql PanamaxAgent::Configuration::DEFAULT_ETCD_API_VERSION }
     its(:journal_api_url) { should eql PanamaxAgent::Configuration::DEFAULT_JOURNAL_API_URL }
+    its(:pmx_metrics_location) { should eql PanamaxAgent::Configuration::DEFAULT_PMX_METRICS_LOCATION }
     its(:open_timeout) { should eql PanamaxAgent::Configuration::DEFAULT_OPEN_TIMEOUT }
     its(:read_timeout) { should eql PanamaxAgent::Configuration::DEFAULT_READ_TIMEOUT }
     its(:logger) { should eql PanamaxAgent::Configuration::DEFAULT_LOGGER }

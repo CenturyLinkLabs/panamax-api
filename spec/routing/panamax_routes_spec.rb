@@ -9,4 +9,10 @@ describe 'panamax routes' do
                             )
   end
 
+  it 'routes GET to the panamax controller metrics action' do
+    expect(get: '/panamax/metrics').to route_to(
+                                           controller: 'panamax',
+                                           action: 'metrics'
+                                       )
+  end
 end
