@@ -2,15 +2,13 @@ require 'spec_helper'
 
 describe TemplateReposController do
 
-  let(:template_repo) { template_repos(:repo1) }
-
   describe '#index' do
 
     it 'returns the template repos' do
       get :index, format: :json
 
       expected = ActiveModel::ArraySerializer.new(
-        [template_repo],
+        TemplateRepo.all,
         each_serializer: TemplateRepoSerializer).to_json
       expect(response.body).to eq expected
     end
