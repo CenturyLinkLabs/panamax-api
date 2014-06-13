@@ -1,0 +1,17 @@
+web:
+  image: wordpress
+  ports:
+    - "8080:80"
+  links:
+    - db
+  environment:
+    MYSQL_PORT_3306_TCP_ADDR: 172.17.0.4
+    WORDPRESS_DB_PASSWORD: mysecretpassword
+  volumes:
+    - cache/:/tmp/cache
+db:
+  image: mysql
+  expose:
+    - "3306"
+  environment:
+    MYSQL_ROOT_PASSWORD: mysecretpassword
