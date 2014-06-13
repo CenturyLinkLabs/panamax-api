@@ -14,21 +14,18 @@ class AppsController < ApplicationController
   end
 
   def create
-    @app = if params[:template_id]
-             App.create_from_template(Template.find(params[:template_id]))
-           else
-             App.create_from_image(image_create_params)
-           end
+    app = AppBuilder.create(app_params)
 
-    if @app.valid?
-      @app.run
+    if app.valid?
+      app.run
     else
-      logger.error("app validation failed: #{@app.errors.to_hash}")
+      logger.error("app validation failed: #{app.errors.to_hash}")
     end
-    respond_with @app
+
+    respond_with app
   rescue => ex
     logger.error("app creation failed: #{ex.message}")
-    @app.try(:destroy)
+    app.try(:destroy)
     render json: { errors: ex.message }, status: :internal_server_error
   end
 
@@ -38,8 +35,9 @@ class AppsController < ApplicationController
 
   private
 
-  def image_create_params
+  def app_params
     params.permit(
+      :template_id,
       :image,
       :tag,
       :icon,

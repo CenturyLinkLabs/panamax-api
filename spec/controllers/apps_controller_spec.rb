@@ -27,160 +27,82 @@ describe AppsController do
 
   describe '#create' do
 
-    context 'when the request contains a template id' do
-      let(:app) { App.new }
-      let(:params) { { template_id: 1 } }
-      let(:template) { double(:template, name: 'my_template') }
+    let(:template) { templates(:wordpress) }
 
-      before do
-        App.stub(:create_from_template).and_return(app)
-        app.stub(:run)
-        Template.stub(:find).with(params[:template_id]).and_return(template)
-      end
-
-      it 'fetches the template for the given template id' do
-        expect(Template).to receive(:find).with(params[:template_id]).and_return(template)
-        post :create, template_id: 1, format: :json
-      end
-
-      it 'creates the application from the template' do
-        expect(App).to receive(:create_from_template).with(template)
-        post :create, template_id: 1, format: :json
-      end
-
+    before do
+      App.any_instance.stub(:run)
     end
 
-    context 'when the request contains an image repository' do
-
-      let(:params) do
-        {
-          image: 'foo/bar:baz',
-          links: [{ service: '1', alias: '1' }, { service: '1', alias: '1' }],
-          ports: [{ host_interface: '', host_port: '', container_port: '', proto: '' }],
-          expose: [''],
-          environment: { 'SOME_KEY' => '' },
-          volumes: [{ host_path: '', container_path: '' }],
-          tag: 'latest'
-        }
-      end
-
-      let(:app) { App.new }
-
-      before do
-        App.stub(:create_from_image).and_return(app)
-        app.stub(:run)
-      end
-
-      it 'creates the application from the image' do
-        expect(App).to receive(:create_from_image).with(params.stringify_keys!).and_return(app)
-        post :create, params.merge(format: :json)
-      end
-
+    it 'creates a new app' do
+      expect do
+        post :create, template_id: template.id, format: :json
+      end.to change(App, :count).by(1)
     end
 
-    context 'when app is invalid' do
-      let(:params) { { image: 'foo/bar:baz' } }
+    it 'runs the app' do
+      expect_any_instance_of(App).to receive(:run)
+      post :create, template_id: template.id, format: :json
+    end
 
-      let(:app) { App.new }
+    it 'returns a new app' do
+      post :create, template_id: template.id, format: :json
+      expect(response.body).to eq AppSerializer.new(App.last).to_json
+    end
+
+    it 'returns a 201 status code' do
+      post :create, template_id: template.id, format: :json
+      expect(response.status).to eq 201
+    end
+
+    context 'when the app is invalid' do
 
       before do
-        app.stub(:valid?).and_return(false)
-        App.stub(:create_from_image).and_return(app)
+        template.name = nil
+      end
+
+      it 'does not create an app' do
+        expect do
+          post :create, format: :json
+        end.to change(App, :count).by(0)
+      end
+
+      it 'does not run the app' do
+        expect_any_instance_of(App).to_not receive(:run)
+        post :create, format: :json
       end
 
       it 'logs an error' do
-        expect(subject.logger).to receive(:error)
-        post :create, params.merge(format: :json)
+        expect(Rails.logger).to receive(:error)
+        post :create, format: :json
       end
     end
 
-    context 'when attempting to run the application raises an exception' do
-      let(:app) { apps(:app1) } # load from fixture to get services assoc
-      let(:params) { { template_id: 1 } }
-      let(:template) { double(:template, name: 'my_template') }
+    context 'when an error occurs' do
 
       before do
-        App.stub(:create_from_template).and_return(app)
-        PanamaxAgent::Fleet::Client.any_instance.stub(:destroy).and_return true
-        app.stub(:run).and_raise('boom')
-        Template.stub(:find)
+        App.any_instance.stub(:run).and_raise('boom')
       end
 
-      it 'destroys the app' do
-        post :create, params.merge(format: :json)
-        expect(App.where(id: app.id).first).to be_nil
+      it 'does not create an app' do
+        expect do
+          post :create, template_id: template.id, format: :json
+        end.to change(App, :count).by(0)
       end
 
-      it 'destroys the app services' do
-        post :create, params.merge(format: :json)
-        expect(Service.where(app_id: app.id)).to be_empty
+      it 'logs an error' do
+        expect(Rails.logger).to receive(:error)
+        post :create, template_id: template.id, format: :json
       end
 
-      it 'returns 422 error' do
-        post :create, params.merge(format: :json)
-        expect(response.status).to eq(500) # :internal_server_error
+      it 'returns an error' do
+        post :create, template_id: template.id, format: :json
+        expect(response.body).to eq({ errors: 'boom' }.to_json)
       end
 
-      it 'returns the exception message' do
-        post :create, params.merge(format: :json)
-        expect(JSON.parse(response.body)).to eq('errors' => 'boom')
+      it 'returns a 500 status code' do
+        post :create, template_id: template.id, format: :json
+        expect(response.status).to eq 500
       end
-
-      it 'renders the error in the json body' do
-        post :create, params.merge(format: :json)
-        expect(JSON.parse(response.body)).to have_key('errors')
-      end
-
-    end
-
-    context 'when the app name is already in use' do
-
-      let(:app) { App.create(name: apps(:app1).name) }
-      let(:params) { { template_id: 1 } }
-      let(:template) { double(:template, name: 'my_template') }
-
-      before do
-        App.stub(:create_from_template).and_return(app)
-        app.stub(:run)
-        Template.stub(:find).with(params[:template_id]).and_return(template)
-      end
-
-      it 'persists the app with a new name' do
-        post :create, params.merge(format: :json)
-        expect(app.persisted?).to be_true
-      end
-
-      it 'the app has a new name' do
-        post :create, params.merge(format: :json)
-        expect(app.name).to eq('App 1_1')
-      end
-
-      it 'returns no errors' do
-        post :create, params.merge(format: :json)
-        expect(response.status).to eq 201
-      end
-
-    end
-
-    context 'when the app is updated with a category' do
-      let(:app) { App.create(name: apps(:app1).name) }
-      let(:params) { { template_id: 1 } }
-      let(:template) { double(:template, name: 'my_template') }
-
-      before do
-        App.stub(:create_from_template).and_return(app)
-        app.stub(:run)
-        Template.stub(:find).with(params[:template_id]).and_return(template)
-      end
-
-      it 'the name is not affected' do
-        post :create, params.merge(format: :json)
-        app.categories = [AppCategory.new(name: 'My Category')]
-        app.save
-        app.reload
-        expect(app.name).to eq('App 1_1')
-      end
-
     end
   end
 
