@@ -34,6 +34,22 @@ describe PanamaxAgent::Journal::Client do
       subject.list_journal_entries(services, cursor)
     end
 
+    context 'when no cursor is provided' do
+
+      it 'defaults the cursor to the last 10,000 entries' do
+        expect(subject).to receive(:get_entries_by_fields).with({}, ':-10000:')
+        subject.list_journal_entries(services, nil)
+      end
+    end
+
+    context 'when the cursor is an empty string' do
+
+      it 'defaults the cursor to the last 10,000 entries' do
+        expect(subject).to receive(:get_entries_by_fields).with({}, ':-10000:')
+        subject.list_journal_entries(services, '')
+      end
+    end
+
     context 'when a single service argument is provided' do
 
       let(:services) { 'foo.service' }

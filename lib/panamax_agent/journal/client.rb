@@ -25,6 +25,11 @@ module PanamaxAgent
 
       def list_journal_entries(services, cursor=nil)
         services = [*services]
+
+        # If there is no cursor supplied, never retrieve more than
+        # 10,000 entries
+        cursor = ':-10000:' if cursor.nil? || cursor.empty?
+
         journal_lines = get_entries_by_fields({}, cursor)
 
         journal_lines.select do |journal_line|
