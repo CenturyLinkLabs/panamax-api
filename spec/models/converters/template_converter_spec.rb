@@ -87,8 +87,8 @@ describe Converters::TemplateConverter do
 
     context 'with linked images' do
 
-      let(:image1) { Image.new(name: 'I1') }
-      let(:image2) { Image.new(name: 'I2') }
+      let(:image1) { Image.new(name: 'I1', repository: 'I1:latest') }
+      let(:image2) { Image.new(name: 'I2', repository: 'I2:latest') }
 
       before do
         image2.links = [{ 'service' => 'I1', 'alias' => 'FOO' }]

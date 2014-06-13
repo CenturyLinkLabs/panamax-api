@@ -15,6 +15,9 @@ class Image < ActiveRecord::Base
 
   has_and_belongs_to_many :templates
 
+  validates_presence_of :name
+  validates_presence_of :repository
+
   def self.search_remote_index(query={})
     images = Docker::Image.search(query)
     images.map do |image|
