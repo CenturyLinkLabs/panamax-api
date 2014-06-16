@@ -21,7 +21,8 @@ describe ServiceSerializer do
       :load_state,
       :sub_state,
       :icon,
-      :errors
+      :errors,
+      :docker_status
     ]
     expect(serialized.keys).to match_array expected_keys
   end
