@@ -23,6 +23,15 @@ describe TemplateBuilder do
       end
     end
 
+    context 'when passed a fig_yml param' do
+      before { options[:fig_yml] = '---' }
+
+      it 'returns a template created from the fig template' do
+        t = described_class.create(options)
+        expect(t).to be_a Template
+      end
+    end
+
     context 'when no app_id is provided' do
       before { options[:name] = 'my-new-template' }
 
