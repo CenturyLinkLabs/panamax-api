@@ -81,13 +81,13 @@ describe TemplateGithub do
     context 'when template file is saved to the repo' do
       it 'invokes create_contents on the github client' do
         expect(github_client).to receive(:create_contents)
-                                 .with(
-                                   'bob/repo',
-                                   "#{subject.name}.pmx",
-                                   "Saved a Panamax template #{subject.name}.pmx",
-                                   subject.as_json.to_s,
-                                   {}
-                                 )
+          .with(
+           'bob/repo',
+           "#{subject.name}.pmx",
+           "Saved a Panamax template #{subject.name}.pmx",
+           TemplateFileSerializer.new(subject).to_json,
+           {}
+          )
         subject.save_to_repo(params)
       end
     end
@@ -99,19 +99,19 @@ describe TemplateGithub do
       end
       it 'invokes update_contents on the github client' do
         expect(github_client).to receive(:contents)
-                                 .with('bob/repo', path: "#{subject.name}.pmx")
-                                 .and_return(contents_response)
-                                 .ordered
+          .with('bob/repo', path: "#{subject.name}.pmx")
+          .and_return(contents_response)
+          .ordered
         expect(github_client).to receive(:update_contents)
-                                 .with(
-                                   'bob/repo',
-                                   "#{subject.name}.pmx",
-                                   "Saved a Panamax template #{subject.name}.pmx",
-                                   contents_response.sha,
-                                   subject.as_json.to_s,
-                                   {}
-                                 )
-                                 .ordered
+          .with(
+            'bob/repo',
+            "#{subject.name}.pmx",
+            "Saved a Panamax template #{subject.name}.pmx",
+            contents_response.sha,
+            TemplateFileSerializer.new(subject).to_json,
+            {}
+          )
+          .ordered
         subject.save_to_repo(params)
       end
     end
@@ -119,13 +119,13 @@ describe TemplateGithub do
     context 'when template file is saved to the repo with a file name' do
       it 'invokes create_contents on the github client' do
         expect(github_client).to receive(:create_contents)
-                                 .with(
-                                   'bob/repo',
-                                   'somefile.pmx',
-                                   'Saved a Panamax template somefile.pmx',
-                                   subject.as_json.to_s,
-                                   {}
-                                 )
+          .with(
+            'bob/repo',
+            'somefile.pmx',
+            'Saved a Panamax template somefile.pmx',
+            TemplateFileSerializer.new(subject).to_json,
+            {}
+          )
         subject.save_to_repo(params_with_file_name)
       end
     end

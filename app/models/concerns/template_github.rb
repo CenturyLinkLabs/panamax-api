@@ -31,7 +31,7 @@ module TemplateGithub
 
     file_full_path  = "#{file_path}#{file_name}.pmx"
     # use template contents saved in the database
-    contents = self.as_json.to_s
+    contents = TemplateFileSerializer.new(self).to_json
 
     begin
       github_client.create_contents(repo, file_full_path, commit_message, contents, opts)
