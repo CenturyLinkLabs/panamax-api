@@ -26,6 +26,12 @@ class User < ActiveRecord::Base
     end
   end
 
+  def subscribe
+    mailchimp_client.create_subscription(email)
+  rescue PanamaxAgent::Error
+    false
+  end
+
   private
 
   def retrieve_from_github(resource, default=nil)
@@ -49,5 +55,9 @@ class User < ActiveRecord::Base
 
   def github_client
     @github_client ||= Octokit::Client.new(access_token: github_access_token)
+  end
+
+  def mailchimp_client
+    @mailchimp_client ||= PanamaxAgent.mailchimp_client
   end
 end

@@ -189,4 +189,39 @@ describe User do
       end
     end
   end
+
+  describe '#subscribe' do
+
+    let(:mailchimp_client) { double(:mailchimp_client) }
+
+    let(:gh_email) do
+      double(:gh_email_object, email: 'bar@foo.com', primary: true)
+    end
+
+    before do
+      fake_gh_client.stub(:emails).and_return([gh_email])
+
+      mailchimp_client.stub(:create_subscription)
+      PanamaxAgent.stub(:mailchimp_client).and_return(mailchimp_client)
+    end
+
+    it 'creates a subscription with the mailchimp client' do
+      expect(mailchimp_client).to receive(:create_subscription)
+        .with(gh_email.email)
+
+      subject.subscribe
+    end
+
+    context 'when an error is raised' do
+
+      before do
+        mailchimp_client.stub(:create_subscription)
+          .and_raise(PanamaxAgent::Error, 'boom')
+      end
+
+      it 'returns false' do
+        expect(subject.subscribe).to eq false
+      end
+    end
+  end
 end
