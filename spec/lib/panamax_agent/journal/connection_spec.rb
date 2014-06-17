@@ -9,7 +9,7 @@ describe PanamaxAgent::Journal::Connection do
     handlers = [
       FaradayMiddleware::EncodeJson,
       FaradayMiddleware::ParseJson,
-      PanamaxAgent::Response::FixBadJson,
+      PanamaxAgent::Response::ListifyJson,
       Faraday::Adapter::NetHttp
     ]
 
