@@ -1,5 +1,5 @@
 require 'faraday'
-require 'panamax_agent/middleware/response/fix_bad_json'
+require 'panamax_agent/middleware/response/listify_json'
 
 module PanamaxAgent
   module Journal
@@ -9,7 +9,7 @@ module PanamaxAgent
         Faraday.new(connection_options) do |faraday|
           faraday.request :json
           faraday.response :json
-          faraday.response :fix_bad_json
+          faraday.response :listify_json
           faraday.adapter adapter
         end
       end
