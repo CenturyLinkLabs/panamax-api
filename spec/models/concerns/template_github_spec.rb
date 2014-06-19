@@ -85,7 +85,7 @@ describe TemplateGithub do
            'bob/repo',
            "#{subject.name}.pmx",
            "Saved a Panamax template #{subject.name}.pmx",
-           TemplateFileSerializer.new(subject).to_json,
+           TemplateFileSerializer.new(subject).to_yaml,
            {}
           )
         subject.save_to_repo(params)
@@ -108,7 +108,7 @@ describe TemplateGithub do
             "#{subject.name}.pmx",
             "Saved a Panamax template #{subject.name}.pmx",
             contents_response.sha,
-            TemplateFileSerializer.new(subject).to_json,
+            TemplateFileSerializer.new(subject).to_yaml,
             {}
           )
           .ordered
@@ -123,7 +123,7 @@ describe TemplateGithub do
             'bob/repo',
             'somefile.pmx',
             'Saved a Panamax template somefile.pmx',
-            TemplateFileSerializer.new(subject).to_json,
+            TemplateFileSerializer.new(subject).to_yaml,
             {}
           )
         subject.save_to_repo(params_with_file_name)
