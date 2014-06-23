@@ -13,7 +13,7 @@ class Image < ActiveRecord::Base
   serialize :environment, Hash
   serialize :volumes, Array
 
-  has_and_belongs_to_many :templates
+  belongs_to :template
 
   validates_presence_of :name
   validates_presence_of :repository

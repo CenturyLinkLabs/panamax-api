@@ -30,6 +30,7 @@ class CreateTemplates < ActiveRecord::Migration
       t.text :expose
       t.text :environment
       t.text :volumes
+      t.integer :template_id
 
       t.timestamps
     end
@@ -37,9 +38,5 @@ class CreateTemplates < ActiveRecord::Migration
     add_index :images, :image_id, unique: true
     add_index :images, :repository
 
-    create_table :images_templates do |t|
-      t.belongs_to :template
-      t.belongs_to :image
-    end
   end
 end

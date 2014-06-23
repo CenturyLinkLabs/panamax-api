@@ -1,7 +1,7 @@
 class Template < ActiveRecord::Base
   include TemplateGithub
 
-  has_and_belongs_to_many :images
+  has_many :images
 
   serialize :authors, Array
 
