@@ -5,7 +5,7 @@ class ServiceLinkExistsValidator < ActiveModel::EachValidator
     catch(:done) do
       value.each do |link|
         unless template_image_names_for(record).include? link['service']
-          record.errors[attribute] << "linked service must exist"
+          record.errors[attribute] << 'linked service must exist'
           throw :done
         end
       end

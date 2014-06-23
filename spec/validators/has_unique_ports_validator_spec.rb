@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe HasUniquePortsValidator do
 
-  subject{ described_class.new({ attributes: [:ports_attr] }) }
+  subject { described_class.new(attributes: [:ports_attr]) }
 
   let(:model) { double('model') }
 
