@@ -15,7 +15,8 @@ service1:
     MYSQL_ROOT_PASSWORD: pass@word01
   volumes: |
     ---
-    - /var/panamax: /var/app/panamax
+    - host_path: /var/panamax
+      container_path: /var/app/panamax
 
 service2:
   app: app1
