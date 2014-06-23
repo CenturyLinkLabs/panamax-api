@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Image do
-  it { should have_and_belong_to_many(:templates) }
+  it { should belong_to(:template) }
   it { should respond_to :is_official }
   it { should respond_to :is_trusted }
   it { should respond_to :star_count }

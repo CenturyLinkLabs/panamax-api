@@ -43,17 +43,13 @@ ActiveRecord::Schema.define(version: 20140528192410) do
     t.text     "expose"
     t.text     "environment"
     t.text     "volumes"
+    t.integer  "template_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "images", ["image_id"], name: "index_images_on_image_id", unique: true
   add_index "images", ["repository"], name: "index_images_on_repository"
-
-  create_table "images_templates", force: true do |t|
-    t.integer "template_id"
-    t.integer "image_id"
-  end
 
   create_table "service_categories", force: true do |t|
     t.integer  "service_id"
@@ -119,7 +115,6 @@ ActiveRecord::Schema.define(version: 20140528192410) do
   add_index "templates", ["name"], name: "index_templates_on_name"
 
   create_table "users", force: true do |t|
-    t.string "email"
     t.string "github_access_token"
   end
 
