@@ -33,6 +33,10 @@ class AppsController < ApplicationController
     respond_with App.find(params[:id]).journal(params[:cursor])
   end
 
+  def rebuild
+    respond_with App.find(params[:id]).restart
+  end
+
   private
 
   def app_params

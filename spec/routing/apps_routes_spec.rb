@@ -55,6 +55,14 @@ describe 'apps routes' do
     )
   end
 
+  it 'routes put rebuild to the apps controller rebuild action' do
+    expect(put: '/apps/1/rebuild').to route_to(
+      controller: 'apps',
+      action: 'rebuild',
+      id: '1'
+    )
+  end
+
   describe 'services sub-resource routes' do
     it 'routes get to the app services controller index' do
       expect(get: '/apps/1/services').to route_to(

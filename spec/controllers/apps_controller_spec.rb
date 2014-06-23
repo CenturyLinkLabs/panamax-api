@@ -140,4 +140,24 @@ describe AppsController do
     end
   end
 
+  describe '#rebuild' do
+
+    let(:app) { App.first }
+
+    before do
+      App.stub(:find).and_return(app)
+      app.stub(:restart)
+    end
+
+    it 'invokes restart on the app object' do
+      expect(app).to receive(:restart)
+      put :rebuild, id: app.id, format: :json
+    end
+
+    it 'returns a no content status' do
+      put :rebuild, id: app.id, format: :json
+      expect(response.status).to eq(204)
+    end
+
+  end
 end
