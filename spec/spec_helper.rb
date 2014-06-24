@@ -57,6 +57,9 @@ RSpec.configure do |config|
   config.global_fixtures = :all
 
   config.before(:each) do
+    # Stub methods on Docker client
+    Docker::Container.stub(:get).and_return({})
+
     # Stub methods on PanamaxAgent::Journal::Client
     journal_client = double(:journal_client)
     journal_client.stub(list_journal_entries: hash_from_fixture('journal'))

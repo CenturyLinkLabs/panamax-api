@@ -16,6 +16,12 @@ module DockerRunnable
     ].flatten.compact.join(' ')
   end
 
+  def docker_status
+    Docker::Container.get(name)
+  rescue Docker::Error::DockerError
+    {}
+  end
+
   private
 
   def link_flags

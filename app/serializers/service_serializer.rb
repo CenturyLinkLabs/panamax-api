@@ -2,7 +2,8 @@ class ServiceSerializer < ActiveModel::Serializer
   self.root = false
 
   attributes :id, :name, :description, :from, :ports, :expose, :environment,
-    :volumes, :load_state, :active_state, :sub_state, :icon, :errors
+    :volumes, :load_state, :active_state, :sub_state, :icon, :errors,
+    :docker_status
 
   has_one :app, serializer: AppLiteSerializer
 
