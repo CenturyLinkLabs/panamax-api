@@ -41,7 +41,7 @@ class ServicesController < ApplicationController
       :name,
       :description,
       :icon,
-      categories: [[:id]],
+      categories: [[:id, :position]],
       ports: [[:host_interface, :host_port, :container_port, :proto]],
       expose: [],
       volumes: [[:host_path, :container_path]],
