@@ -19,6 +19,10 @@ module PanamaxAgent
     PanamaxAgent::Panamax::Client.new(options)
   end
 
+  def self.mailchimp_client(options={})
+    PanamaxAgent::Mailchimp::Client.new(options)
+  end
+
   def self.configure
     yield self
     true

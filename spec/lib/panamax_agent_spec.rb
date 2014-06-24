@@ -46,4 +46,11 @@ describe PanamaxAgent do
     end
   end
 
+  describe '.mailchimp_client' do
+
+    it 'returns a Mailchimp::Client instance' do
+      expect(PanamaxAgent.mailchimp_client).to be_kind_of(PanamaxAgent::Mailchimp::Client)
+    end
+  end
+
 end

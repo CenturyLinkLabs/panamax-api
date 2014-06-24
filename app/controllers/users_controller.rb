@@ -8,6 +8,9 @@ class UsersController < ApplicationController
   def update
     user = User.instance
     user.update(user_params)
+
+    user.subscribe if user.valid?
+
     respond_with user
   end
 
