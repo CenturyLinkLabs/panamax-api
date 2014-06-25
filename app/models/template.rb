@@ -1,4 +1,5 @@
 class Template < ActiveRecord::Base
+  include Classifiable
   include TemplateGithub
 
   self.inheritance_column = :_type_disabled

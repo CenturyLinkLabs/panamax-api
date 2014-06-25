@@ -1,4 +1,5 @@
 class Image < ActiveRecord::Base
+  include Classifiable
 
   self.inheritance_column = :_type_disabled
 

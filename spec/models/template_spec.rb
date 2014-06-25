@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 describe Template do
+
+  it_behaves_like 'a classifiable model'
+
   it { should have_many(:images) }
   it { should validate_presence_of(:name) }
 

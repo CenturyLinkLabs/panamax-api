@@ -10,7 +10,7 @@ describe TemplateBuilder::FromFig do
           'keywords' => 'foo,baz,bar',
           'authors' => [],
           'documentation' => '---\n\nBlah\n\n',
-          'type' => 'wordpres',
+          'type' => 'wordpress',
           'fig_yml' => fig_yml
     )
   end
