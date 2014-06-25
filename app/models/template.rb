@@ -1,6 +1,8 @@
 class Template < ActiveRecord::Base
   include TemplateGithub
 
+  self.inheritance_column = :_type_disabled
+
   has_many :images
 
   serialize :authors, Array

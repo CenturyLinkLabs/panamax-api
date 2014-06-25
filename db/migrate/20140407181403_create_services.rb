@@ -8,7 +8,7 @@ class CreateServices < ActiveRecord::Migration
       t.text :expose
       t.text :environment
       t.text :volumes
-      t.string :icon
+      t.string :type
       t.references :app, index: true
     end
 

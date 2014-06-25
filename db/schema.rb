@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 20140528192410) do
     t.text     "description"
     t.string   "categories"
     t.boolean  "recommended"
-    t.string   "icon"
+    t.string   "type"
     t.text     "links"
     t.text     "ports"
     t.text     "expose"
@@ -83,7 +83,7 @@ ActiveRecord::Schema.define(version: 20140528192410) do
     t.text    "expose"
     t.text    "environment"
     t.text    "volumes"
-    t.string  "icon"
+    t.string  "type"
     t.integer "app_id"
   end
 
@@ -105,7 +105,7 @@ ActiveRecord::Schema.define(version: 20140528192410) do
     t.text     "authors"
     t.boolean  "recommended"
     t.string   "from"
-    t.string   "icon"
+    t.string   "type"
     t.text     "documentation"
     t.datetime "created_at"
     t.datetime "updated_at"

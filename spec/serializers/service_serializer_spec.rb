@@ -20,7 +20,7 @@ describe ServiceSerializer do
       :active_state,
       :load_state,
       :sub_state,
-      :icon,
+      :type,
       :errors,
       :docker_status
     ]

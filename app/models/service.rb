@@ -2,6 +2,8 @@ class Service < ActiveRecord::Base
   include DockerRunnable
   include ServiceJournal
 
+  self.inheritance_column = :_type_disabled
+
   belongs_to :app
   has_many :service_categories
   has_many :categories,

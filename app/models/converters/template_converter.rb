@@ -40,7 +40,7 @@ module Converters
         expose: image.expose,
         environment: image.environment,
         volumes: image.volumes,
-        icon: image.icon,
+        type: image.type,
         categories: service_categories_from_image(image)
       )
     end

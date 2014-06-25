@@ -6,7 +6,7 @@ describe TemplateBuilder::FromApp do
     {
       description: 'some template',
       keywords: 'foo,baz,bar',
-      icon: 'foo.png',
+      type: 'wordpress',
       documentation: '---\n\nBlah\n\n'
     }
   end
@@ -21,7 +21,7 @@ describe TemplateBuilder::FromApp do
     its(:name) { should eq apps(:app1).name }
     its(:description) { should eq options[:description] }
     its(:keywords) { should eq options[:keywords] }
-    its(:icon) { should eq options[:icon] }
+    its(:type) { should eq options[:type] }
     its(:documentation) { should eq options[:documentation] }
   end
 

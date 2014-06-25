@@ -19,7 +19,7 @@ module Converters
           expose: service.expose,
           environment: service.environment,
           volumes: service.volumes,
-          icon: service.icon
+          type: service.type
       )
     end
 

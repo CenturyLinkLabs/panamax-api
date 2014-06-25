@@ -27,7 +27,7 @@ describe Converters::TemplateConverter do
           expose: ['expose this'],
           environment: { var: 'val' },
           volumes: ['volumes'],
-          icon: 'icon.png'
+          type: 'mysql'
         )
       end
 
@@ -50,7 +50,7 @@ describe Converters::TemplateConverter do
         expect(service.expose).to eq image.expose
         expect(service.environment).to eq image.environment
         expect(service.volumes).to eq image.volumes
-        expect(service.icon).to eq image.icon
+        expect(service.type).to eq image.type
       end
 
       context 'when an image has a category' do

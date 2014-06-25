@@ -3,7 +3,7 @@
   "description": "This is a wordpress template",
   "keywords": "foo, baz, bar",
   "authors": ["ctl-labs-futuretech@savvis.com"],
-  "icon": "http://panamax.ca.tier3.io/template_logos/wordpress.png",
+  "type": "wordpress",
   "documentation": "# Wordpress\n\nThis is a WordPress template based on the [panamax/panamax-docker-wordpress](https://index.docker.io/u/panamax/panamax-docker-wordpress/) and [panamax/panamax-docker-mysql](https://index.docker.io/u/panamax/panamax-docker-mysql/) images.\n\nThe template exposes port 80 in the container to port 8080 on the Docker host.  In order to view the WordPress admin console after running the template, ensure that the virtual machine serving as the Docker host is forwarding a port to port 8080 on the host.",
   "images": [
     {
@@ -22,7 +22,7 @@
         }
       ],
       "category": "DB Tier",
-      "icon": "http://panamax.ca.tier3.io/service_icons/icon_service_db_grey.png"
+      "type": "mysql"
     },
     {
       "name": "WP",
@@ -52,7 +52,7 @@
         }
       ],
       "category": "Web Tier",
-      "icon": "http://panamax.ca.tier3.io/service_icons/icon_service_wp_grey.png"
+      "type": "wordpress"
     }
   ]
 }

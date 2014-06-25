@@ -10,7 +10,7 @@ describe TemplateBuilder::FromFig do
           'keywords' => 'foo,baz,bar',
           'authors' => [],
           'documentation' => '---\n\nBlah\n\n',
-          'icon' => 'foo.png',
+          'type' => 'wordpres',
           'fig_yml' => fig_yml
     )
   end
@@ -26,7 +26,7 @@ describe TemplateBuilder::FromFig do
     its(:name) { should eq options[:name] }
     its(:description) { should eq options[:description] }
     its(:keywords) { should eq options[:keywords] }
-    its(:icon) { should eq options[:icon] }
+    its(:type) { should eq options[:type] }
     its(:documentation) { should eq options[:documentation] }
 
     it 'creates images for each service defined in fig.yml' do

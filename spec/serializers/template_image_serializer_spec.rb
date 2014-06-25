@@ -11,7 +11,7 @@ describe TemplateImageSerializer do
       :repository,
       :tag,
       :description,
-      :icon,
+      :type,
       :expose,
       :ports,
       :links,

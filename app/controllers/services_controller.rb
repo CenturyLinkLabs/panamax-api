@@ -40,7 +40,7 @@ class ServicesController < ApplicationController
       *extras,
       :name,
       :description,
-      :icon,
+      :type,
       categories: [[:id, :position]],
       ports: [[:host_interface, :host_port, :container_port, :proto]],
       expose: [],

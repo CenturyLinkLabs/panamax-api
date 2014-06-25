@@ -3,7 +3,7 @@ wordpress:
   description: 'a wordpress template'
   keywords: 'wordpress, wp'
   recommended: true
-  icon: '/some/path/to/an/icon.png'
+  type: 'wordpress'
   documentation: "# Title\r\nSome *markdown*"
 
 another:

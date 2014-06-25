@@ -7,7 +7,7 @@ class CreateTemplates < ActiveRecord::Migration
       t.text :authors
       t.boolean :recommended
       t.string :from
-      t.string :icon
+      t.string :type
       t.text :documentation
 
       t.timestamps
@@ -24,7 +24,7 @@ class CreateTemplates < ActiveRecord::Migration
       t.text :description
       t.string :categories
       t.boolean :recommended
-      t.string :icon
+      t.string :type
       t.text :links
       t.text :ports
       t.text :expose

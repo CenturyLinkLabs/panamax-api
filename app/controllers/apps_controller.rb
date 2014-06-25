@@ -44,7 +44,7 @@ class AppsController < ApplicationController
       :template_id,
       :image,
       :tag,
-      :icon,
+      :type,
       links: [[:service, :alias]],
       ports: [[:host_interface, :host_port, :container_port, :proto]],
       expose: [],

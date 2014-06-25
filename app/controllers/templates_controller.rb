@@ -33,7 +33,7 @@ class TemplatesController < ApplicationController
         :name,
         :description,
         :keywords,
-        :icon,
+        :type,
         :documentation,
         :fig_yml,
         authors: []

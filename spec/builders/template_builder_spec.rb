@@ -8,7 +8,7 @@ describe TemplateBuilder do
         description: 'some template',
         keywords: 'foo,baz,bar',
         recommended: true,
-        icon: 'foo.png',
+        type: 'wordpress',
         documentation: '---\n\nBlah\n\n'
       )
     end

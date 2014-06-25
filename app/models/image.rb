@@ -1,5 +1,7 @@
 class Image < ActiveRecord::Base
 
+  self.inheritance_column = :_type_disabled
+
   EMPTY_REPO = '<none>'
 
   attr_accessor :is_official
