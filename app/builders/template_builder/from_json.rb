@@ -4,7 +4,7 @@ module TemplateBuilder
     attr_reader :params
 
     def initialize(json)
-      @params = YAML.load(json || '')
+      @params = YAML.safe_load(json || '')
     end
 
     def create_template

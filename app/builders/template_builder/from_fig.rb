@@ -17,7 +17,7 @@ module TemplateBuilder
     private
 
     def images_from_fig
-      fig_services = YAML.load(fig_yml) || {}
+      fig_services = YAML.safe_load(fig_yml) || {}
       fig_services.map { |name, service_def| image_from_fig_service(name, service_def) }
     end
 
