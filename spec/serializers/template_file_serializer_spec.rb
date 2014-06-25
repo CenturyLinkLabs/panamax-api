@@ -10,7 +10,7 @@ describe TemplateFileSerializer do
       :description,
       :keywords,
       :recommended,
-      :icon,
+      :type,
       :documentation,
       :images
     ]
@@ -25,7 +25,7 @@ describe TemplateFileSerializer do
         description: 'bar',
         keywords: 'fizz, bin',
         recommended: true,
-        icon: 'icon.png',
+        type: 'wordpress',
         documentation: "This\n\is\nthe\ndocumentation"
       )
     end
@@ -39,7 +39,7 @@ name: foo
 description: bar
 keywords: fizz, bin
 recommended: true
-icon: icon.png
+type: wordpress
 documentation: |-
   This
   is
