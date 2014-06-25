@@ -29,8 +29,7 @@ class Service < ActiveRecord::Base
   after_destroy :shutdown
 
   validates_presence_of :name
-  validate :presence_of_container_ports
-  validate :uniqueness_of_ports
+  validates :ports, has_container_ports: true, has_unique_ports: true
 
   attr_writer :manager
 
@@ -93,28 +92,6 @@ class Service < ActiveRecord::Base
   end
 
   private
-
-  def presence_of_container_ports
-    return unless ports
-    ports.each do |port|
-      return errors.add(:ports, "container port can't be blank") unless port['container_port'].present?
-    end
-  end
-
-  def uniqueness_of_ports
-    return unless ports
-    host_ports.each do |host_port|
-      if host_ports.count(host_port) > 1
-        return errors.add(:ports, 'host ports must be unique')
-      end
-    end
-  end
-
-  def host_ports
-    ports.map do |port|
-      port['host_port']
-    end.compact
-  end
 
   def manager
     @manager ||= ServiceManager.new(self)
