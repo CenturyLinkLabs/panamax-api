@@ -14,7 +14,6 @@ describe AppSerializer do
       :from,
       :categories,
       :errors,
-      :services,
       :documentation
     ]
     expect(serialized.keys).to match_array expected_keys

@@ -4,7 +4,6 @@ class AppSerializer < ActiveModel::Serializer
   attributes :id, :name, :from, :errors, :documentation
 
   has_many :categories, serializer: AppCategorySerializer
-  has_many :services, serializer: ServiceLiteSerializer
 
   def errors
     object.errors.delete(:services) if object.errors.has_key?(:services)
