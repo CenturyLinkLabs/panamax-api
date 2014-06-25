@@ -1,15 +1,16 @@
 ---
-- Default
-- Wordpress
-- Tomcat
-- Rails
-- NodeJS
-- MySQL
-- Magento
-- LAMP
-- Java
-- HuBot
-- Drupal
-- Django
-- Apache
-- Ubuntu
+- name: Default
+  default: true
+- name: Wordpress
+- name: Tomcat
+- name: Rails
+- name: NodeJS
+- name: MySQL
+- name: Magento
+- name: LAMP
+- name: Java
+- name: HuBot
+- name: Drupal
+- name: Django
+- name: Apache
+- name: Ubuntu
