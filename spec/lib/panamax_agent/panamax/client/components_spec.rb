@@ -66,6 +66,10 @@ describe PanamaxAgent::Panamax::Client::Components do
       expect(subject.get_component('panamax-api')).to eql(expected_components['panamax-api'])
     end
 
+    it 'returns the metadata info for the panamax api component' do
+      expect(subject.get_component('panamax-agent')).to eql(expected_components['panamax-agent'])
+    end
+
     it 'returns nil for non panamax component' do
       expect(subject.get_component('not-valid')).to eq nil
     end

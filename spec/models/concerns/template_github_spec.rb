@@ -150,5 +150,14 @@ describe TemplateGithub do
       end
     end
 
+    context 'when repo does not exist' do
+      before do
+        github_client.stub(:create_contents).and_raise(Octokit::NotFound)
+      end
+
+      it 'should raise an error' do
+        expect { subject.save_to_repo(params) }.to raise_error
+      end
+    end
   end
 end
