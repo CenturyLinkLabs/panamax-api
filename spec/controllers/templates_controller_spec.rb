@@ -20,22 +20,20 @@ describe TemplatesController do
   describe 'POST templates' do
     let(:template_params) do
       HashWithIndifferentAccess.new(
-        template: {
-          name: 'new-template',
-          description: 'some template',
-          keywords: 'foo,baz,bar',
-          recommended: true,
-          type: 'wordpress',
-          documentation: '---\n\nBlah\n\n',
-          app_id: '1'
-        }
+        name: 'new-template',
+        description: 'some template',
+        keywords: 'foo,baz,bar',
+        recommended: true,
+        type: 'wordpress',
+        documentation: '---\n\nBlah\n\n',
+        app_id: '1'
       )
     end
 
     before { TemplateBuilder.stub(:create).and_return templates(:wordpress) }
 
     it 'calls out to the TemplateBuilder with permitted parameters' do
-      permitted_params = template_params['template'].delete_if { |k, _| k == 'recommended' }
+      permitted_params = template_params.delete_if { |k, _| k == 'recommended' }
       expect(TemplateBuilder).to receive(:create).with(permitted_params)
       post :create, template_params.merge(format: :json)
     end
