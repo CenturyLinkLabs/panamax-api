@@ -1,8 +1,13 @@
 namespace :panamax do
   namespace :templates do
-    desc 'Load templates from all registered repositories'
+    desc 'Populate local template cache from all registered repositories'
     task :load => :environment do
       Template.load_templates_from_template_repos
+    end
+
+    desc 'Clear local template cache'
+    task :unload => :environment do
+      Template.destroy_all
     end
   end
 end

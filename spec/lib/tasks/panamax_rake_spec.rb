@@ -14,3 +14,18 @@ describe 'panamax:templates:load' do
     subject.invoke
   end
 end
+
+describe 'panamax:templates:unload' do
+  include_context 'rake'
+
+  before do
+    Template.stub(:destroy_all)
+  end
+
+  its(:prerequisites) { should include('environment') }
+
+  it 'loads templates' do
+    expect(Template).to receive(:destroy_all)
+    subject.invoke
+  end
+end
