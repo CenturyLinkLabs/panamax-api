@@ -24,7 +24,7 @@ describe 'panamax:templates:unload' do
 
   its(:prerequisites) { should include('environment') }
 
-  it 'loads templates' do
+  it 'unloads templates' do
     expect(Template).to receive(:destroy_all)
     subject.invoke
   end
