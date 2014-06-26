@@ -1,13 +1,16 @@
 require 'spec_helper'
 
 describe Image do
+
+  it_behaves_like 'a classifiable model'
+
   it { should belong_to(:template) }
   it { should respond_to :is_official }
   it { should respond_to :is_trusted }
   it { should respond_to :star_count }
   it { should validate_presence_of(:name) }
   it { should validate_presence_of(:repository) }
-  
+
   describe '.search_remote_index' do
 
     let(:query) { { term: 'some_term' } }

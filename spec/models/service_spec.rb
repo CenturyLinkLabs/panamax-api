@@ -64,6 +64,7 @@ describe Service do
   end
 
   it_behaves_like 'a docker runnable model'
+  it_behaves_like 'a classifiable model'
 
   describe '#unit_name' do
     it 'postfixes the name with .service' do

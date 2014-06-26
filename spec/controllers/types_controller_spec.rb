@@ -5,10 +5,8 @@ describe TypesController do
   describe 'GET #index' do
     it 'returns all the types as JSON' do
       get :index, format: :json
-      flattened_results = JSON.parse(response.body).map { |t| t['name'] }
-      expect(flattened_results).to eq PanamaxApi::TYPES
       expect(response.body).to eq [
-        { 'name' => 'Default' },
+        { 'name' => 'Default', 'default' => true },
         { 'name' => 'Wordpress' },
         { 'name' => 'Tomcat' },
         { 'name' => 'Rails' },
