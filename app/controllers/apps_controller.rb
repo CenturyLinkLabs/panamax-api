@@ -9,6 +9,12 @@ class AppsController < ApplicationController
     respond_with App.find(params[:id])
   end
 
+  def update
+    app = App.find(params[:id])
+    app.update(app_update_params)
+    respond_with app
+  end
+
   def destroy
     respond_with App.find(params[:id]).destroy
   end
@@ -38,6 +44,16 @@ class AppsController < ApplicationController
   end
 
   private
+
+  def app_update_params
+    params.permit(
+      :id,
+      :name,
+      :from,
+      :description,
+      :categories
+    )
+  end
 
   def app_params
     params.permit(

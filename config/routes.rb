@@ -8,7 +8,7 @@ PanamaxApi::Application.routes.draw do
       post :save
     end
   end
-  resources :apps, only: [:index, :show, :create, :destroy] do
+  resources :apps, only: [:index, :show, :create, :update, :destroy] do
     member do
       get :journal
       put :rebuild
