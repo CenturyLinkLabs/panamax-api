@@ -3,6 +3,7 @@ FROM 74.201.240.198:5000/ruby:alpha
 ADD . /var/app/panamax-api
 
 EXPOSE 3000
+ENV RAILS_ENV production
 
 WORKDIR /var/app/panamax-api
 RUN bundle
