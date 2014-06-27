@@ -18,6 +18,24 @@ describe AppsController do
     end
   end
 
+  describe '#update' do
+    let(:app) { apps(:app1) }
+
+    let(:params) { { name: 'My App', id: app, format: :json } }
+
+    it 'changes attributes' do
+      put :update, params
+
+      app.reload
+      expect(app.name).to eql params[:name]
+    end
+
+    it 'returns a 204 status code' do
+      put :update, params
+      expect(response.status).to eq 204
+    end
+  end
+
   describe '#create' do
 
     let(:template) { templates(:wordpress) }
