@@ -2,10 +2,14 @@ class User < ActiveRecord::Base
 
   EMAIL_SCOPES = %w(user user:email)
 
+  MUTEX = Mutex.new
+
   validate :access_token_scope, on: :update
 
   def self.instance
-    User.first || User.create
+    MUTEX.synchronize do
+      User.first || User.create
+    end
   end
 
   def repos
