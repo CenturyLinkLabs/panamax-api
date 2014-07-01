@@ -32,7 +32,7 @@ describe TemplateBuilder::FromFig do
     it 'creates images for each service defined in fig.yml' do
       expect(subject.images).to have_exactly(2).items
       expect(subject.images.map(&:name)).to match_array(%w(web db))
-      expect(subject.images.map(&:repository)).to match_array(%w(wordpress mysql))
+      expect(subject.images.map(&:source)).to match_array(%w(wordpress mysql))
       expect(subject.images.find_by(name: 'web').ports).to eq([{ 'host_port' => '8080', 'container_port' => '80' }])
       expect(subject.images.find_by(name: 'db').ports).to be_blank
       expect(subject.images.find_by(name: 'web').links).to eq([{ 'service' => 'db', 'alias' => 'db' }])

@@ -8,8 +8,7 @@ describe ImageSerializer do
     expected_keys = [
       :category,
       :name,
-      :repository,
-      :tag,
+      :source,
       :description,
       :type,
       :expose,

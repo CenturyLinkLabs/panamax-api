@@ -19,7 +19,7 @@ class Image < ActiveRecord::Base
   belongs_to :template
 
   validates_presence_of :name
-  validates_presence_of :repository
+  validates_presence_of :source
   validates :ports, has_container_ports: true, has_unique_ports: true
   validates :links, has_link_alias: true, service_link_exists: true
   validates :volumes, has_volume_paths: true
@@ -28,7 +28,7 @@ class Image < ActiveRecord::Base
     images = Docker::Image.search(query)
     images.map do |image|
       new(
-        repository: image.id,
+        source: image.id,
         description: image.info['description'],
         is_official: image.info['is_official'],
         is_trusted: image.info['is_trusted'],
@@ -47,18 +47,18 @@ class Image < ActiveRecord::Base
       repo, _tag = repotags.first.split(':')
 
       if repo != EMPTY_REPO
-        new(repository: repo)
+        new(source: repo)
       else
         nil
       end
     end
 
     # Remove nils and duplicates
-    images.compact.uniq(&:repository)
+    images.compact.uniq(&:source)
   end
 
   def self.local_with_repo_like(search_term)
-    self.all_local.select { |image| image.repository =~ /#{search_term}/ }.compact
+    self.all_local.select { |image| image.source =~ /#{search_term}/ }.compact
   end
 
   def self.find_local_for(name)

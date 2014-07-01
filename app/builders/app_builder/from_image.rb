@@ -5,8 +5,7 @@ module AppBuilder
       template = Template.new(name: "#{options[:image]}_image")
       template.images << Image.new(
         name: options[:image],
-        repository: options[:image],
-        tag: options[:tag]
+        source: options[:image]
       )
 
       converter = Converters::TemplateConverter.new(template)

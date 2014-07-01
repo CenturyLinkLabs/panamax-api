@@ -9,7 +9,7 @@ describe Image do
   it { should respond_to :is_trusted }
   it { should respond_to :star_count }
   it { should validate_presence_of(:name) }
-  it { should validate_presence_of(:repository) }
+  it { should validate_presence_of(:source) }
 
   describe '.search_remote_index' do
 
@@ -35,7 +35,7 @@ describe Image do
 
       expect(images).to be_kind_of(Array)
       expect(images).to have(1).items
-      expect(images.first.repository).to eql(remote_image.id)
+      expect(images.first.source).to eql(remote_image.id)
     end
   end
 
@@ -66,7 +66,7 @@ describe Image do
 
         expect(images).to be_kind_of(Array)
         expect(images).to have(1).items
-        expect(images.first.repository).to eql(local_image.info['RepoTags'].first)
+        expect(images.first.source).to eql(local_image.info['RepoTags'].first)
       end
     end
 
@@ -100,7 +100,7 @@ describe Image do
 
         expect(images).to be_kind_of(Array)
         expect(images).to have(1).items
-        expect(images.first.repository).to eql(local_image.info['RepoTags'].first)
+        expect(images.first.source).to eql(local_image.info['RepoTags'].first)
       end
     end
   end
@@ -120,9 +120,9 @@ describe Image do
     end
 
     context 'when there are local images' do
-      let(:matching_image) { double(:matching_image, repository: 'query') }
+      let(:matching_image) { double(:matching_image, source: 'query') }
 
-      let(:other_image) { double(:other_image, repository: 'blah') }
+      let(:other_image) { double(:other_image, source: 'blah') }
 
       before do
         Image.stub(:all_local).and_return([matching_image, other_image])

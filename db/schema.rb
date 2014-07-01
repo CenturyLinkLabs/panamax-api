@@ -32,8 +32,7 @@ ActiveRecord::Schema.define(version: 20140528192410) do
   create_table "images", force: true do |t|
     t.string   "image_id"
     t.string   "name"
-    t.string   "repository"
-    t.string   "tag"
+    t.string   "source"
     t.text     "description"
     t.string   "categories"
     t.boolean  "recommended"
@@ -49,7 +48,7 @@ ActiveRecord::Schema.define(version: 20140528192410) do
   end
 
   add_index "images", ["image_id"], name: "index_images_on_image_id", unique: true
-  add_index "images", ["repository"], name: "index_images_on_repository"
+  add_index "images", ["source"], name: "index_images_on_source"
 
   create_table "service_categories", force: true do |t|
     t.integer  "service_id"

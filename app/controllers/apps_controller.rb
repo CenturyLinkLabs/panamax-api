@@ -59,7 +59,6 @@ class AppsController < ApplicationController
     params.permit(
       :template_id,
       :image,
-      :tag,
       :type,
       links: [[:service, :alias]],
       environment: [[:variable, :value, :required]],

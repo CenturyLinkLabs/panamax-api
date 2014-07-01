@@ -19,8 +19,7 @@ class CreateTemplates < ActiveRecord::Migration
     create_table :images do |t|
       t.string :image_id
       t.string :name
-      t.string :repository
-      t.string :tag
+      t.string :source
       t.text :description
       t.string :categories
       t.boolean :recommended
@@ -36,7 +35,7 @@ class CreateTemplates < ActiveRecord::Migration
     end
 
     add_index :images, :image_id, unique: true
-    add_index :images, :repository
+    add_index :images, :source
 
   end
 end

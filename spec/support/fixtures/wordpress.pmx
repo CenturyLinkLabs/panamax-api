@@ -8,8 +8,7 @@
   "images": [
     {
       "name": "DB_1",
-      "repository": "panamax/panamax-docker-mysql",
-      "tag": "latest",
+      "source": "panamax/panamax-docker-mysql:latest",
       "description": "MySQL",
       "expose": [3306],
       "environment": [
@@ -29,8 +28,7 @@
     },
     {
       "name": "WP",
-      "repository": "panamax/panamax-docker-wordpress",
-      "tag": "latest",
+      "source": "panamax/panamax-docker-wordpress:latest",
       "description": "Wordpress",
       "links": [
         {

@@ -35,7 +35,7 @@ module Converters
       Service.new(
         name: image.name,
         description: image.description,
-        from: "#{image.repository}:#{image.tag}",
+        from: image.source,
         ports: image.ports,
         expose: image.expose,
         environment: image.environment,

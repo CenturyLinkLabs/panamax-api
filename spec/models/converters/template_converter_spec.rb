@@ -21,8 +21,7 @@ describe Converters::TemplateConverter do
         Image.new(
           name: 'MySql',
           description: 'a database',
-          repository: 'foo',
-          tag: 'bar',
+          source: 'foo',
           ports: [{ 'container_port' => '8080' }],
           expose: ['expose this'],
           environment: { var: 'val' },
@@ -45,7 +44,7 @@ describe Converters::TemplateConverter do
         service = app.services.first
         expect(service.name).to eq image.name
         expect(service.description).to eq image.description
-        expect(service.from).to eq "#{image.repository}:#{image.tag}"
+        expect(service.from).to eq image.source
         expect(service.ports).to eq image.ports
         expect(service.expose).to eq image.expose
         expect(service.environment).to eq image.environment
@@ -87,8 +86,8 @@ describe Converters::TemplateConverter do
 
     context 'with linked images' do
 
-      let(:image1) { Image.new(name: 'I1', repository: 'I1:latest') }
-      let(:image2) { Image.new(name: 'I2', repository: 'I2:latest') }
+      let(:image1) { Image.new(name: 'I1', source: 'I1:latest') }
+      let(:image2) { Image.new(name: 'I2', source: 'I2:latest') }
 
       before do
         image2.links = [{ 'service' => 'I1', 'alias' => 'FOO' }]

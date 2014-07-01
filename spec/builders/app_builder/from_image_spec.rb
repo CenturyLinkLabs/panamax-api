@@ -7,7 +7,6 @@ describe AppBuilder::FromImage do
     let(:options) do
       {
         image: 'someimage',
-        tag: 'tag'
       }
     end
 
@@ -38,7 +37,7 @@ describe AppBuilder::FromImage do
       service = app.services.first
 
       expect(service.name).to eq options[:image]
-      expect(service.from).to eq "#{options[:image]}:#{options[:tag]}"
+      expect(service.from).to eq options[:image]
     end
   end
 

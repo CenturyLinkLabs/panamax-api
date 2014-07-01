@@ -56,14 +56,6 @@ class Service < ActiveRecord::Base
     manager.destroy rescue nil
   end
 
-  def repository
-    from && from.split(':')[0]
-  end
-
-  def tag
-    (from && from.split(':')[1]) || 'latest'
-  end
-
   def restart
     self.shutdown
     self.submit

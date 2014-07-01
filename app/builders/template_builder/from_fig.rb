@@ -23,7 +23,7 @@ module TemplateBuilder
 
     def image_from_fig_service(name, service_def)
       Image.new(name: name) do |image|
-        image.repository = service_def['image']
+        image.source = service_def['image']
         image.links = links(service_def['links'])
         image.ports = ports(service_def['ports'])
         image.expose = service_def['expose']
