@@ -81,7 +81,10 @@ class Service < ActiveRecord::Base
     end
 
     attributes[:ports] ||= []
+    attributes[:ports].map! { |port| port.to_hash }
+
     attributes[:environment] ||= []
+    attributes[:environment].map! { |var| var.to_hash }
 
     self.update(attributes)
   end

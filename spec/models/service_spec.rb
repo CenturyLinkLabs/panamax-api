@@ -173,10 +173,21 @@ describe Service do
 
     context 'when ports are provided' do
 
-      let(:attrs_with_ports) { attrs.merge(ports: [{ container_port: '8080' }]) }
+      let(:attrs_with_ports) do
+        attrs.merge(ports:
+          [ActionController::Parameters.new(container_port: '8080')])
+      end
 
       it 'passes the ports through to the update' do
         expect(subject).to receive(:update).with(hash_including(attrs_with_ports))
+        subject.update_with_relationships(attrs_with_ports)
+      end
+
+      it 'translates the ports into a pure Ruby hash' do
+        expect(subject).to receive(:update) do |attrs|
+          attrs[:ports].each { |port| expect(port).to be_instance_of(Hash) }
+        end
+
         subject.update_with_relationships(attrs_with_ports)
       end
     end
@@ -190,10 +201,21 @@ describe Service do
 
     context 'when environment variables are provided' do
 
-      let(:attrs_with_env_vars) { attrs.merge(environment: { PASSWORD: 'password' }) }
+      let(:attrs_with_env_vars) do
+        attrs.merge(environment:
+          [ActionController::Parameters.new('variable' => 'X', 'value' => 'y')])
+      end
 
       it 'passes the ports through to the update' do
         expect(subject).to receive(:update).with(hash_including(attrs_with_env_vars))
+        subject.update_with_relationships(attrs_with_env_vars)
+      end
+
+      it 'translates the environment variables into a pure Ruby hash' do
+        expect(subject).to receive(:update) do |attrs|
+          attrs[:environment].each { |var| expect(var).to be_instance_of(Hash) }
+        end
+
         subject.update_with_relationships(attrs_with_env_vars)
       end
     end
