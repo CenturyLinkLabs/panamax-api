@@ -12,9 +12,12 @@
       "tag": "latest",
       "description": "MySQL",
       "expose": [3306],
-      "environment": {
-        "MYSQL_ROOT_PASSWORD": "pass@word01"
-      },
+      "environment": [
+        {
+          "variable": "MYSQL_ROOT_PASSWORD",
+          "value": "pass@word01"
+        }
+      ],
       "ports": [
         {
           "host_port": 3306,
@@ -42,11 +45,14 @@
         }
       ],
       "expose": [80],
-      "environment": {
-        "DB_PASSWORD": "pass@word01"
-      },
-	    "volumes": [
-	    {
+      "environment": [
+        {
+          "variable": "DB_PASSWORD",
+          "value": "pass@word01"
+        }
+      ],
+      "volumes": [
+      {
           "host_path": "cache/",
           "container_path": "/tmp/cache"
         }
