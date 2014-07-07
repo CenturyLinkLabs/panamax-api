@@ -61,7 +61,7 @@ shared_examples 'a docker runnable model' do
     context 'when environment vars are specified' do
 
       before do
-        model.environment = { foo: :bar }
+        model.environment = [{ 'variable' => 'foo', 'value' => 'bar' }]
       end
 
       it 'generates a docker command with -e' do

@@ -37,7 +37,7 @@ describe ServicesController do
         description: 'servicedescription',
         ports: [{ host_port: '80', container_port: '80', proto: 'tcp' }],
         expose: %w(80 443),
-        environment: { 'SOME_KEY' => 'some_value' },
+        environment: [{ 'variable' => 'SOME_KEY', 'value' => 'some_value' }],
         volumes: [{ host_path: '/tmp/foo', container_path: '/tmp/bar' }]
       }
     end

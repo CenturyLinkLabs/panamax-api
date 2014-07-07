@@ -25,7 +25,7 @@ class Service < ActiveRecord::Base
 
   serialize :ports, Array
   serialize :expose, Array
-  serialize :environment, Hash
+  serialize :environment, Array
   serialize :volumes, Array
 
   before_save :resolve_name_conflicts
@@ -89,7 +89,7 @@ class Service < ActiveRecord::Base
     end
 
     attributes[:ports] ||= []
-    attributes[:environment] ||= {}
+    attributes[:environment] ||= []
 
     self.update(attributes)
   end

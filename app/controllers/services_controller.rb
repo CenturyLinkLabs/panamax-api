@@ -45,10 +45,9 @@ class ServicesController < ApplicationController
       ports: [[:host_interface, :host_port, :container_port, :proto]],
       expose: [],
       volumes: [[:host_path, :container_path]],
-      links: [[:service_id, :alias]]
-    ).tap do |whitelisted|
-      whitelisted[:environment] = params[:environment]
-    end
+      links: [[:service_id, :alias]],
+      environment: [[:variable, :value, :required]]
+    )
   end
 
   def service_create_params

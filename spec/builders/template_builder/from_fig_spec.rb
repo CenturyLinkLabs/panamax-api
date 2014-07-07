@@ -37,11 +37,13 @@ describe TemplateBuilder::FromFig do
       expect(subject.images.find_by(name: 'db').ports).to be_blank
       expect(subject.images.find_by(name: 'web').links).to eq([{ 'service' => 'db', 'alias' => 'db' }])
       expect(subject.images.find_by(name: 'db').links).to be_blank
-      expect(subject.images.find_by(name: 'web').environment).to eq({
-                                                                        'MYSQL_PORT_3306_TCP_ADDR' => '172.17.0.4',
-                                                                        'WORDPRESS_DB_PASSWORD' => 'mysecretpassword'
-                                                                    })
-      expect(subject.images.find_by(name: 'db').environment).to eq({ 'MYSQL_ROOT_PASSWORD' => 'mysecretpassword' })
+      expect(subject.images.find_by(name: 'web').environment).to eq([
+        { 'variable' => 'MYSQL_PORT_3306_TCP_ADDR', 'value' => '172.17.0.4' },
+        { 'variable' => 'WORDPRESS_DB_PASSWORD', 'value' => 'mysecretpassword' }
+      ])
+      expect(subject.images.find_by(name: 'db').environment).to eq([
+        { 'variable' => 'MYSQL_ROOT_PASSWORD', 'value' => 'mysecretpassword' }
+      ])
       expect(subject.images.find_by(name: 'web').volumes).to eq([{
                                                                      'host_path' => 'cache/',
                                                                      'container_path' => '/tmp/cache'

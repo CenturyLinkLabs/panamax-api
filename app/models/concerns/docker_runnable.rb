@@ -51,7 +51,7 @@ module DockerRunnable
 
   def environment_flags
     return unless environment
-    environment.map { |k, v| "-e \"#{k}=#{v}\"" }
+    environment.map { |env| "-e \"#{env['variable']}=#{env['value']}\"" }
   end
 
   def volume_flags

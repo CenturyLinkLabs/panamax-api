@@ -183,7 +183,7 @@ describe Service do
 
     context 'when environment vars are not provided' do
       it 'updates with an empty env variable hash' do
-        expect(subject).to receive(:update).with(hash_including(environment: {}))
+        expect(subject).to receive(:update).with(hash_including(environment: []))
         subject.update_with_relationships(attrs)
       end
     end

@@ -83,7 +83,7 @@ describe App do
         expose: [''],
         links: [{ service_id: linked_to_service.id, alias: 'DEP' }],
         volumes: [{ host_path: '', container_path: '' }],
-        environment: { 'SOME_KEY' => '' }
+        environment: [{ 'variable' => 'SOME_KEY', 'value' => '' }]
       }
     end
 

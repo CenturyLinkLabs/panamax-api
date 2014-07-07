@@ -62,12 +62,10 @@ class AppsController < ApplicationController
       :tag,
       :type,
       links: [[:service, :alias]],
+      environment: [[:variable, :value, :required]],
       ports: [[:host_interface, :host_port, :container_port, :proto]],
       expose: [],
       volumes: [[:host_path, :container_path]]
-    ).tap do |whitelisted|
-      whitelisted[:environment] = params[:environment]
-    end
+    )
   end
-
 end

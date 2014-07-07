@@ -12,7 +12,8 @@ service1:
     - 3306
   environment:  |
     ---
-    MYSQL_ROOT_PASSWORD: pass@word01
+    - variable: MYSQL_ROOT_PASSWORD
+      value: pass@word01
   volumes: |
     ---
     - host_path: /var/panamax
