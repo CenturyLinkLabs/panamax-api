@@ -1,4 +1,4 @@
-class TemplateImageSerializer < ActiveModel::Serializer
+class ImageSerializer < ActiveModel::Serializer
   self.root = false
 
   attributes :category, :name, :repository, :tag, :description, :type, :expose, :ports, :links, :environment, :volumes
