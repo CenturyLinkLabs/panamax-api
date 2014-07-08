@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe TemplateImageSerializer do
+describe ImageSerializer do
   let(:image_model) { Image.new }
 
   it 'exposes the attributes to be jsonified' do
