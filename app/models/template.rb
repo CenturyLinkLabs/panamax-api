@@ -16,11 +16,13 @@ class Template < ActiveRecord::Base
     images.map(&:categories).flatten.uniq.compact
   end
 
-  def self.search(term)
+  def self.search(term, limit=nil)
     term = term.gsub(',', ' ')
-    term.split.each_with_object([]) do |t, a|
+    results = term.split.each_with_object([]) do |t, a|
       a << self.where('name LIKE ? OR keywords LIKE ?', "%#{t}%", "%#{t}%")
     end.flatten.uniq.compact
+
+    limit.nil? ? results : results.first(limit)
   end
 
 end

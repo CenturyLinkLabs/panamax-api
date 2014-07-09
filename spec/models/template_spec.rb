@@ -22,6 +22,15 @@ describe Template do
         match_array([templates(:wordpress), templates(:another)])
       )
     end
+
+    context 'when a limit parameter is supplied' do
+
+      let(:limit) { 1 }
+
+      it 'limits the returned results to the specified count' do
+        expect(described_class.search('wp', limit)).to have(limit).items
+      end
+    end
   end
 
   describe '#categories' do
