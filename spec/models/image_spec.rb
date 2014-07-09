@@ -151,6 +151,20 @@ describe Image do
         expect(images.first).to be matching_image
       end
     end
+
+    context 'when a limit parameter is supplied' do
+      let(:limit) { 2 }
+      let(:image) { double(:matching_image, repository: 'query') }
+
+      before do
+        Image.stub(:all_local).and_return([image, image, image])
+      end
+
+      it 'limits the returned results to the specified count' do
+        images = Image.local_with_repo_like('query', limit)
+        expect(images).to have(limit).items
+      end
+    end
   end
 
   describe '.find_local_for' do

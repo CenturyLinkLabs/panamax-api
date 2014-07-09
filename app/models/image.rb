@@ -61,8 +61,9 @@ class Image < ActiveRecord::Base
     images.compact.uniq(&:source)
   end
 
-  def self.local_with_repo_like(search_term)
-    self.all_local.select { |image| image.source =~ /#{search_term}/ }.compact
+  def self.local_with_repo_like(search_term, limit=nil)
+    images = self.all_local.select { |image| image.source =~ /#{search_term}/ }.compact
+    limit.nil? ? images : images.first(limit)
   end
 
   def self.find_local_for(name)
