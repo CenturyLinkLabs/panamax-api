@@ -9,7 +9,7 @@ class UsersController < ApplicationController
     user = User.instance
     user.update(user_params)
 
-    user.subscribe if user.valid?
+    user.subscribe if params[:subscribe] && user.valid?
 
     respond_with user
   end
