@@ -37,6 +37,21 @@ describe Image do
       expect(images).to have(1).items
       expect(images.first.source).to eql(remote_image.id)
     end
+
+    context 'when a limit parameter is supplied' do
+
+      let(:limit) { 2 }
+
+      before do
+        Docker::Image.stub(:search).and_return([remote_image, remote_image, remote_image])
+      end
+
+      it 'limits the returned results to the specified count' do
+        images = Image.search_remote_index(query, limit)
+        expect(images).to have(limit).items
+      end
+
+    end
   end
 
   describe '.all_local' do

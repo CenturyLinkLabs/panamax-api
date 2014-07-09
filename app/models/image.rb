@@ -25,8 +25,11 @@ class Image < ActiveRecord::Base
   validates :links, has_link_alias: true, service_link_exists: true
   validates :volumes, has_volume_paths: true
 
-  def self.search_remote_index(query)
+  def self.search_remote_index(query, limit=nil)
     images = Docker::Image.search(term: query)
+
+    images = images.first(limit) if limit
+
     images.map do |image|
       new(
         source: image.id,
