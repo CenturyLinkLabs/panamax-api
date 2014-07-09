@@ -3,29 +3,29 @@ class SearchController < ApplicationController
   respond_to :json
 
   def index
-    q, type = search_params[:q], search_params[:type]
-    respond_with perform_search(q, type).merge(q: q)
+    q, limit, type = search_params.values_at(:q, :limit, :type)
+    respond_with perform_search(q, limit, type).merge(q: q)
   end
 
   private
 
-  def perform_search(q, *types)
+  def perform_search(q, limit, *types)
     types = %w(template local_image remote_image) if types.compact.empty?
     {}.tap do |results|
-      results[:templates] = wrapped_templates(q) if types.include? 'template'
-      results[:local_images] = Image.local_with_repo_like(q) if types.include? 'local_image'
-      results[:remote_images] = Image.search_remote_index(q) if types.include? 'remote_image'
+      results[:templates] = wrapped_templates(q, limit) if types.include? 'template'
+      results[:local_images] = Image.local_with_repo_like(q, limit) if types.include? 'local_image'
+      results[:remote_images] = Image.search_remote_index(q, limit) if types.include? 'remote_image'
     end
   end
 
   def search_params
-    params.permit(:q, :type)
+    params.permit(:q, :type, :limit)
   end
 
   private
 
-  def wrapped_templates(q)
-    Template.search(q).map { |t| TemplateSerializer.new(t) }
+  def wrapped_templates(q, limit)
+    Template.search(q, limit).map { |t| TemplateSerializer.new(t) }
   end
 
 end
