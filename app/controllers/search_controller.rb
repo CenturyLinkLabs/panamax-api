@@ -14,7 +14,7 @@ class SearchController < ApplicationController
     {}.tap do |results|
       results[:templates] = wrapped_templates(q) if types.include? 'template'
       results[:local_images] = Image.local_with_repo_like(q) if types.include? 'local_image'
-      results[:remote_images] = Image.search_remote_index(term: q) if types.include? 'remote_image'
+      results[:remote_images] = Image.search_remote_index(q) if types.include? 'remote_image'
     end
   end
 

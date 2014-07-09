@@ -77,7 +77,7 @@ describe SearchController do
 
     context 'when type is not supplied' do
       it 'passes the query to the Image when searching the remote index' do
-        expect(Image).to receive(:search_remote_index).with(term: query)
+        expect(Image).to receive(:search_remote_index).with(query)
         get :index, q: "#{query}", format: 'json'
       end
 

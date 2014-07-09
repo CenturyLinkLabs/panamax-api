@@ -13,7 +13,7 @@ describe Image do
 
   describe '.search_remote_index' do
 
-    let(:query) { { term: 'some_term' } }
+    let(:query) { 'some_term' }
 
     let(:remote_image) do
       double(:remote_image,
@@ -26,7 +26,7 @@ describe Image do
     end
 
     it 'searches the remote Docker index' do
-      expect(Docker::Image).to receive(:search).with(query).and_return([remote_image])
+      expect(Docker::Image).to receive(:search).with(term: query).and_return([remote_image])
       Image.search_remote_index(query)
     end
 
