@@ -26,7 +26,26 @@ describe TemplatesController do
         recommended: true,
         type: 'wordpress',
         documentation: '---\n\nBlah\n\n',
-        app_id: '1'
+        app_id: '1',
+        images: [
+          {
+            'category' => 'Web Tier',
+            'name' => 'MyWebApp',
+            'source' => 'centurylinklabs/buildstepper:latest',
+            'description' => 'My Web App running in-container',
+            'type' => 'Default',
+            'expose' =>  ['80'],
+            'ports' => [{ 'container_port' => '80' }],
+            'links' =>  [{ 'service_id'  =>  '3', 'alias'  =>  'foo' }],
+            'environment' =>
+            [
+              { 'variable' => 'PORT', 'value' => '80' },
+              { 'variable' => 'GIT_REPO', 'value' => 'https://github.com/fermayo/hello-world-php.git' }
+            ],
+            'volumes' =>  [],
+            'command' => ['/start', 'web']
+          }
+        ]
       )
     end
 

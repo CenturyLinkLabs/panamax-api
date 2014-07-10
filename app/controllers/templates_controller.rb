@@ -35,7 +35,22 @@ class TemplatesController < ApplicationController
       :type,
       :documentation,
       :fig_yml,
-      authors: []
+      authors: [],
+      images: [[
+        :name,
+        :source,
+        :description,
+        :template_id,
+        :category,
+        :type,
+        volumes: [],
+        command: [],
+        expose: [],
+        links: [[:service_id, :alias]],
+        environment: [[:variable, :value, :required]],
+        links: [[:service_id, :alias]],
+        ports: [[:host_interface, :host_port, :container_port, :proto]]
+      ]]
     )
   end
 
