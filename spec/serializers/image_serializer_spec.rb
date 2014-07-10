@@ -6,6 +6,7 @@ describe ImageSerializer do
   it 'exposes the attributes to be jsonified' do
     serialized = described_class.new(image_model).as_json
     expected_keys = [
+      :id,
       :category,
       :name,
       :source,
