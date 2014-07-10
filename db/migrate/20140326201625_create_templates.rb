@@ -25,6 +25,7 @@ class CreateTemplates < ActiveRecord::Migration
       t.boolean :recommended
       t.string :type
       t.text :links
+      t.text :command
       t.text :ports
       t.text :expose
       t.text :environment

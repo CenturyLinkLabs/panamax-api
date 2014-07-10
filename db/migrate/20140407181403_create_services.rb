@@ -7,6 +7,7 @@ class CreateServices < ActiveRecord::Migration
       t.text :ports
       t.text :expose
       t.text :environment
+      t.text :command
       t.text :volumes
       t.string :type
       t.references :app, index: true

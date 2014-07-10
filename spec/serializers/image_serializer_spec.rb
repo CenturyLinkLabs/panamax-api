@@ -16,7 +16,8 @@ describe ImageSerializer do
       :ports,
       :links,
       :environment,
-      :volumes
+      :volumes,
+      :command
     ]
     expect(serialized.keys).to match_array expected_keys
   end

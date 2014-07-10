@@ -46,6 +46,18 @@ shared_examples 'a docker runnable model' do
       end
     end
 
+    context 'when a command is specified' do
+
+      before do
+        model.command = ['/run', 'web']
+      end
+
+      it 'generates a docker run string with a command at the end' do
+        expected = '/run web'
+        expect(model.docker_run_string).to include expected
+      end
+    end
+
     context 'when exposed ports are specified' do
 
       before do

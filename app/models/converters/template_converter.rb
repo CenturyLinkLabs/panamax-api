@@ -39,6 +39,7 @@ module Converters
         ports: image.ports,
         expose: image.expose,
         environment: image.environment,
+        command: image.command,
         volumes: image.volumes,
         type: image.type,
         categories: service_categories_from_image(image)
