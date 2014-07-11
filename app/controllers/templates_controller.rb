@@ -15,6 +15,10 @@ class TemplatesController < ApplicationController
     render(json: { error: ex.message }, status: :internal_server_error)
   end
 
+  def destroy
+    respond_with Template.find(params[:id]).destroy
+  end
+
   def save
     template = Template.find(params[:id])
     resp = template.save_to_repo(template_save_params)

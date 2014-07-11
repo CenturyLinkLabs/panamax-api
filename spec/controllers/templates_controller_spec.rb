@@ -76,6 +76,21 @@ describe TemplatesController do
 
   end
 
+  describe '#destroy' do
+    let(:template) { templates(:another) }
+
+    it 'removes the template' do
+      expect do
+        delete :destroy, id: template.id, format: :json
+      end.to change { Template.count }.by(-1)
+    end
+
+    it 'responds a 204' do
+      delete :destroy, id: template.id, format: :json
+      expect(response.status).to eq 204
+    end
+  end
+
   describe '#save' do
     let(:template) { Template.first }
     let(:save_response) do
