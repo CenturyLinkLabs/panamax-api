@@ -82,7 +82,7 @@ describe App do
         ports: [{ host_interface: '', host_port: '', 'container_port' => 90, proto: '' }],
         expose: [''],
         links: [{ service_id: linked_to_service.id, alias: 'DEP' }],
-        volumes: [{ host_path: '', container_path: '' }],
+        volumes: [{ 'host_path' => '', 'container_path' => '/foo/baz' }],
         environment: [{ 'variable' => 'SOME_KEY', 'value' => '' }]
       }
     end

@@ -23,7 +23,7 @@ class Image < ActiveRecord::Base
   validates_presence_of :source
   validates :ports, has_container_ports: true, has_unique_ports: true
   validates :links, has_link_alias: true, service_link_exists: true
-  validates :volumes, has_volume_paths: true
+  validates :volumes, has_container_paths: true
 
   def self.search_remote_index(query, limit=nil)
     images = Docker::Image.search(term: query)

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe HasVolumePathsValidator do
+describe HasContainerPathsValidator do
 
   let(:record) { Image.new }
   let(:attribute) { 'volumes' }
@@ -16,7 +16,7 @@ describe HasVolumePathsValidator do
       ]
     end
 
-    it 'returns no errors for links with aliases' do
+    it 'returns no errors volumes with container paths' do
       subject.validate_each(record, attribute, value)
       expect(record.errors).to be_empty
     end
