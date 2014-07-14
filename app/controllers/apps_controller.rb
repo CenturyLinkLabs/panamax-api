@@ -62,6 +62,7 @@ class AppsController < ApplicationController
       :type,
       links: [[:service, :alias]],
       environment: [[:variable, :value, :required]],
+      command: [],
       ports: [[:host_interface, :host_port, :container_port, :proto]],
       expose: [],
       volumes: [[:host_path, :container_path]]

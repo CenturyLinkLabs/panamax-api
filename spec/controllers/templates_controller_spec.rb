@@ -26,7 +26,26 @@ describe TemplatesController do
         recommended: true,
         type: 'wordpress',
         documentation: '---\n\nBlah\n\n',
-        app_id: '1'
+        app_id: '1',
+        images: [
+          {
+            'category' => 'Web Tier',
+            'name' => 'MyWebApp',
+            'source' => 'centurylinklabs/buildstepper:latest',
+            'description' => 'My Web App running in-container',
+            'type' => 'Default',
+            'expose' =>  ['80'],
+            'ports' => [{ 'container_port' => '80' }],
+            'links' =>  [{ 'service_id'  =>  '3', 'alias'  =>  'foo' }],
+            'environment' =>
+            [
+              { 'variable' => 'PORT', 'value' => '80' },
+              { 'variable' => 'GIT_REPO', 'value' => 'https://github.com/fermayo/hello-world-php.git' }
+            ],
+            'volumes' =>  [],
+            'command' => ['/start', 'web']
+          }
+        ]
       )
     end
 
@@ -55,6 +74,21 @@ describe TemplatesController do
       expect(response.status).to eq 500
     end
 
+  end
+
+  describe '#destroy' do
+    let(:template) { templates(:another) }
+
+    it 'removes the template' do
+      expect do
+        delete :destroy, id: template.id, format: :json
+      end.to change { Template.count }.by(-1)
+    end
+
+    it 'responds a 204' do
+      delete :destroy, id: template.id, format: :json
+      expect(response.status).to eq 204
+    end
   end
 
   describe '#save' do

@@ -25,6 +25,7 @@ describe Converters::TemplateConverter do
           ports: [{ 'container_port' => '8080' }],
           expose: ['expose this'],
           environment: { var: 'val' },
+          command: ['/boom', 'shaka'],
           volumes: ['volumes'],
           type: 'mysql'
         )
@@ -48,6 +49,7 @@ describe Converters::TemplateConverter do
         expect(service.ports).to eq image.ports
         expect(service.expose).to eq image.expose
         expect(service.environment).to eq image.environment
+        expect(service.command).to eq image.command
         expect(service.volumes).to eq image.volumes
         expect(service.type).to eq image.type
       end

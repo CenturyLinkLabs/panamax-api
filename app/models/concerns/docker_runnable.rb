@@ -12,8 +12,9 @@ module DockerRunnable
       expose_flags,
       environment_flags,
       volume_flags,
-      from
-    ].flatten.compact.join(' ')
+      from,
+      command_string
+    ].flatten.compact.join(' ').strip
   end
 
   def docker_status
@@ -23,6 +24,10 @@ module DockerRunnable
   end
 
   private
+
+  def command_string
+    command.join(' ')
+  end
 
   def link_flags
     return unless links
