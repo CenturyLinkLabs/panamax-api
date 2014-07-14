@@ -8,17 +8,17 @@ module Converters
     end
 
     def to_image
-      Image.create(
-          name: service.name,
-          categories: service_category_names,
-          description: service.description,
-          source: service.from,
-          ports: service.ports,
-          links: service_links,
-          expose: service.expose,
-          environment: service.environment,
-          volumes: service.volumes,
-          type: service.type
+      Image.new(
+        name: service.name,
+        categories: service_category_names,
+        description: service.description,
+        source: service.from,
+        ports: service.ports,
+        links: service_links,
+        expose: service.expose,
+        environment: service.environment,
+        volumes: service.volumes,
+        type: service.type
       )
     end
 
@@ -31,5 +31,6 @@ module Converters
     def service_links
       service.links.map { |link| { 'service' => link.linked_to_service.name, 'alias' => link.alias } }
     end
+
   end
 end

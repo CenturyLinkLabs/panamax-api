@@ -8,9 +8,8 @@ module Converters
     end
 
     def to_template
-      Template.new(name: app.name, documentation: app.documentation) do |template|
-        template.images << app.services.map { |service| service_to_image(service) }
-      end
+      images = app.services.map { |service| service_to_image(service) }
+      Template.new(name: app.name, documentation: app.documentation, images: images)
     end
 
     private
@@ -18,5 +17,6 @@ module Converters
     def service_to_image(service)
       ServiceConverter.new(service).to_image
     end
+
   end
 end

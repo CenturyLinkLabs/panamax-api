@@ -12,6 +12,7 @@ PanamaxApi::Application.routes.draw do
     member do
       get :journal
       put :rebuild
+      post :template
     end
 
     resources :categories, only: [:index, :show, :create, :update, :destroy]
