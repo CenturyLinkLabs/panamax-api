@@ -1,7 +1,7 @@
 class ServiceLink < ActiveRecord::Base
   belongs_to :linked_to_service, class_name: 'Service'
 
-  validates :linked_to_service_id, uniqueness: { scope: :linked_from_service_id }
+  validates :linked_to_service_id, uniqueness: { scope: :linked_from_service_id }, presence: true
   validates :alias, presence: true
   validate :cannot_link_to_self
 
