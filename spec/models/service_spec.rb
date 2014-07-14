@@ -164,6 +164,34 @@ describe Service do
       subject.stub(:update).and_return(true)
     end
 
+    context 'when volumes are not provided' do
+      it 'updates with an empty volumes list' do
+        expect(subject).to receive(:update).with(hash_including(volumes: []))
+        subject.update_with_relationships(attrs)
+      end
+    end
+
+    context 'when volumes are provided' do
+
+      let(:attrs_with_volumes) do
+        attrs.merge(volumes:
+          [ActionController::Parameters.new(container_volume: 'foo/bar')])
+      end
+
+      it 'passes the volumes through to the update' do
+        expect(subject).to receive(:update).with(hash_including(attrs_with_volumes))
+        subject.update_with_relationships(attrs_with_volumes)
+      end
+
+      it 'translates the volumes into a pure Ruby hash' do
+        expect(subject).to receive(:update) do |attrs|
+          attrs[:volumes].each { |volume| expect(volume).to be_instance_of(Hash) }
+        end
+
+        subject.update_with_relationships(attrs_with_volumes)
+      end
+    end
+
     context 'when ports are not provided' do
       it 'updates with an empty ports list' do
         expect(subject).to receive(:update).with(hash_including(ports: []))

@@ -81,6 +81,9 @@ class Service < ActiveRecord::Base
       )
     end
 
+    attributes[:volumes] ||= []
+    attributes[:volumes].map! { |vol| vol.to_hash }
+
     attributes[:ports] ||= []
     attributes[:ports].map! { |port| port.to_hash }
 
