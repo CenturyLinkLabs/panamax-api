@@ -5,7 +5,7 @@ describe SearchController do
   describe 'GET index' do
 
     let(:query) { 'fake' }
-    let(:limit) { 40 }
+    let(:limit) { '40' }
 
     let(:remote_image) { Image.new }
 
@@ -20,7 +20,7 @@ describe SearchController do
       let(:query) { 'wordpress' }
 
       it 'queries the templates with search term and limit' do
-        expect(Template).to receive(:search).with(query, limit).and_return([])
+        expect(Template).to receive(:search).with(query, limit.to_i).and_return([])
         get :index, q: query, limit: limit, type: 'template', format: 'json'
       end
 
@@ -45,7 +45,7 @@ describe SearchController do
       let(:query) { 'wordpress' }
 
       it 'queries local images with the search term and limit' do
-        expect(Image).to receive(:local_with_repo_like).with(query, limit)
+        expect(Image).to receive(:local_with_repo_like).with(query, limit.to_i)
         get :index, q: query, limit: limit, type: 'local_image', format: 'json'
       end
 
@@ -70,7 +70,7 @@ describe SearchController do
       let(:query) { 'wordpress' }
 
       it 'queries remote images with the search term and limit' do
-        expect(Image).to receive(:search_remote_index).with(query, limit)
+        expect(Image).to receive(:search_remote_index).with(query, limit.to_i)
         get :index, q: query, limit: limit, type: 'remote_image', format: 'json'
       end
 
@@ -93,12 +93,12 @@ describe SearchController do
 
     context 'when type is not supplied' do
       it 'passes the query to the Image when searching the remote index' do
-        expect(Image).to receive(:search_remote_index).with(query, limit)
+        expect(Image).to receive(:search_remote_index).with(query, limit.to_i)
         get :index, q: query, limit: limit, format: 'json'
       end
 
       it 'queries local images when searching' do
-        expect(Image).to receive(:local_with_repo_like).with(query, limit)
+        expect(Image).to receive(:local_with_repo_like).with(query, limit.to_i)
         get :index, q: query, limit: limit, format: 'json'
       end
 

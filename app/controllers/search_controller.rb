@@ -19,10 +19,11 @@ class SearchController < ApplicationController
   end
 
   def search_params
+    # Coerce limit to an integer
+    params[:limit] = params[:limit].to_i if params[:limit].present?
+
     params.permit(:q, :type, :limit)
   end
-
-  private
 
   def wrapped_templates(q, limit)
     Template.search(q, limit).map { |t| TemplateSerializer.new(t) }
