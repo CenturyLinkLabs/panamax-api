@@ -154,7 +154,7 @@ describe Image do
 
     context 'when a limit parameter is supplied' do
       let(:limit) { 2 }
-      let(:image) { double(:matching_image, repository: 'query') }
+      let(:image) { double(:matching_image, source: 'query') }
 
       before do
         Image.stub(:all_local).and_return([image, image, image])
