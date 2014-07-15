@@ -91,6 +91,8 @@ class Service < ActiveRecord::Base
     attributes[:environment] ||= []
     attributes[:environment].map! { |var| var.to_hash }
 
+    attributes[:expose] ||= []
+
     self.update(attributes)
   end
 

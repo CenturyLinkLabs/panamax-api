@@ -220,6 +220,23 @@ describe Service do
       end
     end
 
+    context 'when expose is provided' do
+
+      let(:attrs_with_expose) { attrs.merge(expose: ['9999']) }
+
+      it 'passes expose through to the update' do
+        expect(subject).to receive(:update).with(hash_including(attrs_with_expose))
+        subject.update_with_relationships(attrs_with_expose)
+      end
+    end
+
+    context 'when expose vars are not provided' do
+      it 'updates with an empty array' do
+        expect(subject).to receive(:update).with(hash_including(expose: []))
+        subject.update_with_relationships(attrs)
+      end
+    end
+
     context 'when environment vars are not provided' do
       it 'updates with an empty env variable hash' do
         expect(subject).to receive(:update).with(hash_including(environment: []))
