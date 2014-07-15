@@ -13,7 +13,7 @@ describe Image do
 
   describe '.search_remote_index' do
 
-    let(:query) { { term: 'some_term' } }
+    let(:query) { 'some_term' }
 
     let(:remote_image) do
       double(:remote_image,
@@ -26,7 +26,7 @@ describe Image do
     end
 
     it 'searches the remote Docker index' do
-      expect(Docker::Image).to receive(:search).with(query).and_return([remote_image])
+      expect(Docker::Image).to receive(:search).with(term: query).and_return([remote_image])
       Image.search_remote_index(query)
     end
 
@@ -36,6 +36,21 @@ describe Image do
       expect(images).to be_kind_of(Array)
       expect(images).to have(1).items
       expect(images.first.source).to eql(remote_image.id)
+    end
+
+    context 'when a limit parameter is supplied' do
+
+      let(:limit) { 2 }
+
+      before do
+        Docker::Image.stub(:search).and_return([remote_image, remote_image, remote_image])
+      end
+
+      it 'limits the returned results to the specified count' do
+        images = Image.search_remote_index(query, limit)
+        expect(images).to have(limit).items
+      end
+
     end
   end
 
@@ -134,6 +149,20 @@ describe Image do
         expect(images).to be_kind_of(Array)
         expect(images).to have(1).items
         expect(images.first).to be matching_image
+      end
+    end
+
+    context 'when a limit parameter is supplied' do
+      let(:limit) { 2 }
+      let(:image) { double(:matching_image, repository: 'query') }
+
+      before do
+        Image.stub(:all_local).and_return([image, image, image])
+      end
+
+      it 'limits the returned results to the specified count' do
+        images = Image.local_with_repo_like('query', limit)
+        expect(images).to have(limit).items
       end
     end
   end
