@@ -9,7 +9,6 @@ describe TemplateFileSerializer do
       :name,
       :description,
       :keywords,
-      :recommended,
       :type,
       :documentation,
       :images
@@ -20,13 +19,23 @@ describe TemplateFileSerializer do
   describe '#to_yaml' do
 
     let(:template_model) do
+
       Template.new(
         name: 'foo',
         description: 'bar',
         keywords: 'fizz, bin',
-        recommended: true,
         type: 'wordpress',
-        documentation: "This\n\is\nthe\ndocumentation"
+        documentation: "This\n\is\nthe\ndocumentation",
+        images: [
+          Image.new(
+            name: 'abc',
+            source: 'def',
+            type: 'ghi',
+            categories: ['jkl'],
+            expose: [8000],
+            environment: [{ 'variable' => 'mno', 'value' => 'pqr' }]
+          )
+        ]
       )
     end
 
@@ -38,14 +47,22 @@ describe TemplateFileSerializer do
 name: foo
 description: bar
 keywords: fizz, bin
-recommended: true
 type: wordpress
 documentation: |-
   This
   is
   the
   documentation
-images: []
+images:
+- name: abc
+  source: def
+  category: jkl
+  type: ghi
+  expose:
+  - 8000
+  environment:
+  - variable: mno
+    value: pqr
       EXPECTED
     end
 
