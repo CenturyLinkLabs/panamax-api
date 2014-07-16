@@ -25,7 +25,7 @@ describe Converters::TemplateConverter do
           ports: [{ 'container_port' => '8080' }],
           expose: ['expose this'],
           environment: { var: 'val' },
-          command: ['/boom', 'shaka'],
+          command: '/boom shaka',
           volumes: ['volumes'],
           type: 'mysql'
         )

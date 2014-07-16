@@ -26,7 +26,6 @@ class Service < ActiveRecord::Base
   serialize :ports, Array
   serialize :expose, Array
   serialize :environment, Array
-  serialize :command, Array
   serialize :volumes, Array
 
   before_save :resolve_name_conflicts

@@ -41,6 +41,7 @@ class ServicesController < ApplicationController
       :name,
       :description,
       :type,
+      :command,
       categories: [[:id, :position]],
       ports: [[:host_interface, :host_port, :container_port, :proto]],
       expose: [],

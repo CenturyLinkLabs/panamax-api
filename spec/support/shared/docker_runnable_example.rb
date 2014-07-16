@@ -49,7 +49,7 @@ shared_examples 'a docker runnable model' do
     context 'when a command is specified' do
 
       before do
-        model.command = ['/run', 'web']
+        model.command = '/run web'
       end
 
       it 'generates a docker run string with a command at the end' do

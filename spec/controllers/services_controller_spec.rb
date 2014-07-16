@@ -38,7 +38,8 @@ describe ServicesController do
         ports: [{ host_port: '80', container_port: '80', proto: 'tcp' }],
         expose: %w(80 443),
         environment: [{ 'variable' => 'SOME_KEY', 'value' => 'some_value' }],
-        volumes: [{ host_path: '/tmp/foo', container_path: '/tmp/bar' }]
+        volumes: [{ host_path: '/tmp/foo', container_path: '/tmp/bar' }],
+        command: 'rails s'
       }
     end
 

@@ -43,7 +43,7 @@ describe TemplatesController do
               { 'variable' => 'GIT_REPO', 'value' => 'https://github.com/fermayo/hello-world-php.git' }
             ],
             'volumes' =>  [],
-            'command' => ['/start', 'web']
+            'command' => '/start web'
           }
         ]
       )

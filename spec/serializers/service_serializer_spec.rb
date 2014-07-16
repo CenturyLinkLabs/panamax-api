@@ -15,6 +15,7 @@ describe ServiceSerializer do
       :ports,
       :expose,
       :volumes,
+      :command,
       :app,
       :categories,
       :active_state,

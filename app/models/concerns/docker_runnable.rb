@@ -13,7 +13,7 @@ module DockerRunnable
       environment_flags,
       volume_flags,
       from,
-      command_string
+      command
     ].flatten.compact.join(' ').strip
   end
 
@@ -24,10 +24,6 @@ module DockerRunnable
   end
 
   private
-
-  def command_string
-    command.join(' ')
-  end
 
   def link_flags
     return unless links

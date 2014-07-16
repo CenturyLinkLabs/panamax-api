@@ -14,7 +14,6 @@ class Image < ActiveRecord::Base
   serialize :ports, Array
   serialize :expose, Array
   serialize :environment, Array
-  serialize :command, Array
   serialize :volumes, Array
 
   belongs_to :template
