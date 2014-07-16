@@ -4,9 +4,24 @@ describe ServiceLink do
   it { should belong_to(:linked_to_service) }
 
   describe 'validations' do
+
     it { should validate_presence_of :alias }
-    it { should validate_presence_of :linked_to_service_id }
-    it { should validate_uniqueness_of(:linked_to_service_id).scoped_to(:linked_from_service_id) }
+    it { should validate_presence_of :linked_to_service }
+
+    describe 'uniqueness validations' do
+      before do
+        # we need a record in the DB for the uniqueness validations to work
+        to = Service.create!(name: 'to')
+        from = Service.create!(name: 'from')
+        ServiceLink.create!(
+          linked_to_service: to,
+          linked_from_service_id: from.id,
+          alias: 'link'
+        )
+      end
+
+      it { should validate_uniqueness_of(:linked_to_service).scoped_to(:linked_from_service_id) }
+    end
 
     describe 'linking to itself' do
       before do
@@ -21,7 +36,7 @@ describe ServiceLink do
       end
 
       it 'does not error if one of the ids is nil' do
-        subject.linked_to_service_id = 3
+        subject.linked_to_service = Service.new
         expect(subject.valid?).to be_true
       end
     end
