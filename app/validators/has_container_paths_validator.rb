@@ -3,7 +3,7 @@ class HasContainerPathsValidator < ActiveModel::EachValidator
     return unless value.present?
     value.each do |volume|
       next if volume['container_path'].present?
-      record.errors[attribute] << "container path and host path can't be blank"
+      record.errors[attribute] << "container path can't be blank"
       break
     end
   end

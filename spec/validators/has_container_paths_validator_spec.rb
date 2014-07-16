@@ -34,7 +34,7 @@ describe HasContainerPathsValidator do
 
     it 'should set an error on the record' do
       subject.validate_each(record, attribute, value)
-      expect(record.errors).to_not be_empty
+      expect(record.errors[attribute]).to include "container path can't be blank"
     end
 
     it 'should quit validating after the first error is detected' do
