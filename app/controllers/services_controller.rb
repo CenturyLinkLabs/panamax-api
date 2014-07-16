@@ -13,12 +13,16 @@ class ServicesController < ApplicationController
     service = app.add_service(service_create_params)
     app.restart if service
     respond_with app, service
+  rescue PanamaxAgent::ConnectionError => ex
+    handle_exception(ex, :fleet_connection_error)
   end
 
   def update
     service = app.services.find(params[:id])
     service.update_with_relationships(service_params) && app.restart
     respond_with service
+  rescue PanamaxAgent::ConnectionError => ex
+    handle_exception(ex, :fleet_connection_error)
   end
 
   def destroy

@@ -71,6 +71,16 @@ describe ServicesController do
           format: :json
         )
       end
+
+      it 'returns a successful status' do
+        put :update, params.merge(
+          app_id: '1',
+          id: '2',
+          format: :json
+        )
+
+        expect(response.status).to eq 204
+      end
     end
 
     context 'when the service update fails' do
@@ -101,14 +111,23 @@ describe ServicesController do
       end
     end
 
-    it 'returns a successful status' do
-      put :update, params.merge(
-        app_id: '1',
-        id: '2',
-        format: :json
-      )
+    context 'when restart raises a PanamaxAgent::ConnectionError' do
 
-      expect(response.status).to eq 204
+      before do
+        dummy_app.stub(:restart).and_raise(PanamaxAgent::ConnectionError, 'oops')
+      end
+
+      it 'returns the fleet error message' do
+        put :update, params.merge(app_id: '1', id: '2', format: :json)
+
+        expect(response.body).to eq(
+          { message: I18n.t(:fleet_connection_error) }.to_json)
+      end
+
+      it 'returns a 500 status code' do
+        put :update, params.merge(app_id: '1', id: '2', format: :json)
+        expect(response.status).to eq 500
+      end
     end
   end
 
@@ -189,6 +208,25 @@ describe ServicesController do
     it 'returns a 201 status code' do
       post :create, params.merge(app_id: app, format: :json)
       expect(response.status).to eq 201
+    end
+
+    context 'when restart raises a PanamaxAgent::ConnectionError' do
+
+      before do
+        App.any_instance.stub(:restart).and_raise(PanamaxAgent::ConnectionError, 'oops')
+      end
+
+      it 'returns the fleet error message' do
+        post :create, params.merge(app_id: app, format: :json)
+
+        expect(response.body).to eq(
+          { message: I18n.t(:fleet_connection_error) }.to_json)
+      end
+
+      it 'returns a 500 status code' do
+        post :create, params.merge(app_id: app, format: :json)
+        expect(response.status).to eq 500
+      end
     end
   end
 

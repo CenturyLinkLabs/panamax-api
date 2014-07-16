@@ -21,3 +21,4 @@
 
 en:
   hello: "Hello world"
+  fleet_connection_error: "Fleet or Etcd services are not responding"

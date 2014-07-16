@@ -30,9 +30,12 @@ class AppsController < ApplicationController
 
     respond_with app
   rescue => ex
-    logger.error("app creation failed: #{ex.message}")
     app.try(:destroy)
-    render json: { errors: ex.message }, status: :internal_server_error
+
+    message =
+      PanamaxAgent::ConnectionError === ex ? :fleet_connection_error : ex.message
+
+    handle_exception(ex, message)
   end
 
   def journal
@@ -41,6 +44,8 @@ class AppsController < ApplicationController
 
   def rebuild
     respond_with App.find(params[:id]).restart
+  rescue PanamaxAgent::ConnectionError => ex
+    handle_exception(ex, :fleet_connection_error)
   end
 
   private

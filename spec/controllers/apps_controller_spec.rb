@@ -100,14 +100,33 @@ describe AppsController do
         end.to change(App, :count).by(0)
       end
 
-      it 'logs an error' do
-        expect(Rails.logger).to receive(:error)
-        post :create, template_id: template.id, format: :json
-      end
-
       it 'returns an error' do
         post :create, template_id: template.id, format: :json
-        expect(response.body).to eq({ errors: 'boom' }.to_json)
+        expect(response.body).to eq({ message: 'boom' }.to_json)
+      end
+
+      it 'returns a 500 status code' do
+        post :create, template_id: template.id, format: :json
+        expect(response.status).to eq 500
+      end
+    end
+
+    context 'when a PanamaxAgent::ConnectionError error occurs' do
+
+      before do
+        App.any_instance.stub(:run).and_raise(PanamaxAgent::ConnectionError, 'oops')
+      end
+
+      it 'does not create an app' do
+        expect do
+          post :create, template_id: template.id, format: :json
+        end.to change(App, :count).by(0)
+      end
+
+      it 'returns the fleet error message' do
+        post :create, template_id: template.id, format: :json
+        expect(response.body).to eq(
+          { message: I18n.t(:fleet_connection_error) }.to_json)
       end
 
       it 'returns a 500 status code' do
@@ -168,6 +187,24 @@ describe AppsController do
     it 'returns a no content status' do
       put :rebuild, id: app.id, format: :json
       expect(response.status).to eq(204)
+    end
+
+    context 'when a PanamaxAgent::ConnectionError error occurs' do
+
+      before do
+        app.stub(:restart).and_raise(PanamaxAgent::ConnectionError, 'oops')
+      end
+
+      it 'returns the fleet error message' do
+        put :rebuild, id: app.id, format: :json
+        expect(response.body).to eq(
+          { message: I18n.t(:fleet_connection_error) }.to_json)
+      end
+
+      it 'returns a 500 status code' do
+        put :rebuild, id: app.id, format: :json
+        expect(response.status).to eq 500
+      end
     end
 
   end
