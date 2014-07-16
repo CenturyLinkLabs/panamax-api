@@ -38,4 +38,5 @@ module PanamaxAgent
     PanamaxAgent.const_set(class_name, Class.new(Error)).const_set('HTTP_CODE', code)
   end
 
+  class ConnectionError < Error; end
 end
