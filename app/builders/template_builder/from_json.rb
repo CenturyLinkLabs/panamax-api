@@ -7,10 +7,11 @@ module TemplateBuilder
       @params = YAML.safe_load(json || '')
     end
 
-    def create_template
+    def create_template(persisted=true)
       images_hash = params.delete('images')
-      Template.create(params) do |t|
-        t.images = create_images(images_hash) if images_hash
+      Template.new(params) do |template|
+        template.images = create_images(images_hash) if images_hash
+        template.save if persisted
       end
     end
 

@@ -1,6 +1,6 @@
 module TemplateBuilder
 
-  def self.create(options)
+  def self.create(options, persisted=true)
     options ||= {}
 
     if options.kind_of?(String)
@@ -14,7 +14,7 @@ module TemplateBuilder
       strategy = TemplateBuilder::FromJson.new(options.to_json)
     end
 
-    strategy.create_template
+    strategy.create_template(persisted)
   end
 
 end

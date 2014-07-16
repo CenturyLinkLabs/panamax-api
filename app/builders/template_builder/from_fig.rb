@@ -8,9 +8,10 @@ module TemplateBuilder
       @options = options
     end
 
-    def create_template
-      Template.create(self.options) do |template|
+    def create_template(persisted=true)
+      Template.new(self.options) do |template|
         template.images = images_from_fig if fig_yml
+        template.save if persisted
       end
     end
 
