@@ -1,5 +1,6 @@
 require 'faraday'
 require 'json'
+require 'panamax_agent/error'
 
 module PanamaxAgent
   module Response

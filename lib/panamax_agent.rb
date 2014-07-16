@@ -1,4 +1,9 @@
 require 'panamax_agent/configuration'
+require 'panamax_agent/fleet/client'
+require 'panamax_agent/journal/client'
+require 'panamax_agent/mailchimp/client'
+require 'panamax_agent/panamax/client'
+require 'panamax_agent/registry/client'
 
 module PanamaxAgent
   extend Configuration
