@@ -55,8 +55,7 @@ class AppsController < ApplicationController
       :id,
       :name,
       :from,
-      :description,
-      :categories
+      :description
     )
   end
 
