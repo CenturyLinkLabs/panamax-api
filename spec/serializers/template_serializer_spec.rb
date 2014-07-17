@@ -8,6 +8,7 @@ describe TemplateSerializer do
     expected_keys = [
       :id,
       :name,
+      :documentation,
       :description,
       :keywords,
       :recommended,
