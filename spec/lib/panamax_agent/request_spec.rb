@@ -44,6 +44,17 @@ describe PanamaxAgent::Request do
       it 'returns the response body' do
         expect(subject.send(method, path)).to eql(response.body)
       end
+
+      context 'when a Faraday::Error::ConnectionFailed error is raised' do
+
+        before do
+          connection.stub(:send).and_raise(Faraday::Error::ConnectionFailed, 'oops')
+        end
+
+        it 'raises a PanamaxAgent::ConnectionError' do
+          expect { subject.send(method, path) }.to raise_error(PanamaxAgent::ConnectionError, 'oops')
+        end
+      end
     end
   end
 

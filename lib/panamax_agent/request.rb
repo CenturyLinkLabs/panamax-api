@@ -36,6 +36,8 @@ module PanamaxAgent
       end
 
       response.body
+    rescue Faraday::Error::ConnectionFailed => ex
+      raise PanamaxAgent::ConnectionError, ex.message
     end
 
     private
