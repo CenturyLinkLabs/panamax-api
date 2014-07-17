@@ -22,3 +22,4 @@
 en:
   hello: "Hello world"
   fleet_connection_error: "Fleet or Etcd services are not responding"
+  journal_connection_error: "Journal API service is not responding"

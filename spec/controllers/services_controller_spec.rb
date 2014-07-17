@@ -164,6 +164,26 @@ describe ServicesController do
       get :journal, app_id: app.id, id: Service.first.id, format: :json
       expect(response.body).to eq fixture_data('journal')
     end
+
+    context 'when the journal API is not responding' do
+
+      before do
+        Service.any_instance.stub(:journal)
+          .and_raise(PanamaxAgent::ConnectionError, 'oops')
+      end
+
+      it 'returns an HTTP 500 status code' do
+        get :journal, app_id: app.id, id: Service.first.id, format: :json
+        expect(response.status).to eq 500
+      end
+
+      it 'returns the journal error message' do
+        get :journal, app_id: app.id, id: Service.first.id, format: :json
+
+        expect(response.body).to eq(
+          { message: I18n.t(:journal_connection_error) }.to_json)
+      end
+    end
   end
 
   describe '#create' do

@@ -31,6 +31,8 @@ class ServicesController < ApplicationController
 
   def journal
     respond_with app.services.find(params[:id]).journal(params[:cursor])
+  rescue PanamaxAgent::ConnectionError => ex
+    handle_exception(ex, :journal_connection_error)
   end
 
   private

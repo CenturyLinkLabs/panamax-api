@@ -40,6 +40,8 @@ class AppsController < ApplicationController
 
   def journal
     respond_with App.find(params[:id]).journal(params[:cursor])
+  rescue PanamaxAgent::ConnectionError => ex
+    handle_exception(ex, :journal_connection_error)
   end
 
   def rebuild
