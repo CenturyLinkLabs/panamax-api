@@ -58,7 +58,10 @@ module DockerRunnable
   def volume_flags
     return unless volumes
     volumes.map do |volume|
-      "-v #{volume['host_path']}:#{volume['container_path']}"
+      option = '-v '
+      option << "#{volume['host_path']}:" if volume['host_path']
+      option << volume['container_path']
+      option
     end
   end
 

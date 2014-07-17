@@ -92,6 +92,12 @@ shared_examples 'a docker runnable model' do
         expected = '-v /tmp/foo:/tmp/bar'
         expect(model.docker_run_string).to include expected
       end
+
+      it 'excludes the : if only a container volume is specified' do
+        model.volumes.first.delete('host_path')
+        expected = '-v /tmp/bar'
+        expect(model.docker_run_string).to include expected
+      end
     end
   end
 
