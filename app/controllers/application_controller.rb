@@ -5,6 +5,10 @@ class ApplicationController < ActionController::Base
 
   rescue_from StandardError, with: :handle_exception
 
+  rescue_from Docker::Error::ServerError do |ex|
+    handle_exception(ex, :docker_connection_error)
+  end
+
   def handle_exception(ex, message=nil, &block)
     log_message = "\n#{ex.class} (#{ex.message}):\n"
     log_message << "  " << ex.backtrace.join("\n  ") << "\n\n"
