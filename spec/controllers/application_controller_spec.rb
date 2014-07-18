@@ -11,7 +11,7 @@ describe ApplicationController do
     end
 
     it 'logs some info at the error level' do
-      expect(controller.logger).to receive(:error).twice
+      expect(controller.logger).to receive(:error).once
       get :index
     end
 

@@ -6,8 +6,9 @@ class ApplicationController < ActionController::Base
   rescue_from StandardError, with: :handle_exception
 
   def handle_exception(ex, message=nil, &block)
-    logger.error "#{ex.class} - #{ex.message}"
-    logger.error "\t#{ex.backtrace.join("\n\t")}"
+    log_message = "\n#{ex.class} (#{ex.message}):\n"
+    log_message << "  " << ex.backtrace.join("\n  ") << "\n\n"
+    logger.error(log_message)
 
     message = message.nil? ? ex.message : t(message, default: message)
 
