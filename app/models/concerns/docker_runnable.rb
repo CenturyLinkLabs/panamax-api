@@ -40,7 +40,7 @@ module DockerRunnable
         option << ':'
       end
       option << "#{port['container_port']}"
-      option << "/#{port['proto']}" if port['proto']
+      option << '/udp' if port['proto'] && port['proto'].upcase == 'UDP'
       option
     end
   end

@@ -36,13 +36,42 @@ shared_examples 'a docker runnable model' do
           'host_interface' => '0.0.0.0',
           'host_port' => '8000',
           'container_port' => '3000',
-          'proto' => 'tcp'
         }]
       end
 
       it 'generates a docker command with -p' do
-        expected = '-p 0.0.0.0:8000:3000/tcp'
+        expected = '-p 0.0.0.0:8000:3000'
         expect(model.docker_run_string).to include expected
+      end
+
+      context 'when the UDP protocol is specified' do
+
+        before do
+          model.ports = [{
+            'container_port' => '3000',
+            'proto' => 'udp',
+          }]
+        end
+
+        it 'generates a docker command with -p with the udp protocol' do
+          expected = '-p 3000/udp'
+          expect(model.docker_run_string).to include expected
+        end
+      end
+
+      context 'when the TCP protocol is specified' do
+
+        before do
+          model.ports = [{
+            'container_port' => '3000',
+            'proto' => 'tcp',
+          }]
+        end
+
+        it 'generates a docker command with -p with no protocol' do
+          expected = '-p 3000'
+          expect(model.docker_run_string).to include expected
+        end
       end
     end
 
