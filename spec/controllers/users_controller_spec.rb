@@ -83,4 +83,21 @@ describe UsersController do
     end
   end
 
+  context 'handling Faraday::Errror::ConnectionFailed exceptions' do
+
+    controller(UsersController) do
+      def index
+        raise Faraday::Error::ConnectionFailed, 'oops'
+      end
+    end
+
+    it 'returns the githb connection error message' do
+      get :index
+
+      expect(response.status).to eq 500
+      expect(response.body).to eq(
+        { message: I18n.t(:github_connection_error) }.to_json)
+    end
+  end
+
 end

@@ -1,6 +1,10 @@
 class UsersController < ApplicationController
   respond_to :json
 
+  rescue_from Faraday::Error::ConnectionFailed do |ex|
+    handle_exception(ex, :github_connection_error)
+  end
+
   def show
     respond_with User.instance
   end
