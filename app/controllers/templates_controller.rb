@@ -11,8 +11,6 @@ class TemplatesController < ApplicationController
 
   def create
     respond_with TemplateBuilder.create(template_create_params), serializer: TemplateFileSerializer
-  rescue => ex
-    render(json: { error: ex.message }, status: :internal_server_error)
   end
 
   def destroy
@@ -24,8 +22,6 @@ class TemplatesController < ApplicationController
     resp = template.save_to_repo(template_save_params)
     html_url = resp[:content][:html_url]
     render(nothing: true, location: html_url, status: :no_content)
-  rescue => ex
-    render(json: { error: ex.message }, status: :internal_server_error)
   end
 
   private
