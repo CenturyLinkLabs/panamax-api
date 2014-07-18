@@ -10,6 +10,8 @@ class RepositoriesController < ApplicationController
       tags = list_remote_tags
     end
     respond_with tags
+  rescue PanamaxAgent::ConnectionError => ex
+    handle_exception(ex, :registry_connection_error)
   end
 
   private
