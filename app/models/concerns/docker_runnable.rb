@@ -59,7 +59,7 @@ module DockerRunnable
     return unless volumes
     volumes.map do |volume|
       option = '-v '
-      option << "#{volume['host_path']}:" if volume['host_path']
+      option << "#{volume['host_path']}:" if volume['host_path'].present?
       option << volume['container_path']
       option
     end
