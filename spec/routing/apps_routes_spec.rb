@@ -63,6 +63,14 @@ describe 'apps routes' do
     )
   end
 
+  it 'routes post to the apps controller template action' do
+    expect(post: '/apps/1/template').to route_to(
+      controller: 'apps',
+      action: 'template',
+      id: '1'
+    )
+  end
+
   describe 'services sub-resource routes' do
     it 'routes get to the app services controller index' do
       expect(get: '/apps/1/services').to route_to(

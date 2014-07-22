@@ -8,11 +8,11 @@ module TemplateBuilder
       @options = options
     end
 
-    def create_template
+    def create_template(persisted=true)
       app = App.find(app_id)
       Converters::AppConverter.new(app).to_template.tap do |template|
         template.assign_attributes(options)
-        template.save
+        template.save if persisted
       end
     end
 

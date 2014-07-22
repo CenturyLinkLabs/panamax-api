@@ -50,6 +50,11 @@ class AppsController < ApplicationController
     handle_exception(ex, :fleet_connection_error)
   end
 
+  def template
+    template = TemplateBuilder.create(template_params, false)
+    render json: { template: TemplateFileSerializer.new(template).to_yaml }
+  end
+
   private
 
   def app_update_params
@@ -72,6 +77,19 @@ class AppsController < ApplicationController
       ports: [[:host_interface, :host_port, :container_port, :proto]],
       expose: [],
       volumes: [[:host_path, :container_path]]
+    )
+  end
+
+  def template_params
+    params[:app_id] = params[:id]
+    params.permit(
+      :app_id,
+      :name,
+      :description,
+      :keywords,
+      :authors,
+      :type,
+      :documentation
     )
   end
 end

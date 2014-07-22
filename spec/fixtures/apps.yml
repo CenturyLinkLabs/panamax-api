@@ -1,3 +1,4 @@
 app1:
   name: 'App 1'
   from: 'Template'
+  documentation: 'Documentation for the application'

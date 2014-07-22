@@ -228,4 +228,45 @@ describe AppsController do
     end
 
   end
+
+  describe '#template' do
+
+    let(:app) { App.first }
+    let(:template_params) do
+      {
+        'name' => 'foo',
+        'description' => 'foobar',
+        'keywords' => 'foo, bar',
+        'authors' => 'foo',
+        'type' => 'foo',
+        'documentation' => 'foo docs'
+      }
+    end
+    let(:template) { Template.new(name: 'Template1',
+                                  description: 'my template',
+                                  keywords: 'foo, bar',
+                                  documentation: "# Title\r\nSome *markdown*") }
+
+    before do
+      TemplateBuilder.stub(:create).and_return(template)
+    end
+
+    it 'invokes the template builder' do
+      expect(TemplateBuilder).to receive(:create).with(template_params.merge('app_id' => app.id.to_s), false)
+      post :template, template_params.merge('id' => app.id), format: :json
+    end
+
+    it 'returns a serialized version of the template' do
+      expected_json_str = {template: TemplateFileSerializer.new(template).to_yaml}
+
+      post :template, template_params.merge(id: app.id), format: :json
+      expect(response.body).to eq(expected_json_str.to_json)
+    end
+
+    it 'returns a success status' do
+      post :template, template_params.merge(id: app.id), format: :json
+      expect(response.status).to eq(200)
+    end
+
+  end
 end
