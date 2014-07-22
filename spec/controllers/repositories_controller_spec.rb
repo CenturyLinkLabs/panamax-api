@@ -40,5 +40,20 @@ describe RepositoriesController do
         expect(response.body).to eql(['foo'].to_json)
       end
     end
+
+    context 'when a PanamaxAgent::ConnectionError is raised' do
+
+      before do
+        PanamaxAgent.stub(:registry_client)
+          .and_raise(PanamaxAgent::ConnectionError, 'oops')
+      end
+
+      it 'returns the registry connection error message' do
+        get :list_tags, repository: repository, format: :json
+        expect(response.status).to eq 500
+        expect(response.body).to eq(
+          { message: I18n.t(:registry_connection_error) }.to_json)
+      end
+    end
   end
 end

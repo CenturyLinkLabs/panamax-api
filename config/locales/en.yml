@@ -23,3 +23,6 @@ en:
   hello: "Hello world"
   fleet_connection_error: "Fleet or Etcd services are not responding"
   journal_connection_error: "Journal API service is not responding"
+  docker_connection_error: "Docker Remote API is not responding"
+  registry_connection_error: "Docker Registry API is not responding"
+  github_connection_error: "GitHub API is not responding"
