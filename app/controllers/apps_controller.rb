@@ -62,7 +62,7 @@ class AppsController < ApplicationController
       :id,
       :name,
       :from,
-      :description
+      :documentation
     )
   end
 

@@ -21,13 +21,15 @@ describe AppsController do
   describe '#update' do
     let(:app) { apps(:app1) }
 
-    let(:params) { { name: 'My App', id: app, format: :json } }
+    let(:params) { { name: 'My App', id: app, format: :json, from: 'some template', documentation: 'blah' } }
 
     it 'changes attributes' do
       put :update, params
 
       app.reload
       expect(app.name).to eql params[:name]
+      expect(app.from).to eql params[:from]
+      expect(app.documentation).to eql params[:documentation]
     end
 
     it 'returns a 204 status code' do
