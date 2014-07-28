@@ -61,7 +61,7 @@ describe SearchController do
       end
 
       it 'does not search templates' do
-        expect(Template).to_not receive(:recommended)
+        expect(Template).to_not receive(:search)
         get :index, q: query, type: 'local_image', format: 'json'
       end
     end
@@ -86,7 +86,7 @@ describe SearchController do
       end
 
       it 'does not search templates' do
-        expect(Template).to_not receive(:recommended)
+        expect(Template).to_not receive(:search)
         get :index, q: query, type: 'remote_image', format: 'json'
       end
     end

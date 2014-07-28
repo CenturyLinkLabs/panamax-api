@@ -69,10 +69,6 @@ class Image < ActiveRecord::Base
     Docker::Image.all.select { |i| i.info['RepoTags'].first.start_with? "#{name}:" }
   end
 
-  def recommended
-    self[:recommended] || false
-  end
-
   def as_json(options={})
     super(options).merge(is_official: is_official, is_trusted: is_trusted, star_count: star_count)
   end

@@ -11,7 +11,6 @@ describe TemplateSerializer do
       :documentation,
       :description,
       :keywords,
-      :recommended,
       :type,
       :images,
       :image_count,

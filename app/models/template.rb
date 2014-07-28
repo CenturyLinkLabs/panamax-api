@@ -8,8 +8,6 @@ class Template < ActiveRecord::Base
 
   serialize :authors, Array
 
-  scope :recommended, -> { where(recommended: true) }
-
   validates_presence_of :name
 
   def categories

@@ -6,7 +6,6 @@ describe TemplateBuilder do
     HashWithIndifferentAccess.new(
       description: 'some template',
       keywords: 'foo,baz,bar',
-      recommended: true,
       type: 'wordpress'
     )
   end

@@ -23,7 +23,6 @@ describe TemplatesController do
         name: 'new-template',
         description: 'some template',
         keywords: 'foo,baz,bar',
-        recommended: true,
         type: 'wordpress',
         documentation: '---\n\nBlah\n\n',
         app_id: '1',
@@ -52,8 +51,7 @@ describe TemplatesController do
     before { TemplateBuilder.stub(:create).and_return templates(:wordpress) }
 
     it 'calls out to the TemplateBuilder with permitted parameters' do
-      permitted_params = template_params.delete_if { |k, _| k == 'recommended' }
-      expect(TemplateBuilder).to receive(:create).with(permitted_params)
+      expect(TemplateBuilder).to receive(:create).with(template_params)
       post :create, template_params.merge(format: :json)
     end
 

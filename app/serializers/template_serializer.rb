@@ -1,7 +1,7 @@
 class TemplateSerializer < ActiveModel::Serializer
   self.root = false
 
-  attributes :id, :name, :description, :keywords, :source, :recommended, :type, :image_count, :created_at, :updated_at,
+  attributes :id, :name, :description, :keywords, :source, :type, :image_count, :created_at, :updated_at,
              :documentation
 
   has_many :images

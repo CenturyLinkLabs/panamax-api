@@ -2,7 +2,6 @@ wordpress:
   name: 'wordpress'
   description: 'a wordpress template'
   keywords: 'wordpress, wp'
-  recommended: true
   type: 'wordpress'
   documentation: "# Title\r\nSome *markdown*"
 
