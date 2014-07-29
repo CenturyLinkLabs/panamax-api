@@ -6,9 +6,4 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-
-unless User.any?
-  User.create(github_access_token: '4afd3519b925cd38bb1b04398de783266859ca47')
-end
-
-TemplateRepo.find_or_create_by(name: 'CenturyLinkLabs/panamax-templates-test')
+TemplateRepo.find_or_create_by(name: 'centurylinklabs/panamax-public-templates')
