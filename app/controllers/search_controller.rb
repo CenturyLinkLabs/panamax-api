@@ -1,5 +1,7 @@
 class SearchController < ApplicationController
 
+  using ArrayItemWrapper
+
   respond_to :json
 
   def index
@@ -13,8 +15,8 @@ class SearchController < ApplicationController
     types = %w(template local_image remote_image) if types.compact.empty?
     {}.tap do |results|
       results[:templates] = wrapped_templates(q, limit) if types.include? 'template'
-      results[:local_images] = Image.local_with_repo_like(q, limit) if types.include? 'local_image'
-      results[:remote_images] = Image.search_remote_index(q, limit) if types.include? 'remote_image'
+      results[:local_images] = wrapped_local_images(q, limit) if types.include? 'local_image'
+      results[:remote_images] = wrapped_remote_images(q, limit) if types.include? 'remote_image'
     end
   end
 
@@ -26,7 +28,14 @@ class SearchController < ApplicationController
   end
 
   def wrapped_templates(q, limit)
-    Template.search(q, limit).map { |t| TemplateSerializer.new(t) }
+    Template.search(q, limit).wrap(TemplateSerializer)
   end
 
+  def wrapped_local_images(q, limit)
+    LocalImage.search(q, limit).wrap(LocalImageSearchResultSerializer)
+  end
+
+  def wrapped_remote_images(q, limit)
+    RemoteImage.search(q, limit).wrap(RemoteImageSearchResultSerializer)
+  end
 end
