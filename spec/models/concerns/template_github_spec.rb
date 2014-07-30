@@ -15,12 +15,13 @@ describe TemplateGithub do
     describe '.load_templates_from_template_repo' do
 
       let(:template_repo) { template_repos(:repo1) }
+      let(:template) { Template.new }
       let(:file1) { double(:file, name: 'readme', content: 'hi') }
       let(:file2) { double(:file, name: 'foo.pmx', content: 'bar') }
 
       before do
         TemplateRepo.any_instance.stub(:files).and_return([file1, file2])
-        TemplateBuilder.stub(:create)
+        TemplateBuilder.stub(:create).and_return(template)
       end
 
       it 'invokes the TemplateBuilder ONLY for .pmx files' do
@@ -31,6 +32,11 @@ describe TemplateGithub do
       it 'invokes the TemplateBuilder with .pmx file contents' do
         expect(TemplateBuilder).to receive(:create).with(file2.content)
         subject.load_templates_from_template_repo(template_repo)
+      end
+
+      it 'sets the repo name on the source field of the template' do
+        subject.load_templates_from_template_repo(template_repo)
+        expect(template.source).to eql template_repo.name
       end
     end
 

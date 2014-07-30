@@ -6,7 +6,7 @@ module TemplateGithub
     def load_templates_from_template_repo(repo)
       repo.files.each do |file|
         next unless file.name.end_with?('.pmx')
-        TemplateBuilder.create(file.content)
+        TemplateBuilder.create(file.content).tap { |tpl| tpl.update_attributes(source: repo.name) }
       end
     end
 
