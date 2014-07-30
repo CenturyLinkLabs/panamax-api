@@ -7,13 +7,13 @@ describe SearchController do
     let(:query) { 'fake' }
     let(:limit) { '40' }
 
-    let(:remote_image) { Image.new }
+    let(:remote_image) { RemoteImage.new }
 
-    let(:local_image) { Image.new }
+    let(:local_image) { LocalImage.new }
 
     before do
-      Image.stub(:search_remote_index).and_return([remote_image])
-      Image.stub(:local_with_repo_like).and_return([local_image])
+      RemoteImage.stub(:search).and_return([remote_image])
+      LocalImage.stub(:search).and_return([local_image])
     end
 
     context 'when searching for templates only' do
@@ -45,7 +45,7 @@ describe SearchController do
       let(:query) { 'wordpress' }
 
       it 'queries local images with the search term and limit' do
-        expect(Image).to receive(:local_with_repo_like).with(query, limit.to_i)
+        expect(LocalImage).to receive(:search).with(query, limit.to_i)
         get :index, q: query, limit: limit, type: 'local_image', format: 'json'
       end
 
@@ -70,7 +70,7 @@ describe SearchController do
       let(:query) { 'wordpress' }
 
       it 'queries remote images with the search term and limit' do
-        expect(Image).to receive(:search_remote_index).with(query, limit.to_i)
+        expect(RemoteImage).to receive(:search).with(query, limit.to_i)
         get :index, q: query, limit: limit, type: 'remote_image', format: 'json'
       end
 
@@ -93,23 +93,25 @@ describe SearchController do
 
     context 'when type is not supplied' do
       it 'passes the query to the Image when searching the remote index' do
-        expect(Image).to receive(:search_remote_index).with(query, limit.to_i)
+        expect(RemoteImage).to receive(:search).with(query, limit.to_i)
         get :index, q: query, limit: limit, format: 'json'
       end
 
       it 'queries local images when searching' do
-        expect(Image).to receive(:local_with_repo_like).with(query, limit.to_i)
+        expect(LocalImage).to receive(:search).with(query, limit.to_i)
         get :index, q: query, limit: limit, format: 'json'
       end
 
       it 'returns local images with the query term in the name' do
         get :index, q: query, format: 'json'
-        expect(response.body).to include(local_image.to_json)
+        expect(response.body).to include(
+          LocalImageSearchResultSerializer.new(local_image).to_json)
       end
 
       it 'returns remote images matching the query term' do
         get :index, q: query, format: 'json'
-        expect(response.body).to include(remote_image.to_json)
+        expect(response.body).to include(
+          RemoteImageSearchResultSerializer.new(remote_image).to_json)
       end
 
       it 'includes the original query in the response' do
