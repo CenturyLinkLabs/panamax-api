@@ -45,4 +45,19 @@ describe TemplateReposController do
       expect(response.status).to eq 201
     end
   end
+
+  describe '#destroy' do
+
+    it 'removes the repo' do
+      expect do
+        delete :destroy, id: template_repos(:repo1).id, format: :json
+      end.to change(TemplateRepo, :count).by(-1)
+    end
+
+    it 'returns a 204 status code' do
+      delete :destroy, id: template_repos(:repo1).id, format: :json
+      expect(response.status).to eq 204
+    end
+
+  end
 end

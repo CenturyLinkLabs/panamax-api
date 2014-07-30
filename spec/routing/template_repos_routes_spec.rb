@@ -15,4 +15,12 @@ describe 'template repos routes' do
        action: 'create'
     )
   end
+
+  it 'routes DELETE to the template repos controller destroy action' do
+    expect(delete: '/template_repos/1').to route_to(
+       controller: 'template_repos',
+       id: "1",
+       action: 'destroy'
+    )
+  end
 end

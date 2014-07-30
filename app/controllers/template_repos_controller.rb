@@ -9,6 +9,10 @@ class TemplateReposController < ApplicationController
     respond_with TemplateRepo.create(template_repo_params), location: nil
   end
 
+  def destroy
+    respond_with TemplateRepo.destroy(params[:id])
+  end
+
   private
 
   def template_repo_params
