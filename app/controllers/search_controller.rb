@@ -2,8 +2,6 @@ class SearchController < ApplicationController
 
   using ArrayItemWrapper
 
-  respond_to :json
-
   def index
     q, limit, type = search_params.values_at(:q, :limit, :type)
     respond_with perform_search(q, limit, type).merge(q: q)

@@ -1,7 +1,5 @@
 class RepositoriesController < ApplicationController
 
-  respond_to :json
-
   def list_tags
     repo = params[:repository]
     if params[:local_image] == 'true'

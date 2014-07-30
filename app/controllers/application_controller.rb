@@ -3,6 +3,8 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :null_session
 
+  respond_to :json
+
   rescue_from StandardError, with: :handle_exception
 
   rescue_from Docker::Error::ServerError do |ex|

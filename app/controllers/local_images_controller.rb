@@ -1,5 +1,4 @@
 class LocalImagesController < ApplicationController
-  respond_to :json
 
   def index
     respond_with LocalImage.all
