@@ -8,6 +8,7 @@ PanamaxApi::Application.routes.draw do
       post :save
     end
   end
+
   resources :apps, only: [:index, :show, :create, :update, :destroy] do
     member do
       get :journal
@@ -24,9 +25,14 @@ PanamaxApi::Application.routes.draw do
     end
   end
 
+  resources :local_images, only: [:index, :destroy]
+  get 'local_images/*id', to: 'local_images#show'
+
   resources :types, only: [:index]
 
   resources :template_repos, only: [:index, :create]
+
   resource :user, only: [:show, :update]
+
   resource :panamax, only: [:show]
 end
