@@ -1,15 +1,11 @@
 class RepositoriesController < ApplicationController
 
-  def list_tags
-    repo = params[:repository]
-    if params[:local_image] == 'true'
-      image = LocalImage.find_by_name(repo)
-    else
-      image = RemoteImage.find_by_name(repo)
-    end
-    respond_with image.tags
+  def show
+    image = (params[:local] == 'true' ? LocalImage : RemoteImage)
+      .find_by_name(params[:id])
+
+    respond_with image, serializer: RepositorySerializer
   rescue PanamaxAgent::ConnectionError => ex
     handle_exception(ex, :registry_connection_error)
   end
-
 end

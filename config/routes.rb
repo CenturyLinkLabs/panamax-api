@@ -1,7 +1,7 @@
 PanamaxApi::Application.routes.draw do
   get '/search', to: 'search#index'
 
-  get 'repositories/*repository/tags', to: 'repositories#list_tags'
+  get 'repositories/*id', to: 'repositories#show'
 
   resources :templates, only: [:index, :show, :create, :destroy] do
     member do

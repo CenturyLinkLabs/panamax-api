@@ -7,9 +7,10 @@ describe RepositoriesController do
     let(:repository) { 'name/repo' }
 
     let(:tags) { %w(tag1 tag2) }
-    let(:image) { double(:image, tags: tags) }
 
     context 'for a local image' do
+
+      let(:image) { LocalImage.new(id: repository, tags: tags) }
 
       before do
         LocalImage.stub(:find_by_name).and_return(image)
@@ -17,16 +18,18 @@ describe RepositoriesController do
 
       it 'finds the local image' do
         expect(LocalImage).to receive(:find_by_name).with(repository)
-        get :list_tags, repository: repository, local_image: 'true', format: :json
+        get :show, id: repository, local: 'true', format: :json
       end
 
       it 'returns the array of tag names' do
-        get :list_tags, repository: repository, local_image: 'true', format: :json
-        expect(response.body).to eql(tags.to_json)
+        get :show, id: repository, local: 'true', format: :json
+        expect(response.body).to eq RepositorySerializer.new(image).to_json
       end
     end
 
     context 'for a remote image' do
+
+      let(:image) { RemoteImage.new(id: repository, tags: tags) }
 
       before do
         RemoteImage.stub(:find_by_name).and_return(image)
@@ -34,12 +37,12 @@ describe RepositoriesController do
 
       it 'finds the remote image' do
         expect(RemoteImage).to receive(:find_by_name).with(repository)
-        get :list_tags, repository: repository, local_image: true, format: :json
+        get :show, id: repository, format: :json
       end
 
       it 'returns the array of tag names' do
-        get :list_tags, repository: repository, local_image: true, format: :json
-        expect(response.body).to eql(tags.to_json)
+        get :show, id: repository, format: :json
+        expect(response.body).to eq RepositorySerializer.new(image).to_json
       end
 
     end
@@ -52,7 +55,7 @@ describe RepositoriesController do
       end
 
       it 'returns the registry connection error message' do
-        get :list_tags, repository: repository, format: :json
+        get :show, id: repository, format: :json
 
         expect(response.status).to eq 500
         expect(response.body).to eq(
