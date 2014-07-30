@@ -58,9 +58,51 @@ describe LocalImage do
     it 'returns LocalImage instances' do
       result = described_class.all.first
 
-      expect(result).to be_kind_of(LocalImage)
+      expect(result).to be_kind_of(described_class)
       expect(result.id).to eq local_image1.id
       expect(result.tags).to eq local_image1.info['RepoTags']
+    end
+  end
+
+  describe '.find' do
+
+    context 'when the image exists' do
+
+      it 'returns the result with the given ID' do
+        result = described_class.find(local_image3.id)
+        expect(result.id).to eq local_image3.id
+      end
+    end
+
+    context 'when the image does NOT exist' do
+
+      it 'returns nil' do
+        expect(described_class.find('sparky')).to be_nil
+      end
+    end
+  end
+
+  describe '.destroy' do
+
+    let(:id) { '123abc' }
+    let(:image) { double(:image, delete: nil) }
+
+    before do
+      Docker::Image.stub(:get).and_return(image)
+    end
+
+    it 'retrieves the image' do
+      expect(Docker::Image).to receive(:get).with(id)
+      described_class.destroy(id)
+    end
+
+    it 'deletes the image' do
+      expect(image).to receive(:delete)
+      described_class.destroy(id)
+    end
+
+    it 'returns true' do
+      expect(described_class.destroy(id)).to eq true
     end
   end
 
@@ -89,7 +131,7 @@ describe LocalImage do
     it 'returns a LocalImage for the specified name' do
       result = described_class.find_by_name(name)
 
-      expect(result).to be_kind_of(LocalImage)
+      expect(result).to be_kind_of(described_class)
       expect(result.id).to eq name
     end
 
@@ -121,6 +163,31 @@ describe LocalImage do
       it 'returns only the specified number of results' do
         result = described_class.search(query, limit)
         expect(result.size).to eq limit
+      end
+    end
+  end
+
+  describe '.find_by_id_or_name' do
+
+    context 'when queried by ID' do
+
+      let(:key) { local_image3.id }
+
+      it 'returns the LocalImage matching the provided ID' do
+        result = described_class.find_by_id_or_name(key)
+        expect(result).to be_kind_of(described_class)
+        expect(result.id).to eq key
+      end
+    end
+
+    context 'when queried by name' do
+
+      let(:key) { 'foo/bar' }
+
+      it 'returns a LocalImage matching the provided name' do
+        result = described_class.find_by_id_or_name(key)
+        expect(result).to be_kind_of(described_class)
+        expect(result.id).to eq key
       end
     end
   end
