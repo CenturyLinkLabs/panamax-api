@@ -15,7 +15,7 @@ describe TemplateSerializer do
       :type,
       :images,
       :image_count,
-      :from,
+      :source,
       :created_at,
       :updated_at
     ]
