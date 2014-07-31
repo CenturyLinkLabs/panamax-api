@@ -21,6 +21,14 @@ describe TemplateReposController do
 
   describe '#create' do
 
+    before do
+      TemplateRepo.skip_callback(:create, :after, :reload_templates)
+    end
+
+    after do
+      TemplateRepo.set_callback(:create, :after, :reload_templates)
+    end
+
     let(:params) { { name: 'owner/repo' } }
 
     it 'adds a new template repo' do

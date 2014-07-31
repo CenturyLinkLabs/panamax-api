@@ -6,4 +6,9 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
+# When you run the Panamax container, a rake task executes to unload and load templates. We are disabling
+# the after_create callback here to avoid two sets of unload/loading of templates.
+
+TemplateRepo.skip_callback(:create, :after, :reload_templates)
 TemplateRepo.find_or_create_by(name: 'centurylinklabs/panamax-public-templates')
+TemplateRepo.set_callback(:create, :after, :reload_templates)

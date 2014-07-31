@@ -1,5 +1,6 @@
 class TemplateRepo < ActiveRecord::Base
 
+  after_create :reload_templates
   after_destroy :purge_templates
 
   validates :name, presence: true, uniqueness: true

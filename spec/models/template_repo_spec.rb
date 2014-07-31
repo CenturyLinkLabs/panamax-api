@@ -30,6 +30,14 @@ describe TemplateRepo do
     end
   end
 
+  describe 'after_create callback' do
+    it 'reloads the repo templates' do
+      repo = TemplateRepo.new(name: 'fizz/buzz')
+      expect(repo).to receive(:reload_templates)
+      repo.save!
+    end
+  end
+
   describe 'after_destroy callback' do
     it 'destroys all templates in the db sourced from that repo' do
       template_repos(:repo1).destroy
