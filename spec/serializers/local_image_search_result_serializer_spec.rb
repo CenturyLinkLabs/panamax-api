@@ -5,7 +5,15 @@ describe LocalImageSearchResultSerializer do
 
   it 'exposes the attributes to be jsonified' do
     serialized = described_class.new(image_model).as_json
-    expected = [:source, :description, :is_official, :is_trusted, :star_count]
-    expect(serialized.keys).to match_array expected
+
+    expected_keys = [
+      :source,
+      :tags,
+      :description,
+      :is_official,
+      :is_trusted,
+      :star_count
+    ]
+    expect(serialized.keys).to match_array expected_keys
   end
 end
