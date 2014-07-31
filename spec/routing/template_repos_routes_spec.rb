@@ -23,4 +23,12 @@ describe 'template repos routes' do
        action: 'destroy'
     )
   end
+
+  it 'routes POST to a specific repo /reload to the reload action' do
+    expect(post: 'template_repos/1/reload').to route_to(
+       controller: 'template_repos',
+       id: "1",
+       action: 'reload'
+    )
+  end
 end
