@@ -60,4 +60,9 @@ describe TemplateReposController do
     end
 
   end
+
+  describe '#reload' do
+    it 'removes all templates associated with the repo'
+    it 'loads templates from the repo'
+  end
 end
