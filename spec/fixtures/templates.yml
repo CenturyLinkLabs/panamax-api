@@ -4,9 +4,9 @@ wordpress:
   keywords: 'wordpress, wp'
   type: 'wordpress'
   documentation: "# Title\r\nSome *markdown*"
-  source: repo1.name
+  source: 'foo/bar'
 
 another:
   name: 'wp-test'
   keywords: 'blah'
-  source: repo1.name
+  source: 'bar/foo'

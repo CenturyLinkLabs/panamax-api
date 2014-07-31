@@ -14,6 +14,7 @@ describe TemplateRepoSerializer do
   end
 
   it 'calculates the Template count for the repository' do
-    expect(TemplateRepoSerializer.new(template_repos(:repo1)).template_count).to eq templates.count
+    template_count = Template.where(source: template_repos(:repo1).name).count
+    expect(TemplateRepoSerializer.new(template_repos(:repo1)).template_count).to eq template_count
   end
 end
