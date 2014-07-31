@@ -12,6 +12,12 @@ class TemplateReposController < ApplicationController
     respond_with TemplateRepo.destroy(params[:id])
   end
 
+  def reload
+    repo = TemplateRepo.find(params[:id])
+    repo.reload_templates
+    head status: :ok
+  end
+
   private
 
   def template_repo_params

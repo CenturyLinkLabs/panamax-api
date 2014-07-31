@@ -25,6 +25,13 @@ class TemplateRepo < ActiveRecord::Base
     Template.destroy_all(source: self.name)
   end
 
+  def reload_templates
+    transaction do
+      purge_templates
+      load_templates
+    end
+  end
+
   def self.load_templates_from_all_repos
     self.all.each(&:load_templates)
   end

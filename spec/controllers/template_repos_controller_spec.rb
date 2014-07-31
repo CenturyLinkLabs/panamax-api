@@ -62,7 +62,21 @@ describe TemplateReposController do
   end
 
   describe '#reload' do
-    it 'removes all templates associated with the repo'
-    it 'loads templates from the repo'
+    let(:template_repo) { double('template_repo', reload_templates: true) }
+
+    before do
+      TemplateRepo.stub(:find).and_return(template_repo)
+    end
+
+    it 'removes all templates associated with the repo' do
+      expect(template_repo).to receive(:reload_templates)
+      post :reload, id: 1, format: :json
+    end
+
+    it 'returns a 200 status code' do
+      post :reload, id: 1, format: :json
+      expect(response.status).to eq 200
+    end
+
   end
 end

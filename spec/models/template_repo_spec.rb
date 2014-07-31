@@ -68,7 +68,7 @@ describe TemplateRepo do
 
   describe '.load_templates_from_all_repos' do
 
-    let(:fake_repo){ double('fake_repo', load_templates: true) }
+    let(:fake_repo) { double('fake_repo', load_templates: true) }
 
     before do
       described_class.stub(:all).and_return([fake_repo])
@@ -78,6 +78,17 @@ describe TemplateRepo do
       expect(fake_repo).to receive(:load_templates).once
       described_class.load_templates_from_all_repos
     end
+  end
+
+  describe '#reload_templates' do
+
+    it 'purges and reloads templates' do
+      repo = TemplateRepo.new
+      expect(repo).to receive(:purge_templates)
+      expect(repo).to receive(:load_templates)
+      repo.reload_templates
+    end
+
   end
 
 end
