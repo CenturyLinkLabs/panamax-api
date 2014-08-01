@@ -118,6 +118,44 @@ describe ApplicationController do
         expect(response.body).to eq 'whoops'
       end
     end
+  end
+
+  describe '#log_kiss_event' do
+
+    controller do
+      def index
+        log_kiss_event('foo', 'bar')
+      end
+    end
+
+    context 'when user email is set' do
+
+      let(:email) { 'foo@bar.com' }
+
+      before do
+        User.stub(:instance).and_return(double(:user, email: email))
+      end
+
+      it 'logs the event with the user email address' do
+        expect(KMTS).to receive(:record).with(email, 'foo', 'bar')
+        get :index
+      end
+    end
+
+    context 'when user email is not set' do
+
+      let(:panamax_id) { 'abc123def456' }
+
+      before do
+        ENV['PANAMAX_ID'] = panamax_id
+        User.stub(:instance).and_return(double(:user, email: nil))
+      end
+
+      it 'logs the event with the panamax ID' do
+        expect(KMTS).to receive(:record).with(panamax_id, 'foo', 'bar')
+        get :index
+      end
+    end
 
   end
 end

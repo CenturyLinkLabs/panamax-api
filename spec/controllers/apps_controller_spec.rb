@@ -72,6 +72,12 @@ describe AppsController do
       post :create, template_id: template.id, format: :json
     end
 
+    it 'logs a KissMetrcis event' do
+      expect(subject).to receive(:log_kiss_event)
+        .with('run-template', template_name: template.name)
+      post :create, template_id: template.id, format: :json
+    end
+
     it 'returns a new app' do
       post :create, template_id: template.id, format: :json
       expect(response.body).to eq AppSerializer.new(App.last).to_json

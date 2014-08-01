@@ -21,11 +21,15 @@ describe UsersController do
 
     context 'when the user is successfully updated' do
 
+      let(:email) { 'foo@bar.com' }
+
       before do
         # Neuter model validations
         User.any_instance.stub(:access_token_scope)
+        User.any_instance.stub(:email).and_return(email)
         User.any_instance.stub(:valid?).and_return(true)
         User.any_instance.stub(:subscribe)
+        ENV['PANAMAX_ID'] = '123'
       end
 
       it 'changes the user attributes' do
@@ -33,6 +37,11 @@ describe UsersController do
 
         expect(User.instance.github_access_token).to eq(
           params[:github_access_token])
+      end
+
+      it 'sends an alias update to KissMetrics' do
+        expect(KMTS).to receive(:alias).with('123', email)
+        put :update, params.merge(format: :json)
       end
 
       it 'returns a 204 status code' do
@@ -97,6 +106,11 @@ describe UsersController do
       it 'returns the error message' do
         put :update, params.merge(format: :json)
         expect(response.body).to include 'boom'
+      end
+
+      it 'does NOT send an alias update to KissMetrics' do
+        expect(KMTS).to_not receive(:alias)
+        put :update, params.merge(format: :json)
       end
 
       it 'does NOT subscribe the user' do

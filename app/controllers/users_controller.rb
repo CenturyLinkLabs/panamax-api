@@ -18,7 +18,10 @@ class UsersController < ApplicationController
     user = User.instance
     user.update(user_params)
 
-    user.subscribe if params[:subscribe] && user.valid?
+    if user.valid?
+      alias_kiss_user(user.email)
+      user.subscribe if params[:subscribe]
+    end
 
     respond_with user
   end
@@ -27,5 +30,11 @@ class UsersController < ApplicationController
 
   def user_params
     params.permit(:github_access_token)
+  end
+
+  def alias_kiss_user(email)
+    KMTS.alias(panamax_id, email)
+  rescue => ex
+    logger.warn(ex.message)
   end
 end

@@ -119,6 +119,15 @@ describe TemplatesController do
       )
     end
 
+    it 'logs a KissMetrcis event' do
+      expect(subject).to receive(:log_kiss_event)
+        .with('save-template', template_name: template.name)
+      post :save, params.merge(
+          id: template.id,
+          format: :json
+      )
+    end
+
     it 'returns a no content status' do
       post :save, params.merge(
           id: template.id,

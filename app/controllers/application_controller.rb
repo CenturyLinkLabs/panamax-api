@@ -26,4 +26,19 @@ class ApplicationController < ActionController::Base
       render json: { message: message }, status: :internal_server_error
     end
   end
+
+  def log_kiss_event(name, options)
+    KMTS.record(user_id, name, options)
+  rescue => ex
+    logger.warn(ex.message)
+  end
+
+  def user_id
+    User.instance.email || panamax_id
+  end
+
+  def panamax_id
+    ENV['PANAMAX_ID'] || ''
+  end
+
 end

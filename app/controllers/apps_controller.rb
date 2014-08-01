@@ -24,6 +24,7 @@ class AppsController < ApplicationController
 
     if app.valid?
       app.run
+      log_kiss_event('run-template', template_name: app.name)
     else
       logger.error("app validation failed: #{app.errors.to_hash}")
     end

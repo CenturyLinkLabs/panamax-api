@@ -7,6 +7,7 @@ gem 'faraday_middleware', '0.9.0'
 gem 'docker-api', '1.13.0', require: 'docker'
 gem 'active_model_serializers', '0.8.1'
 gem 'octokit', '3.2.0'
+gem 'kmts', '2.0.1'
 
 group :test, :development do
   gem 'rspec-rails', '2.14.2'
