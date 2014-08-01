@@ -26,6 +26,7 @@ describe TemplatesController do
         type: 'wordpress',
         documentation: '---\n\nBlah\n\n',
         app_id: '1',
+        source: 'foo/bar',
         images: [
           {
             'category' => 'Web Tier',

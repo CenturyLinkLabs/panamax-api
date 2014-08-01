@@ -34,6 +34,7 @@ class TemplatesController < ApplicationController
       :type,
       :documentation,
       :fig_yml,
+      :source,
       authors: [],
       images: [[
         :name,
