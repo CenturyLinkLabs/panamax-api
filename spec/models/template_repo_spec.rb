@@ -36,4 +36,59 @@ describe TemplateRepo do
       expect(Template.where(source: template_repos(:repo1).name).count).to eq 0
     end
   end
+
+  describe '#load_templates' do
+
+    let(:template) { Template.new }
+    let(:file1) { double(:file, name: 'readme', content: 'hi') }
+    let(:file2) { double(:file, name: 'foo.pmx', content: 'bar') }
+
+    before do
+      subject.name = 'my/repo'
+      subject.stub(:files).and_return([file1, file2])
+      # TemplateRepo.any_instance.stub(:files).and_return([file1, file2])
+      TemplateBuilder.stub(:create).and_return(template)
+    end
+
+    it 'invokes the TemplateBuilder ONLY for .pmx files' do
+      expect(TemplateBuilder).to receive(:create).once
+      subject.load_templates
+    end
+
+    it 'invokes the TemplateBuilder with .pmx file contents' do
+      expect(TemplateBuilder).to receive(:create).with(file2.content)
+      subject.load_templates
+    end
+
+    it 'sets the repo name on the source field of the template' do
+      subject.load_templates
+      expect(template.source).to eql subject.name
+    end
+  end
+
+  describe '.load_templates_from_all_repos' do
+
+    let(:fake_repo) { double('fake_repo', load_templates: true) }
+
+    before do
+      described_class.stub(:all).and_return([fake_repo])
+    end
+
+    it 'invokes load_templates for each repo' do
+      expect(fake_repo).to receive(:load_templates).once
+      described_class.load_templates_from_all_repos
+    end
+  end
+
+  describe '#reload_templates' do
+
+    it 'purges and reloads templates' do
+      repo = TemplateRepo.new
+      expect(repo).to receive(:purge_templates)
+      expect(repo).to receive(:load_templates)
+      repo.reload_templates
+    end
+
+  end
+
 end

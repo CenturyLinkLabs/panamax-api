@@ -30,7 +30,11 @@ PanamaxApi::Application.routes.draw do
 
   resources :types, only: [:index]
 
-  resources :template_repos, only: [:index, :create, :destroy]
+  resources :template_repos, only: [:index, :create, :destroy] do
+    member do
+      post :reload
+    end
+  end
 
   resource :user, only: [:show, :update]
 

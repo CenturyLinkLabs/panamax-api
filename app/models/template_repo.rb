@@ -14,8 +14,26 @@ class TemplateRepo < ActiveRecord::Base
     end.compact
   end
 
+  def load_templates
+    self.files.each do |file|
+      next unless file.name.end_with?('.pmx')
+      TemplateBuilder.create(file.content).tap { |tpl| tpl.update_attributes(source: self.name) }
+    end
+  end
+
   def purge_templates
     Template.destroy_all(source: self.name)
+  end
+
+  def reload_templates
+    transaction do
+      purge_templates
+      load_templates
+    end
+  end
+
+  def self.load_templates_from_all_repos
+    self.all.each(&:load_templates)
   end
 
   private

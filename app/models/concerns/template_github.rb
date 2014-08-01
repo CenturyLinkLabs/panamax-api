@@ -1,23 +1,6 @@
 module TemplateGithub
   extend ActiveSupport::Concern
 
-  module ClassMethods
-
-    def load_templates_from_template_repo(repo)
-      repo.files.each do |file|
-        next unless file.name.end_with?('.pmx')
-        TemplateBuilder.create(file.content).tap { |tpl| tpl.update_attributes(source: repo.name) }
-      end
-    end
-
-    def load_templates_from_template_repos
-      TemplateRepo.all.each do |repo|
-        load_templates_from_template_repo(repo)
-      end
-    end
-
-  end
-
   def save_to_repo(params)
     repo            = params[:repo]
     file_name       = params[:file_name] || "#{name}"
