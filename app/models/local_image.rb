@@ -2,12 +2,13 @@ class LocalImage
 
   UNTAGGED = '<none>'
 
-  attr_accessor :id, :tags
+  attr_accessor :id, :virtual_size, :tags
 
   # When using .all the ID is the same as the Docker image ID
   def self.all
     Docker::Image.all.map do |image|
       new(id: image.id,
+        virtual_size: image.info['VirtualSize'],
         tags: image.info['RepoTags'] || [UNTAGGED])
     end
   end
@@ -50,6 +51,7 @@ class LocalImage
 
   def initialize(options={})
     self.id = options[:id]
+    self.virtual_size = options[:virtual_size]
     self.tags = Array(options[:tags])
   end
 

@@ -6,6 +6,7 @@ describe LocalImage do
     double(:local_image1,
       id: 'abc123',
       info: {
+        'VirtualSize' => 111,
         'RepoTags' => ['foo/bar:latest', 'foo/bar:1.0', 'fizz:latest']
       })
   end
@@ -13,13 +14,16 @@ describe LocalImage do
   let(:local_image2) do
     double(:local_image2,
       id: 'xyz789',
-      info: {})
+      info: {
+        'VirtualSize' => 222,
+      })
   end
 
   let(:local_image3) do
     double(:local_image3,
       id: 'efg456',
       info: {
+        'VirtualSize' => 333,
         'RepoTags' => ['panamax:latest']
       })
   end
@@ -30,6 +34,7 @@ describe LocalImage do
 
   describe 'attributes' do
     it { should respond_to :id }
+    it { should respond_to :virtual_size }
     it { should respond_to :tags }
   end
 
@@ -60,6 +65,7 @@ describe LocalImage do
 
       expect(result).to be_kind_of(described_class)
       expect(result.id).to eq local_image1.id
+      expect(result.virtual_size).to eq local_image1.info['VirtualSize']
       expect(result.tags).to eq local_image1.info['RepoTags']
     end
   end
