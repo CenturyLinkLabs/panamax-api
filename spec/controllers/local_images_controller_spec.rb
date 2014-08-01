@@ -72,5 +72,22 @@ describe LocalImagesController do
       delete :destroy, id: id, format: :json
       expect(response.status).to eq 204
     end
+
+    context 'when a Conflict error is raised' do
+
+      before do
+        LocalImage.stub(:destroy).and_raise(Excon::Errors::Conflict, 'oops')
+      end
+
+      it 'returns an error' do
+        delete :destroy, id: id, format: :json
+        expect(response.body).to eq({ message: I18n.t(:docker_rmi_error) }.to_json)
+      end
+
+      it 'returns a 500 status code' do
+        delete :destroy, id: id, format: :json
+        expect(response.status).to eq 500
+      end
+    end
   end
 end

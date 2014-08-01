@@ -16,5 +16,7 @@ class LocalImagesController < ApplicationController
 
   def destroy
     respond_with LocalImage.destroy(params[:id])
+  rescue Excon::Errors::Conflict => ex
+    handle_exception(ex, :docker_rmi_error)
   end
 end
