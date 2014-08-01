@@ -54,7 +54,7 @@ describe TemplateRepo do
     before do
       subject.name = 'my/repo'
       subject.stub(:files).and_return([file1, file2])
-      # TemplateRepo.any_instance.stub(:files).and_return([file1, file2])
+      subject.stub(:touch).and_return(true)
       TemplateBuilder.stub(:create).and_return(template)
     end
 
@@ -72,6 +72,13 @@ describe TemplateRepo do
       subject.load_templates
       expect(template.source).to eql subject.name
     end
+
+    it 'updates the updated_at value' do
+      repo = template_repos(:repo1)
+      repo.stub(:files).and_return([])
+      expect { repo.load_templates }.to change(repo, :updated_at)
+    end
+
   end
 
   describe '.load_templates_from_all_repos' do
@@ -95,6 +102,12 @@ describe TemplateRepo do
       expect(repo).to receive(:purge_templates)
       expect(repo).to receive(:load_templates)
       repo.reload_templates
+    end
+
+    it 'updates the updated_at value' do
+      repo = template_repos(:repo1)
+      repo.stub(:files).and_return([])
+      expect { repo.reload_templates }.to change(repo, :updated_at)
     end
 
   end

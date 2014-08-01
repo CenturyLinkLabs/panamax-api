@@ -20,6 +20,7 @@ class TemplateRepo < ActiveRecord::Base
       next unless file.name.end_with?('.pmx')
       TemplateBuilder.create(file.content).tap { |tpl| tpl.update_attributes(source: self.name) }
     end
+    self.touch
   end
 
   def purge_templates
