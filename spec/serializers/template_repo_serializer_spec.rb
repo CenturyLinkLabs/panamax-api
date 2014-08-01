@@ -8,7 +8,8 @@ describe TemplateRepoSerializer do
     expected_keys = [
       :id,
       :name,
-      :template_count
+      :template_count,
+      :updated_at
     ]
     expect(serialized.keys).to match_array expected_keys
   end
