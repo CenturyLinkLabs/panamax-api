@@ -65,4 +65,15 @@ PanamaxApi::Application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  config.before_initialize do
+    log_level = (ENV['LOG_LEVEL'] || config.log_level).to_s.upcase
+
+    STDOUT.sync = true
+    logger = ActiveSupport::TaggedLogging.new(Logger.new(STDOUT))
+    logger.level = Logger.const_get(log_level)
+    logger.formatter = config.log_formatter
+
+    ::Rails.logger = config.logger = logger
+  end
 end
