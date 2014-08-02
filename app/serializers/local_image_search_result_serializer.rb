@@ -7,19 +7,11 @@ class LocalImageSearchResultSerializer < ActiveModel::Serializer
     object.id
   end
 
-  def tags
-    object.tags
-  end
+  def description; end
 
-  def description
-  end
+  def is_official; end
 
-  def is_official
-  end
+  def is_trusted; end
 
-  def is_trusted
-  end
-
-  def star_count
-  end
+  def star_count; end
 end

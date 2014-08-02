@@ -1,4 +1,4 @@
-class RemoteImage
+class RemoteImage < ApiModel
 
   attr_accessor :id
   attr_accessor :tags
@@ -27,14 +27,5 @@ class RemoteImage
   def self.find_by_name(name)
     tags = PanamaxAgent.registry_client.list_repository_tags(name)
     new(id: name, tags: tags.map { |tag| tag['name'] })
-  end
-
-  def initialize(options={})
-    self.id = options[:id]
-    self.tags = Array(options[:tags])
-    self.description = options[:description]
-    self.is_official = options[:is_official]
-    self.is_trusted = options[:is_trusted]
-    self.star_count = options[:star_count]
   end
 end

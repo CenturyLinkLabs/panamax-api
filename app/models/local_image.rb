@@ -1,4 +1,4 @@
-class LocalImage
+class LocalImage < ApiModel
 
   UNTAGGED = '<none>'
 
@@ -30,7 +30,7 @@ class LocalImage
     all.each_with_object({}) do |image, memo|
       image.tags.each do |tag|
         repo, tag = tag.split(':')
-        memo[repo] ||= new(id: repo)
+        memo[repo] ||= new(id: repo, tags: [])
         memo[repo].tags << tag
       end
     end.values.reject(&:untagged?)
@@ -47,12 +47,6 @@ class LocalImage
 
   def self.find_by_id_or_name(id_or_name)
     self.find(id_or_name) || self.find_by_name(id_or_name)
-  end
-
-  def initialize(options={})
-    self.id = options[:id]
-    self.virtual_size = options[:virtual_size]
-    self.tags = Array(options[:tags])
   end
 
   def untagged?
