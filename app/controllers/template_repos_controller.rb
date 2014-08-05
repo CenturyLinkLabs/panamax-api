@@ -1,7 +1,8 @@
 class TemplateReposController < ApplicationController
 
   def index
-    respond_with TemplateRepo.all
+    headers['Total-Count'] = TemplateRepo.count
+    respond_with TemplateRepo.limit(params[:limit].presence)
   end
 
   def create

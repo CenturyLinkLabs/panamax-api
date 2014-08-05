@@ -13,6 +13,21 @@ describe TemplateReposController do
       expect(response.body).to eq expected
     end
 
+    it 'without a limit parameter returns all repos' do
+      get :index, format: :json
+      expect(JSON.parse(response.body)).to have_exactly(2).items
+    end
+
+    it 'allows a limit parameter to limit the number of repos returned in the response' do
+      get :index, limit: 1, format: :json
+      expect(JSON.parse(response.body)).to have_exactly(1).item
+    end
+
+    it 'includes a Total-Count header with the repo count' do
+      get :index, limit: 1, format: :json
+      expect(response.headers['Total-Count']).to eq TemplateRepo.count
+    end
+
     it 'returns a 200 status code' do
       get :index, format: :json
       expect(response.status).to eq 200
