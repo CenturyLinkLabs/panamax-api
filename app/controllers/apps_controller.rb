@@ -1,7 +1,8 @@
 class AppsController < ApplicationController
 
   def index
-    respond_with App.all
+    headers['Total-Count'] = App.count
+    respond_with App.limit(params[:limit].presence)
   end
 
   def show

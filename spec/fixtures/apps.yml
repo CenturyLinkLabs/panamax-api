@@ -2,3 +2,7 @@ app1:
   name: 'App 1'
   from: 'Template'
   documentation: 'Documentation for the application'
+app2:
+  name: 'App 2'
+  from: 'Some Template'
+  documentation: 'Documentation for the application'
