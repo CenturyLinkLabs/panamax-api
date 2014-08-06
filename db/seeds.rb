@@ -11,4 +11,5 @@
 
 TemplateRepo.skip_callback(:create, :after, :reload_templates)
 TemplateRepo.find_or_create_by(name: 'centurylinklabs/panamax-public-templates')
+TemplateRepo.find_or_create_by(name: 'centurylinklabs/panamax-contest-templates')
 TemplateRepo.set_callback(:create, :after, :reload_templates)
