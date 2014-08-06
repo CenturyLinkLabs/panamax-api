@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe RemoteImage do
 
+  it_behaves_like 'an api model'
+
   describe 'attributes' do
     it { should respond_to :id }
     it { should respond_to :tags }

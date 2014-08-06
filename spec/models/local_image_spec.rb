@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe LocalImage do
 
+  it_behaves_like 'an api model'
+
   let(:local_image1) do
     double(:local_image1,
       id: 'abc123',
