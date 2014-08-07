@@ -13,7 +13,8 @@ module PanamaxAgent
             id: mailchimp_id
           },
           body: {
-            'EMAIL' => email
+            'EMAIL' => email,
+            mailchimp_group_id => '1'
           }
         }
 

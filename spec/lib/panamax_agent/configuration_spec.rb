@@ -20,6 +20,7 @@ describe PanamaxAgent::Configuration do
     its(:mailchimp_api_url) { should eql PanamaxAgent::Configuration::DEFAULT_MAILCHIMP_API_URL }
     its(:mailchimp_user) { should eql PanamaxAgent::Configuration::DEFAULT_MAILCHIMP_USER }
     its(:mailchimp_id) { should eql PanamaxAgent::Configuration::DEFAULT_MAILCHIMP_ID }
+    its(:mailchimp_group_id) { should eql PanamaxAgent::Configuration::DEFAULT_MAILCHIMP_GROUP_ID }
     its(:open_timeout) { should eql PanamaxAgent::Configuration::DEFAULT_OPEN_TIMEOUT }
     its(:read_timeout) { should eql PanamaxAgent::Configuration::DEFAULT_READ_TIMEOUT }
     its(:logger) { should eql PanamaxAgent::Configuration::DEFAULT_LOGGER }

@@ -21,7 +21,8 @@ describe PanamaxAgent::Mailchimp::Client do
           id: subject.mailchimp_id
         },
         body: {
-          'EMAIL' => email
+          'EMAIL' => email,
+          'group[9397][2]' => '1'
         }
       }
 
