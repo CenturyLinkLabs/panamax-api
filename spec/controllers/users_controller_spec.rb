@@ -17,7 +17,7 @@ describe UsersController do
 
   describe '#update' do
 
-    let(:params) { { github_access_token: 'token', subscribe: true } }
+    let(:params) { { github_access_token: 'token', subscribe: '1' } }
 
     context 'when the user is successfully updated' do
 
@@ -40,10 +40,38 @@ describe UsersController do
         expect(response.status).to eq 204
       end
 
+      context 'when the subscribe flag is set to 1' do
+        it 'subscribes the user' do
+          expect_any_instance_of(User).to receive(:subscribe)
+          put :update, params.merge(subscribe: 1, format: :json)
+        end
+      end
+
+      context 'when the subscribe flag is set to "1"' do
+        it 'subscribes the user' do
+          expect_any_instance_of(User).to receive(:subscribe)
+          put :update, params.merge(subscribe: '1', format: :json)
+        end
+      end
+
       context 'when the subscribe flag is set to true' do
         it 'subscribes the user' do
           expect_any_instance_of(User).to receive(:subscribe)
-          put :update, params.merge(format: :json)
+          put :update, params.merge(subscribe: true, format: :json)
+        end
+      end
+
+      context 'when the subscribe flag is set to "true"' do
+        it 'subscribes the user' do
+          expect_any_instance_of(User).to receive(:subscribe)
+          put :update, params.merge(subscribe: 'true', format: :json)
+        end
+      end
+
+      context 'when the subscribe flag is set to "0"' do
+        it 'does NOT subscribe the user' do
+          expect_any_instance_of(User).to_not receive(:subscribe)
+          put :update, params.merge(subscribe: '0', format: :json)
         end
       end
 

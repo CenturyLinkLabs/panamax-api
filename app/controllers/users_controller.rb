@@ -9,6 +9,12 @@ class UsersController < ApplicationController
   end
 
   def update
+    params[:subscribe] =
+      params[:subscribe] == true ||
+      params[:subscribe] == 'true' ||
+      params[:subscribe] == 1 ||
+      params[:subscribe] == '1'
+
     user = User.instance
     user.update(user_params)
 
