@@ -124,3 +124,8 @@ If you used all the configuration values specified in these instructions, the Pa
 	$ curl http://localhost:8888/local_images.json
 	
 	[{"id":"8effcd007cad6bbdb936d547fac60f65c5f24f5a579e8d34e50e220d588dac70","virtual_size":436409804,"tags":["centurylink/panamax-ruby-base:latest"]}]
+	
+### Run the automated tests
+```
+rspec spec
+```
