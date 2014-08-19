@@ -96,8 +96,8 @@ module PanamaxAgent
         raw_string += "ExecStart=#{exec_start}\n" if exec_start
         raw_string += "ExecStartPost=#{exec_start_post}\n" if exec_start_post
         raw_string += "ExecReload=#{exec_reload}\n" if exec_reload
-        raw_string += "ExecStop=#{exec_stop}\n" if exec_stop
-        raw_string += "ExecStopPost=#{exec_stop_post}\n" if exec_stop_post
+        raw_string += "ExecStop=#{exec_stop} || true\n" if exec_stop
+        raw_string += "ExecStopPost=#{exec_stop_post} || true\n" if exec_stop_post
         raw_string += "Restart=#{restart}\n" if restart
         raw_string += "RestartSec=#{restart_sec}\n" if restart_sec
         raw_string += "TimeoutStartSec=#{timeout_start_sec}\n" if timeout_start_sec
