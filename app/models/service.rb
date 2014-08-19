@@ -34,6 +34,7 @@ class Service < ActiveRecord::Base
   validates_presence_of :name
   validates :ports, has_container_ports: true, has_unique_ports: true
   validates :volumes, has_container_paths: true
+  validates :expose, is_numeric_list: true
 
   attr_writer :manager
 
