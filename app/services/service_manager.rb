@@ -1,3 +1,5 @@
+require 'fleet'
+
 class ServiceManager
 
   def self.load(service)
@@ -13,7 +15,7 @@ class ServiceManager
   end
 
   def load
-    fleet_client.load(service_def_from_service(@service))
+    fleet_client.load(@service.unit_name, service_def_from_service(@service))
   end
 
   def start
@@ -29,7 +31,7 @@ class ServiceManager
   end
 
   def get_state
-    fleet_client.states(@service.unit_name)
+    fleet_client.status(@service.unit_name)
   rescue
     {}
   end
@@ -37,32 +39,39 @@ class ServiceManager
   private
 
   def fleet_client
-    PanamaxAgent.fleet_client
+    Fleet.new
   end
 
   def service_def_from_service(service)
-    PanamaxAgent::Fleet::ServiceDefinition.new(service.unit_name) do |sd|
-      sd.description = service.description
 
-      # Collect service dependencies
-      if service.links.any?
-        dep_services = service.links.map { |link| link.linked_to_service.unit_name }.join(' ')
-        sd.after = dep_services
-        sd.requires = dep_services
-      end
+    unit_block = {
+      'Description' => service.description
+    }
 
-      # The '-' prefix in the docker rm command causes the return value to be
-      # ignored. We want to try and remove the container if it has exited, but
-      # don't really care if it fails.
-      docker_rm = "-/usr/bin/docker rm #{service.name}"
+    if service.links.any?
+      dep_services = service.links.map do |link|
+        link.linked_to_service.unit_name
+      end.join(' ')
 
-      sd.exec_start_pre = "-/usr/bin/docker pull #{service.from}"
-      sd.exec_start = service.docker_run_string
-      sd.exec_start_post = docker_rm
-      sd.exec_stop = "/usr/bin/docker kill #{service.name}"
-      sd.exec_stop_post = docker_rm
-      sd.restart_sec = '10'
-      sd.timeout_start_sec = '5min'
+      unit_block['After'] = dep_services
+      unit_block['Requires'] = dep_services
     end
+
+    docker_rm = "-/usr/bin/docker rm #{service.name}"
+    service_block = {
+      'ExecStartPre' => "-/usr/bin/docker pull #{service.from}",
+      'ExecStart' => service.docker_run_string,
+      'ExecStartPost' => docker_rm,
+      'ExecStop' => "/usr/bin/docker kill #{service.name}",
+      'ExecStopPost' => docker_rm,
+      'Restart' => 'always',
+      'RestartSec' => '10',
+      'TimeoutStartSec' => '5min'
+    }
+
+    {
+      'Unit' => unit_block,
+      'Service' => service_block
+    }
   end
 end
