@@ -21,13 +21,6 @@ describe PanamaxAgent do
     end
   end
 
-  describe '.fleet_client' do
-
-    it 'returns a Fleet::Client instance' do
-      expect(PanamaxAgent.fleet_client).to be_kind_of(PanamaxAgent::Fleet::Client)
-    end
-  end
-
   describe '.journal_client' do
 
     before do

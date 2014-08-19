@@ -1,5 +1,4 @@
 require 'panamax_agent/configuration'
-require 'panamax_agent/fleet/client'
 require 'panamax_agent/journal/client'
 require 'panamax_agent/mailchimp/client'
 require 'panamax_agent/panamax/client'
@@ -10,10 +9,6 @@ module PanamaxAgent
 
   def self.registry_client(options={})
     PanamaxAgent::Registry::Client.new(options)
-  end
-
-  def self.fleet_client(options={})
-    PanamaxAgent::Fleet::Client.new(options)
   end
 
   def self.journal_client(options={})

@@ -8,8 +8,6 @@ module PanamaxAgent
       :adapter,
       :registry_api_url,
       :registry_api_version,
-      :etcd_api_url,
-      :etcd_api_version,
       :journal_api_url,
       :pmx_registry_api_url,
       :pmx_registry_api_version,
@@ -27,8 +25,6 @@ module PanamaxAgent
     DEFAULT_ADAPTER = Faraday.default_adapter
     DEFAULT_REGISTRY_API_URL = 'https://index.docker.io'
     DEFAULT_REGISTRY_API_VERSION = 'v1'
-    DEFAULT_ETCD_API_URL = ENV['FLEETCTL_ENDPOINT']
-    DEFAULT_ETCD_API_VERSION = 'v2'
     DEFAULT_JOURNAL_API_URL = ENV['JOURNAL_ENDPOINT']
     DEFAULT_PMX_REGISTRY_API_URL = 'http://74.201.240.198:5000'
     DEFAULT_PMX_REGISTRY_API_VERSION = 'v1'
@@ -56,8 +52,6 @@ module PanamaxAgent
       self.adapter = DEFAULT_ADAPTER
       self.registry_api_url = DEFAULT_REGISTRY_API_URL
       self.registry_api_version = DEFAULT_REGISTRY_API_VERSION
-      self.etcd_api_url = DEFAULT_ETCD_API_URL
-      self.etcd_api_version = DEFAULT_ETCD_API_VERSION
       self.journal_api_url = DEFAULT_JOURNAL_API_URL
       self.pmx_registry_api_url = DEFAULT_PMX_REGISTRY_API_URL
       self.pmx_registry_api_version = DEFAULT_PMX_REGISTRY_API_VERSION
