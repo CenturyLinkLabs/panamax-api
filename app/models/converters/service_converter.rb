@@ -18,6 +18,7 @@ module Converters
         expose: service.expose,
         environment: service.environment,
         volumes: service.volumes,
+        command: service.command,
         type: service.type
       )
     end

@@ -3,6 +3,7 @@ service1:
   name: my-service
   description: just some service I ran
   from: panamax/panamax-docker-mysql
+  type: default
   ports: |
     ---
     - host_port: 3306
@@ -18,6 +19,7 @@ service1:
     ---
     - host_path: /var/panamax
       container_path: /var/app/panamax
+  command: '/bin/foo'
 
 service2:
   app: app1
