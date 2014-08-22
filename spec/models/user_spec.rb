@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe User do
   let(:fake_gh_client) { double(:fake_gh_client) }
-
   before do
     Octokit::Client.stub(:new).and_return(fake_gh_client)
   end
@@ -128,6 +127,18 @@ describe User do
         expect(subject.repos).to eq []
       end
     end
+
+    context 'when github paging is set' do
+      before do
+        fake_gh_client.stub(:repos).and_return([])
+      end
+
+      it 'github client per page setting is set correctly' do
+        expect(Octokit::Client).to receive(:new).with(access_token: nil, auto_paginate: true)
+        subject.repos
+      end
+    end
+
   end
 
   describe '#email' do
@@ -224,4 +235,5 @@ describe User do
       end
     end
   end
+
 end
