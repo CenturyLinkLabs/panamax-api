@@ -58,7 +58,7 @@ class User < ActiveRecord::Base
   end
 
   def github_client
-    @github_client ||= Octokit::Client.new(access_token: github_access_token)
+    @github_client ||= Octokit::Client.new(access_token: github_access_token, auto_paginate: true)
   end
 
   def mailchimp_client
