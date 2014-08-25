@@ -62,7 +62,7 @@ class ServiceManager
       'ExecStartPre' => "-/usr/bin/docker pull #{service.from}",
       'ExecStart' => service.docker_run_string,
       'ExecStartPost' => docker_rm,
-      'ExecStop' => "/usr/bin/docker kill #{service.name}",
+      'ExecStop' => "-/usr/bin/docker kill #{service.name}",
       'ExecStopPost' => docker_rm,
       'Restart' => 'always',
       'RestartSec' => '10',
