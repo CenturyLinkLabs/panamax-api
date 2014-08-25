@@ -33,7 +33,7 @@ describe ServiceManager do
   subject { described_class.new(service) }
 
   before do
-    PanamaxAgent.stub(:fleet_client).and_return(fake_fleet_client)
+    Fleet.stub(:new).and_return(fake_fleet_client)
   end
 
   describe '.load' do
@@ -88,17 +88,27 @@ describe ServiceManager do
     end
 
     it 'submits a service definition to the fleet service' do
-      expect(fake_fleet_client).to receive(:load) do |service_def|
-        expect(service_def.description).to eq service_description
-        expect(service_def.after).to eq linked_to_service.unit_name
-        expect(service_def.requires).to eq linked_to_service.unit_name
-        expect(service_def.exec_start_pre).to eq "-/usr/bin/docker pull #{image_name}"
-        expect(service_def.exec_start).to eq docker_run_string
-        expect(service_def.exec_start_post).to eq "-/usr/bin/docker rm #{service_name}"
-        expect(service_def.exec_stop).to eq "/usr/bin/docker kill #{service_name}"
-        expect(service_def.exec_stop_post).to eq "-/usr/bin/docker rm #{service_name}"
-        expect(service_def.restart_sec).to eq '10'
-        expect(service_def.timeout_start_sec).to eq '5min'
+      expect(fake_fleet_client).to receive(:load) do |name, service_def|
+        expect(name).to eq service.unit_name
+        expect(service_def).to eq(
+          {
+            'Unit' => {
+              'Description' => service_description,
+              'After' => linked_to_service.unit_name,
+              'Requires' => linked_to_service.unit_name,
+            },
+            'Service' => {
+              'ExecStartPre' => "-/usr/bin/docker pull #{image_name}",
+              'ExecStart' => docker_run_string,
+              'ExecStartPost' => "-/usr/bin/docker rm #{service_name}",
+              'ExecStop' => "/usr/bin/docker kill #{service_name}",
+              'ExecStopPost' => "-/usr/bin/docker rm #{service_name}",
+              'Restart' => 'always',
+              'RestartSec' => '10',
+              'TimeoutStartSec' => '5min'
+            }
+          }
+        )
       end
 
       subject.load
@@ -131,11 +141,11 @@ describe ServiceManager do
     end
 
     before do
-      fake_fleet_client.stub(:states).and_return(fleet_state)
+      fake_fleet_client.stub(:status).and_return(fleet_state)
     end
 
     it 'retrieves service state from the fleet client' do
-      expect(fake_fleet_client).to receive(:states).with(service.unit_name)
+      expect(fake_fleet_client).to receive(:status).with(service.unit_name)
       subject.get_state
     end
 
@@ -146,7 +156,7 @@ describe ServiceManager do
     context 'when an error occurs while querying fleet' do
 
       before do
-        fake_fleet_client.stub(:states).and_raise('boom')
+        fake_fleet_client.stub(:status).and_raise('boom')
       end
 
       it 'returns an empty hash' do

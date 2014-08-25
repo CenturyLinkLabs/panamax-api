@@ -1,4 +1,5 @@
 require 'faraday'
+require 'panamax_agent/middleware/response/raise_error'
 
 module PanamaxAgent
   module Mailchimp
