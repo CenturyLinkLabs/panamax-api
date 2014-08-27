@@ -1,6 +1,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+0.1.2 - 2014-08-27
+------------------
+
+### Fixed
+- Service command not copied from app to template (#187)
+- Missing validation for exposed ports (centurylinklabs/panamax-ui#292)
+- Not all GitHub repos shown when saving template (#194)
+- Unexpected token error when running in CoreOS cluster (centurylinklabs/panamax-ui#296)
+- Job state could not be achieved error (centurylinklabs/panamax-ui#297)
+- ExecStop errors in service unit file generate journal noise
+
 0.1.1 - 2014-08-11
 ------------------
 
