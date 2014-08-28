@@ -7,7 +7,7 @@ describe HasUniquePortsValidator do
 
   subject { described_class.new(attributes: [attribute]) }
 
-  context 'when the attribute is valid' do
+  context 'when host ports are unique' do
 
     let(:value) do
       [
@@ -16,14 +16,44 @@ describe HasUniquePortsValidator do
       ]
     end
 
-    it 'returns no errors for links with aliases' do
+    it 'returns no errors' do
       subject.validate_each(record, attribute, value)
       expect(record.errors).to be_empty
     end
 
   end
 
-  context 'when the attribute is invalid' do
+  context 'when host ports are not unique, but have different protocols' do
+    let(:value) do
+      [
+        { 'host_port' => 80, 'proto' => 'TCP' },
+        { 'host_port' => 80, 'proto' => 'UDP' }
+      ]
+    end
+
+    it 'returns no errors' do
+      subject.validate_each(record, attribute, value)
+      expect(record.errors).to be_empty
+    end
+
+  end
+
+  context 'when both host ports are blank' do
+    let(:value) do
+      [
+        { 'container_port' => 80 },
+        { 'container_port' => 80 }
+      ]
+    end
+
+    it 'returns no errors' do
+      subject.validate_each(record, attribute, value)
+      expect(record.errors).to be_empty
+    end
+
+  end
+
+  context 'when host ports are not unique' do
 
     let(:value) do
       [
