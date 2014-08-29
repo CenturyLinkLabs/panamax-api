@@ -14,6 +14,16 @@ class Template < ActiveRecord::Base
     images.map(&:categories).flatten.uniq.compact
   end
 
+  def self.all_keywords
+    self.select(:keywords).each_with_object(Hash.new(0)) do |t, h|
+      t.keywords.split(',').each do |kw|
+        h[kw.strip.downcase] += 1
+      end
+    end.each_with_object([]) do |(k, v), keywords|
+      keywords << { keyword: k, count: v }
+    end
+  end
+
   def self.search(term, limit=nil)
     term = term.gsub(',', ' ')
     results = term.split.each_with_object([]) do |t, a|

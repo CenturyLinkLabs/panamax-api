@@ -29,6 +29,7 @@ PanamaxApi::Application.routes.draw do
   get 'local_images/*id', to: 'local_images#show'
 
   resources :types, only: [:index]
+  resources :keywords, only: [:index]
 
   resources :template_repos, only: [:index, :create, :destroy] do
     member do
