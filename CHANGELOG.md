@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+0.1.3 - 2014-09-03
+------------------
+### Added
+- Expose a rollup of all template keywords (#199)
+
+### Fixed
+- Allow setting the same host port numbers if protocol does not match (CenturyLinkLabs/panamax-ui#329)
+
 0.1.2 - 2014-08-27
 ------------------
 
