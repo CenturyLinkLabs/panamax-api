@@ -9,7 +9,12 @@ describe LocalImage do
       id: 'abc123',
       info: {
         'VirtualSize' => 111,
-        'RepoTags' => ['foo/bar:latest', 'foo/bar:1.0', 'fizz:latest']
+        'RepoTags' => [
+          'foo/bar:latest',
+          'foo/bar:1.0',
+          'fizz:latest',
+          'private:5000/bizzle:1.5'
+        ]
       })
   end
 
@@ -120,15 +125,15 @@ describe LocalImage do
       result = described_class.all_by_repo
 
       expect(result).to be_kind_of(Array)
-      expect(result.count).to eq 3
-      expect(result.map(&:id)).to eq %w(foo/bar fizz panamax)
+      expect(result.count).to eq 4
+      expect(result.map(&:id)).to match_array %w(foo/bar fizz panamax private:5000/bizzle)
     end
 
     it 'returns the tags for each repo' do
-      result = described_class.all_by_repo.first
+      result = described_class.all_by_repo.map(&:tags).flatten
 
-      expect(result.tags.count).to eq 2
-      expect(result.tags).to eq %w(latest 1.0)
+      expect(result.count).to eq 5
+      expect(result).to match_array %w(latest latest latest 1.5 1.0)
     end
   end
 

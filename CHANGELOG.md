@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+Latest
+------------------
+
+### Fixed
+- repo with port bug (#201)
+
 0.2.0 - 2014-09-09
 ------------------
 

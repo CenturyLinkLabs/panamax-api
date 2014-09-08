@@ -29,7 +29,7 @@ class LocalImage < ApiModel
   def self.all_by_repo
     all.each_with_object({}) do |image, memo|
       image.tags.each do |tag|
-        repo, tag = tag.split(':')
+        repo, _, tag = tag.rpartition(':').reject(&:empty?)
         memo[repo] ||= new(id: repo, tags: [])
         memo[repo].tags << tag
       end

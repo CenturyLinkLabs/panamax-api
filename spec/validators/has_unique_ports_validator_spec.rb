@@ -41,8 +41,8 @@ describe HasUniquePortsValidator do
   context 'when both host ports are blank' do
     let(:value) do
       [
-        { 'container_port' => 80 },
-        { 'container_port' => 80 }
+        { 'container_port' => 82, 'host_port' => '', 'proto' => 'TCP' },
+        { 'container_port' => 80, 'host_port' => '', 'proto' => 'TCP' }
       ]
     end
 
