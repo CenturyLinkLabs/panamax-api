@@ -26,5 +26,7 @@ module PanamaxApi
     # config.i18n.default_locale = :de
 
     config.autoload_paths += %W(#{config.root}/lib)
+
+    config.force_ssl = true
   end
 end
