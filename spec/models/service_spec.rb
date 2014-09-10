@@ -67,8 +67,8 @@ describe Service do
   it_behaves_like 'a classifiable model'
 
   describe '#unit_name' do
-    it 'postfixes the name with .service' do
-      subject.name = 'wordpress'
+    it 'postfixes the internal_name with .service' do
+      subject.internal_name = 'wordpress'
       expect(subject.unit_name).to eq 'wordpress.service'
     end
   end
@@ -76,6 +76,21 @@ describe Service do
   describe '#service_state' do
     it 'returns the service state from the service manager' do
       expect(subject.service_state).to eql(load_state: 'loaded')
+    end
+  end
+
+  describe 'before_create callback' do
+    describe '#internal_name' do
+      it 'is set to the service name' do
+        service = described_class.create(name: 'foobar')
+        expect(service.internal_name).to eq(service.name)
+      end
+
+      it 'does not change with subsequent updates to the service' do
+        service = described_class.create(name: 'foobar')
+        service.update(name: 'new_name')
+        expect(service.internal_name).to eq('foobar')
+      end
     end
   end
 
@@ -105,6 +120,7 @@ describe Service do
       end
 
     end
+
   end
 
   describe '#submit' do

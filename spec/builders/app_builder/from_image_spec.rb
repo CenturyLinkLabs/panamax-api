@@ -37,6 +37,7 @@ describe AppBuilder::FromImage do
       service = app.services.first
 
       expect(service.name).to eq options[:image]
+      expect(service.internal_name).to eq options[:image]
       expect(service.from).to eq options[:image]
     end
   end

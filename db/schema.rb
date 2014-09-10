@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140528192410) do
+ActiveRecord::Schema.define(version: 20140910190904) do
 
   create_table "app_categories", force: true do |t|
     t.string   "name"
@@ -86,6 +86,7 @@ ActiveRecord::Schema.define(version: 20140528192410) do
     t.text    "volumes"
     t.string  "type"
     t.integer "app_id"
+    t.string  "internal_name"
   end
 
   add_index "services", ["app_id"], name: "index_services_on_app_id"

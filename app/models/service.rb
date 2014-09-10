@@ -29,6 +29,7 @@ class Service < ActiveRecord::Base
   serialize :volumes, Array
 
   before_save :resolve_name_conflicts
+  before_create :set_internal_name
   after_destroy :shutdown
 
   validates_presence_of :name
@@ -39,7 +40,7 @@ class Service < ActiveRecord::Base
   attr_writer :manager
 
   def unit_name
-    "#{name}.service"
+    "#{internal_name}.service"
   end
 
   def service_state
@@ -118,5 +119,9 @@ class Service < ActiveRecord::Base
   def resolve_name_conflicts
     sanitized_name = sanitize_name(name)
     self.name = increment_name(sanitized_name)
+  end
+
+  def set_internal_name
+    self.internal_name = self.name
   end
 end
