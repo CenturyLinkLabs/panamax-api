@@ -24,6 +24,17 @@ en:
   fleet_connection_error: "Fleet or Etcd services are not responding"
   journal_connection_error: "Journal API service is not responding"
   docker_connection_error: "Docker Remote API is not responding"
-  docker_rmi_error: "Unable to delete image -- it may be referenced by a running container"
+  docker_rmi_error: |
+    <p>Unable to delete image. It is referenced by another resource.</p>
+    <ul>
+      <li>The image may be referenced by a running container. You may only delete an image when all associated
+          containers have been stopped. Docker may have removed the image tag and renamed the image
+          '&lt;none&gt;:&lt;none&gt;' in an attempt to delete it.
+      </li>
+      <li>The image may be tagged in multiple repositories. An image may only be deleted when it belongs to only one
+          repository.
+      </li>
+    </ul>
+
   registry_connection_error: "Docker Registry API is not responding"
   github_connection_error: "GitHub API is not responding"
