@@ -8,6 +8,7 @@ describe ServiceSerializer do
     expected_keys = [
       :id,
       :name,
+      :internal_name,
       :description,
       :from,
       :links,
