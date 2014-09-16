@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
 
-  http_basic_authenticate_with name: 'admin', password: 'password'
+  before_action :authenticate
 
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
@@ -42,6 +42,14 @@ class ApplicationController < ActionController::Base
 
   def panamax_id
     ENV['PANAMAX_ID'] || ''
+  end
+
+  private
+
+  def authenticate
+    authenticate_with_http_basic do |username, password|
+      username == 'admin' && password == 'password'
+    end
   end
 
 end
