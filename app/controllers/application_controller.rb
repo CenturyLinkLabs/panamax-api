@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
 
-  before_filter :require_authentication
+  http_basic_authenticate_with name: 'admin', password: 'password'
 
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
@@ -42,22 +42,6 @@ class ApplicationController < ActionController::Base
 
   def panamax_id
     ENV['PANAMAX_ID'] || ''
-  end
-
-  private
-
-  def require_authentication
-    unless current_certificate.verify(public_key)
-      head :forbidden
-    end
-  end
-
-  def public_key
-    @public_key ||= OpenSSL::PKey::RSA.new(ENV['AUTH_PUBLIC_KEY'])
-  end
-
-  def current_certificate
-    @current_certificate ||= OpenSSL::X509::Certificate.new(request.headers['X-SSL-Auth'])
   end
 
 end
