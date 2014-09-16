@@ -25,6 +25,11 @@ PanamaxApi::Application.routes.draw do
     end
   end
 
+  resources :deployment_targets do
+    resources :deployments, controller: :remote_deployments,
+                            only: [:index, :show, :create, :destroy]
+  end
+
   resources :local_images, only: [:index, :destroy]
   get 'local_images/*id', to: 'local_images#show'
 

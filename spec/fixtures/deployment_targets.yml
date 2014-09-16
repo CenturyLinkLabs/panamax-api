@@ -1,0 +1,4 @@
+target1:
+  endpoint_url: http://foo.com
+target2:
+  endpoint_url: http://example.com
