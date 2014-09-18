@@ -1,11 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-Latest
+0.2.1 - 2014-09-18
 ------------------
 
+### Added
+- Support for service renaming (#202)
+- Better error messaging when trying to delete an in-use image (#203)
+
 ### Fixed
-- repo with port bug (#201)
+- Private repositories with port bug (#201)
+
 
 0.2.0 - 2014-09-09
 ------------------
