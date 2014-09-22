@@ -41,6 +41,7 @@ module Converters
         environment: image.environment,
         command: image.command,
         volumes: image.volumes,
+        volumes_from: image.volumes_from,
         type: image.type,
         categories: service_categories_from_image(image)
       )

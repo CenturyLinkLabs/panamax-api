@@ -52,6 +52,12 @@ describe TemplateBuilder::FromFig do
           }
         ])
         expect(subject.images.find_by(name: 'db').volumes).to be_blank
+        expect(subject.images.find_by(name: 'web').volumes_from).to eq([
+          {
+            'container_name' => 'foobar'
+          }
+        ])
+        expect(subject.images.find_by(name: 'db').volumes_from).to be_blank
         expect(subject.images.find_by(name: 'web').expose).to be_blank
         expect(subject.images.find_by(name: 'db').expose).to eq(['3306'])
       end
