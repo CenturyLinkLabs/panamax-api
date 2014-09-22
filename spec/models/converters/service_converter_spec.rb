@@ -43,6 +43,10 @@ describe Converters::ServiceConverter do
       expect(subject.to_image.volumes).to eq service1.volumes
     end
 
+    it 'copies the service volumes' do
+      expect(subject.to_image.volumes_from).to eq service1.volumes_from
+    end
+
     it 'copies the service command' do
       expect(subject.to_image.command).to eq service1.command
     end

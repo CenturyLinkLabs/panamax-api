@@ -9,6 +9,7 @@ class Image < ActiveRecord::Base
   serialize :expose, Array
   serialize :environment, Array
   serialize :volumes, Array
+  serialize :volumes_from, Array
 
   belongs_to :template
 
@@ -17,4 +18,5 @@ class Image < ActiveRecord::Base
   validates :ports, has_container_ports: true, has_unique_ports: true
   validates :links, has_link_alias: true, service_link_exists: true
   validates :volumes, has_container_paths: true
+  validates :volumes_from, has_container_names: true
 end
