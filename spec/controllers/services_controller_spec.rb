@@ -39,6 +39,7 @@ describe ServicesController do
         expose: %w(80 443),
         environment: [{ 'variable' => 'SOME_KEY', 'value' => 'some_value' }],
         volumes: [{ host_path: '/tmp/foo', container_path: '/tmp/bar' }],
+        volumes_from: [{ container_name: 'foobaz' }],
         command: 'rails s'
       }
     end
@@ -193,7 +194,8 @@ describe ServicesController do
       {
         name: 'foo_bar',
         description: 'my foo service',
-        from: 'some image'
+        from: 'some image',
+        volumes_from: [{ container_name: 'foobaz' }]
       }
     end
 
@@ -213,6 +215,7 @@ describe ServicesController do
 
       expect(Service.last.name).to eq params[:name]
       expect(Service.last.description).to eq params[:description]
+      expect(Service.last.volumes_from).to eq params[:volumes_from]
     end
 
     it 'restarts the app' do

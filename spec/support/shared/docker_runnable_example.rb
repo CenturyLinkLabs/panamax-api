@@ -128,6 +128,19 @@ shared_examples 'a docker runnable model' do
         expect(model.docker_run_string).to include expected
       end
     end
+
+    context 'when volumes_from is specified' do
+
+      before do
+        model.volumes_from = [{ 'container_name' => 'foodata' }, { 'container_name' => 'bardata' }]
+      end
+
+      it 'generates a docker command with --volumes-from' do
+        expected = '--volumes-from foodata bardata'
+        expect(model.docker_run_string).to include expected
+      end
+    end
+
   end
 
   describe '#docker_status' do

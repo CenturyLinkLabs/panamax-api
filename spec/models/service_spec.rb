@@ -208,6 +208,34 @@ describe Service do
       end
     end
 
+    context 'when volumes_from is not provided' do
+      it 'updates with an empty volumes_from list' do
+        expect(subject).to receive(:update).with(hash_including(volumes_from: []))
+        subject.update_with_relationships(attrs)
+      end
+    end
+
+    context 'when volumes_from is provided' do
+
+      let(:attrs_with_volumes_from) do
+        attrs.merge(volumes_from:
+                        [ActionController::Parameters.new(container_name: 'foo/baz')])
+      end
+
+      it 'passes the volumes_from data through to the update' do
+        expect(subject).to receive(:update).with(hash_including(attrs_with_volumes_from))
+        subject.update_with_relationships(attrs_with_volumes_from)
+      end
+
+      it 'translates the volumes_from data into a pure Ruby hash' do
+        expect(subject).to receive(:update) do |attrs|
+          attrs[:volumes_from].each { |vol_f| expect(vol_f).to be_instance_of(Hash) }
+        end
+
+        subject.update_with_relationships(attrs_with_volumes_from)
+      end
+    end
+
     context 'when ports are not provided' do
       it 'updates with an empty ports list' do
         expect(subject).to receive(:update).with(hash_including(ports: []))
