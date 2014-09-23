@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Private repositories with port bug (#201)
-
+- -p flag bug in Docker run string (#208)
 
 0.2.0 - 2014-09-09
 ------------------

@@ -44,6 +44,23 @@ shared_examples 'a docker runnable model' do
         expect(model.docker_run_string).to include expected
       end
 
+      context 'when the host_port is empty' do
+
+        before do
+          model.ports = [{
+                           'host_interface' => nil,
+                           'host_port' => '',
+                           'container_port' => '3000',
+                         }]
+        end
+
+        it 'does not include the colon affixed to the host port info' do
+          expected = '-p 3000'
+          expect(model.docker_run_string).to include expected
+        end
+      end
+
+
       context 'when the UDP protocol is specified' do
 
         before do

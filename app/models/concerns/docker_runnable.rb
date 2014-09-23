@@ -36,8 +36,7 @@ module DockerRunnable
       option = '-p '
       if port['host_interface'] || port['host_port']
         option << "#{port['host_interface']}:" if port['host_interface']
-        option << "#{port['host_port']}" if port['host_port']
-        option << ':'
+        option << "#{port['host_port']}:" unless port['host_port'].to_s.empty?
       end
       option << "#{port['container_port']}"
       option << '/udp' if port['proto'] && port['proto'].upcase == 'UDP'
