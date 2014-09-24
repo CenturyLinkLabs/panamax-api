@@ -11,6 +11,7 @@ class TemplateFileSerializer < ActiveModel::Serializer
       :links,
       :environment,
       :volumes,
+      :volumes_from,
       :command
 
     def category

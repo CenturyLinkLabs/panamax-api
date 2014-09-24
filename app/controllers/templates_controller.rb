@@ -46,6 +46,7 @@ class TemplatesController < ApplicationController
         :type,
         :command,
         volumes: [],
+        volumes_from: [[:container_name]],
         expose: [],
         links: [[:service_id, :alias]],
         environment: [[:variable, :value, :required]],

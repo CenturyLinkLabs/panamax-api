@@ -19,6 +19,10 @@ service1:
     ---
     - host_path: /var/panamax
       container_path: /var/app/panamax
+  volumes_from: |
+    ---
+    - container_name: foodata
+    - container_name: bardata
   command: '/bin/foo'
 
 service2:

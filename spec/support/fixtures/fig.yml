@@ -11,6 +11,8 @@ web:
       value: mysecretpassword
   volumes:
     - cache/:/tmp/cache
+  volumes_from:
+    - container_name: foobar
 db:
   image: mysql
   expose:

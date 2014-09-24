@@ -50,9 +50,14 @@
         }
       ],
       "volumes": [
-      {
+        {
           "host_path": "cache/",
           "container_path": "/tmp/cache"
+        }
+      ],
+      "volumes_from": [
+        {
+          "container_name": "foobaz"
         }
       ],
       "category": "Web Tier",

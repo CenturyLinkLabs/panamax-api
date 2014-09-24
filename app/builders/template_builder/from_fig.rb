@@ -29,6 +29,7 @@ module TemplateBuilder
         image.ports = ports(service_def['ports'])
         image.expose = service_def['expose']
         image.volumes = volumes(service_def['volumes'])
+        image.volumes_from = service_def['volumes_from']
         image.environment = service_def['environment']
       end
     end

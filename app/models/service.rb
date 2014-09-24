@@ -27,6 +27,7 @@ class Service < ActiveRecord::Base
   serialize :expose, Array
   serialize :environment, Array
   serialize :volumes, Array
+  serialize :volumes_from, Array
 
   before_save :resolve_name_conflicts
   before_create :set_internal_name
@@ -35,6 +36,7 @@ class Service < ActiveRecord::Base
   validates_presence_of :name
   validates :ports, has_container_ports: true, has_unique_ports: true
   validates :volumes, has_container_paths: true
+  validates :volumes_from, has_container_names: true
   validates :expose, is_numeric_list: true
 
   attr_writer :manager
@@ -85,6 +87,9 @@ class Service < ActiveRecord::Base
 
     attributes[:volumes] ||= []
     attributes[:volumes].map! { |vol| vol.to_hash }
+
+    attributes[:volumes_from] ||= []
+    attributes[:volumes_from].map! { |vol_f| vol_f.to_hash }
 
     attributes[:ports] ||= []
     attributes[:ports].map! { |port| port.to_hash }

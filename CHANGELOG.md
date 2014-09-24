@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+0.2.2 - 2014
+------------------
+
+### Added
+- Support for mounting volumes from other containers using --volumes-from ([panamax-ui#283](https://github.com/CenturyLinkLabs/panamax-ui/issues/283))
+
+
 0.2.1 - 2014-09-18
 ------------------
 

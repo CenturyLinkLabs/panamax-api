@@ -27,6 +27,7 @@ describe Converters::TemplateConverter do
           environment: { var: 'val' },
           command: '/boom shaka',
           volumes: ['volumes'],
+          volumes_from: [{ 'container_name' => 'foobaz' }],
           type: 'mysql'
         )
       end
@@ -51,6 +52,7 @@ describe Converters::TemplateConverter do
         expect(service.environment).to eq image.environment
         expect(service.command).to eq image.command
         expect(service.volumes).to eq image.volumes
+        expect(service.volumes_from).to eq image.volumes_from
         expect(service.type).to eq image.type
       end
 

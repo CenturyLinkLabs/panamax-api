@@ -12,6 +12,7 @@ module DockerRunnable
       expose_flags,
       environment_flags,
       volume_flags,
+      volumes_from_flag,
       from,
       command
     ].flatten.compact.join(' ').strip
@@ -62,6 +63,15 @@ module DockerRunnable
       option << volume['container_path']
       option
     end
+  end
+
+  def volumes_from_flag
+    return unless volumes_from
+    dvols = ''
+    volumes_from.map do |data_volumes|
+      dvols += " #{data_volumes['container_name']}"
+    end
+    "--volumes-from#{dvols}" unless dvols.blank?
   end
 
 end
