@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+Latest
+------------------
+
+### Added
+- Return ports exposed by the Dockerfile in service details (#209)
+
+
 0.2.2 - 2014-09-26
 ------------------
 

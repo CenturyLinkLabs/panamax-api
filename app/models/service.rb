@@ -65,6 +65,13 @@ class Service < ActiveRecord::Base
     self.start
   end
 
+  def default_exposed_ports
+    result = Docker::Image.get(self.from).info['Config']['ExposedPorts']
+    result.present? ? result.keys : []
+  rescue Docker::Error::DockerError
+    []
+  end
+
   # Works just like ActiveRecord::Persistence#update but will also update relations
   def update_with_relationships(attributes)
     attributes[:links] ||= []

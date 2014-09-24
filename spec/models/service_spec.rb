@@ -172,6 +172,78 @@ describe Service do
     end
   end
 
+  describe '#default_exposed_ports' do
+
+    context 'when default exposed ports exist' do
+
+      let(:image_status) do
+        double(:image_status,
+               info: {
+                 'Config' => {
+                   'ExposedPorts' => {'3000/tcp' => {} }
+                 }
+               })
+      end
+
+      before do
+        Docker::Image.stub(:get).and_return(image_status)
+      end
+
+      it 'queries the Docker API with the base image name' do
+        expect(Docker::Image).to receive(:get).with(subject.from)
+        subject.default_exposed_ports
+      end
+
+      it 'assigns each exposed port to an array' do
+        expect(subject.default_exposed_ports).to match_array %w(3000/tcp)
+      end
+    end
+
+    context 'when default exposed ports exist' do
+
+      let(:image_status) do
+        double(:image_status,
+               info: {
+                 'Config' => {
+                   'ExposedPorts' => nil
+                 }
+               })
+      end
+
+      before do
+        Docker::Image.stub(:get).and_return(image_status)
+      end
+
+      it 'queries the Docker API with the base image name' do
+        expect(Docker::Image).to receive(:get).with(subject.from)
+        subject.default_exposed_ports
+      end
+
+      it 'returns an empty array' do
+        expect(subject.default_exposed_ports).to be_a(Array)
+        expect(subject.default_exposed_ports.length).to eql(0)
+      end
+    end
+
+    context 'when there is a Docker error' do
+
+      before do
+        Docker::Image.stub(:get).and_raise(Docker::Error::DockerError)
+      end
+
+      it 'queries the Docker API with the base image name' do
+        expect(Docker::Image).to receive(:get).with(subject.from)
+        subject.default_exposed_ports
+      end
+
+      it 'returns an empty array' do
+        expect(subject.default_exposed_ports).to be_a(Array)
+        expect(subject.default_exposed_ports.length).to eql(0)
+      end
+    end
+
+  end
+
   describe '#update_with_relationships' do
 
     let(:attrs) { { name: 'new_name' } }

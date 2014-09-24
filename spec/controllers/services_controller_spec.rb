@@ -3,6 +3,19 @@ require 'spec_helper'
 describe ServicesController do
   let(:app) { App.first }
 
+  let(:image_status) do
+    double(:image_status,
+           info: {
+             'Config' => {
+               'ExposedPorts' => {'3000/tcp' => {} }
+             }
+           })
+  end
+
+  before do
+    Docker::Image.stub(:get).and_return(image_status)
+  end
+
   describe '#index' do
 
     it 'returns an array' do
