@@ -59,6 +59,8 @@ RSpec.configure do |config|
   config.before(:each) do
     # Stub methods on Docker client
     Docker::Container.stub(:get).and_return({})
+    KMTS.stub(:record)
+    KMTS.stub(:alias)
 
     # Stub methods on PanamaxAgent::Journal::Client
     journal_client = double(:journal_client)
