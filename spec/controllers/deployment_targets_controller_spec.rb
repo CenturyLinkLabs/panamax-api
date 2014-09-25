@@ -20,7 +20,7 @@ describe DeploymentTargetsController do
     context 'when the desired target exists' do
       it 'queries for the DeploymentTarget with the supplied identifier' do
         get :show, id: deployment_target.id, format: :json
-        expect(response.body).to eq deployment_target.to_json
+        expect(response.body).to eq DeploymentTargetSerializer.new(deployment_target).to_json
       end
 
       it 'returns an HTTP 200 status code' do
