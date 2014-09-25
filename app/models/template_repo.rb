@@ -18,14 +18,7 @@ class TemplateRepo < ActiveRecord::Base
   def load_templates
     self.files.each do |file|
       next unless file.name.end_with?('.pmx')
-      TemplateBuilder.create(file.content).tap do |tpl|
-        tpl.source = self.name
-        if self.name.downcase == 'centurylinklabs/panamax-contest-templates'
-          existing_keywords = tpl.keywords.to_s.split(', ')
-          tpl.keywords = (existing_keywords << 'contest').uniq.join(', ')
-        end
-        tpl.save
-      end
+      TemplateBuilder.create(file.content).tap { |tpl| tpl.update_attributes(source: self.name) }
     end
     self.touch
   end

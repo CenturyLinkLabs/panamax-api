@@ -73,30 +73,6 @@ describe TemplateRepo do
       expect(template.source).to eql subject.name
     end
 
-    context 'contest submissions' do
-      before do
-        subject.name = 'CenturyLinkLabs/panamax-contest-templates'
-      end
-
-      it 'appends the contest keyword to the existing keywords list' do
-        template.keywords = 'mysql, postgres'
-        subject.load_templates
-        expect(template.keywords).to eq 'mysql, postgres, contest'
-      end
-
-      it 'adds the contest keyword when there are no existing keywords' do
-        template.keywords = nil
-        subject.load_templates
-        expect(template.keywords).to eq 'contest'
-      end
-
-      it 'does not add a duplicate contest keyword if one already exists' do
-        template.keywords = 'postgres, contest'
-        subject.load_templates
-        expect(template.keywords).to eq 'postgres, contest'
-      end
-    end
-
     it 'updates the updated_at value' do
       repo = template_repos(:repo1)
       repo.stub(:files).and_return([])
