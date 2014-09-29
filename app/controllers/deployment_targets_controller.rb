@@ -27,6 +27,6 @@ class DeploymentTargetsController < ApplicationController
   private
 
   def deploy_target_params
-    params.permit(:endpoint_url)
+    params.permit(:name, :auth_blob)
   end
 end

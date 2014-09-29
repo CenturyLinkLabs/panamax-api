@@ -42,7 +42,22 @@ describe DeploymentTargetsController do
   end
 
   describe 'POST #create' do
-    let(:create_params) { { 'endpoint_url' => 'http://endpoint.example.com' } }
+    let(:create_params) do
+      auth_array = [
+        'http://endpoint.example.com',
+        'admin',
+        'password',
+        'cert contents'
+      ]
+      {
+        'name' => 'dev',
+        'auth_blob' => Base64.encode64(auth_array.join('|'))
+      }
+    end
+
+    after do
+      FileUtils.rm_f('certs/dev.crt')
+    end
 
     context 'when creation is successful' do
       it 'creates the deployment target' do
@@ -60,9 +75,9 @@ describe DeploymentTargetsController do
 
   describe 'PATCH/PUT #update' do
     it 'updates the deployment target' do
-      update_params = { 'endpoint_url' => 'https://updated.url' }
+      update_params = { 'name' => 'production backup' }
       patch :update, { id: deployment_target.id, format: :json }.merge(update_params)
-      expect(deployment_target.reload.endpoint_url).to eq 'https://updated.url'
+      expect(deployment_target.reload.name).to eq 'production backup'
     end
 
     it 'returns an HTTP 204 status code' do

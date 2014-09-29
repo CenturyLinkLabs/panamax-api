@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140912192958) do
+ActiveRecord::Schema.define(version: 20140919202446) do
 
   create_table "app_categories", force: true do |t|
     t.string   "name"
@@ -30,7 +30,9 @@ ActiveRecord::Schema.define(version: 20140912192958) do
   end
 
   create_table "deployment_targets", force: true do |t|
-    t.string "endpoint_url"
+    t.string "name"
+    t.text   "cert_file"
+    t.text   "auth_blob"
   end
 
   create_table "images", force: true do |t|
