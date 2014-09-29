@@ -20,6 +20,8 @@ Latest
 
 0.2.1 - 2014-09-18
 ------------------
+### ADDED
+- support for remote deployments (#205 and #207)
 
 ### Added
 - Support for service renaming (#202)
