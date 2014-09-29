@@ -12,6 +12,7 @@ module DockerRunnable
       expose_flags,
       environment_flags,
       volume_flags,
+      volumes_from_flags,
       from,
       command
     ].flatten.compact.join(' ').strip
@@ -64,4 +65,10 @@ module DockerRunnable
     end
   end
 
+  def volumes_from_flags
+    return unless volumes_from && volumes_from.present?
+    volumes_from.map do |svol|
+      "--volumes-from #{svol.exported_from_service_name}"
+    end
+  end
 end

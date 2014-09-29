@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140919202446) do
+ActiveRecord::Schema.define(version: 20140929181001) do
 
   create_table "app_categories", force: true do |t|
     t.string   "name"
@@ -97,6 +97,17 @@ ActiveRecord::Schema.define(version: 20140919202446) do
 
   add_index "services", ["app_id"], name: "index_services_on_app_id"
   add_index "services", ["name"], name: "index_services_on_name"
+
+  create_table "shared_volumes", force: true do |t|
+    t.integer  "exported_from_service_id"
+    t.integer  "mounted_on_service_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "shared_volumes", ["exported_from_service_id", "mounted_on_service_id"], name: "index_shared_volume_keys", unique: true
+  add_index "shared_volumes", ["exported_from_service_id"], name: "index_shared_volumes_on_exported_from_service_id"
+  add_index "shared_volumes", ["mounted_on_service_id"], name: "index_shared_volumes_on_mounted_on_service_id"
 
   create_table "template_repos", force: true do |t|
     t.string   "name"

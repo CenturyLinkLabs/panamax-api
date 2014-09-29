@@ -35,7 +35,7 @@ shared_examples 'a docker runnable model' do
         model.ports = [{
           'host_interface' => '0.0.0.0',
           'host_port' => '8000',
-          'container_port' => '3000',
+          'container_port' => '3000'
         }]
       end
 
@@ -48,10 +48,10 @@ shared_examples 'a docker runnable model' do
 
         before do
           model.ports = [{
-                           'host_interface' => nil,
-                           'host_port' => '',
-                           'container_port' => '3000',
-                         }]
+            'host_interface' => nil,
+            'host_port' => '',
+            'container_port' => '3000'
+          }]
         end
 
         it 'does not include the colon affixed to the host port info' do
@@ -60,13 +60,12 @@ shared_examples 'a docker runnable model' do
         end
       end
 
-
       context 'when the UDP protocol is specified' do
 
         before do
           model.ports = [{
             'container_port' => '3000',
-            'proto' => 'udp',
+            'proto' => 'udp'
           }]
         end
 
@@ -81,7 +80,7 @@ shared_examples 'a docker runnable model' do
         before do
           model.ports = [{
             'container_port' => '3000',
-            'proto' => 'tcp',
+            'proto' => 'tcp'
           }]
         end
 
@@ -145,6 +144,21 @@ shared_examples 'a docker runnable model' do
         expect(model.docker_run_string).to include expected
       end
     end
+
+    context 'when volumes_from flags are specified' do
+
+      before do
+        exported_from_service = Service.new(name: 'foobar')
+        vol_from = SharedVolume.new(exported_from_service: exported_from_service)
+        model.volumes_from << vol_from
+      end
+
+      it 'generates a docker command with --volumes-from' do
+        expected = '--volumes-from foobar'
+        expect(model.docker_run_string).to include expected
+      end
+    end
+
   end
 
   describe '#docker_status' do

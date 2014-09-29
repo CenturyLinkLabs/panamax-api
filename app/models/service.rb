@@ -15,12 +15,23 @@ class Service < ActiveRecord::Base
     class_name: 'ServiceLink',
     foreign_key: 'linked_from_service_id',
     dependent: :destroy
+  has_many :volumes_from,
+    class_name: 'SharedVolume',
+    foreign_key: 'mounted_on_service_id',
+    dependent: :destroy
 
   # Only here for the dependent destroy. Want to remove any service link joins that may point
   # to this model as the 'linked_to_service'
   has_many :linked_from_links,
     class_name: 'ServiceLink',
     foreign_key: 'linked_to_service_id',
+    dependent: :destroy
+
+  # Only here for the dependent destroy. Want to remove any service mount joins that may point
+  # to this model as the 'mounted_on_service'
+  has_many :mounted_volumes,
+    class_name: 'SharedVolume',
+    foreign_key: 'exported_from_service_id',
     dependent: :destroy
 
   serialize :ports, Array
@@ -87,6 +98,13 @@ class Service < ActiveRecord::Base
       self.categories.find_or_initialize_by(
         app_category_id: category[:id],
         position: category[:position]
+      )
+    end
+
+    attributes[:volumes_from] ||= []
+    attributes[:volumes_from].map! do |svol|
+      self.volumes_from.find_or_initialize_by(
+        exported_from_service_id: svol[:service_id]
       )
     end
 
