@@ -18,3 +18,5 @@ db:
   environment:
     - variable: MYSQL_ROOT_PASSWORD
       value: mysecretpassword
+  volumes_from:
+    - web
