@@ -66,5 +66,16 @@ describe Converters::ServiceConverter do
         service1.categories.build(app_category: app_categories(:category1))
       end
     end
+
+    context 'when handling services with volumes_from' do
+      before do
+        service1.volumes_from.create(exported_from_service: services(:service2))
+      end
+
+      it 'populates the image with volumes_from' do
+        expect(subject.to_image.volumes_from).to eql [{ 'service' => 'my-other-service' }]
+      end
+    end
+
   end
 end
