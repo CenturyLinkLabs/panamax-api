@@ -6,6 +6,7 @@ Latest
 
 ### Added
 - Return ports exposed by the Dockerfile in service details (#209)
+- Support for mounting volumes from other containers using `--volumes-from` ([panamax-ui#283](https://github.com/CenturyLinkLabs/panamax-ui/issues/283))
 
 
 0.2.2 - 2014-09-26
