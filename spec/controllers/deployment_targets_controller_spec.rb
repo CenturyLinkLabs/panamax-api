@@ -55,10 +55,6 @@ describe DeploymentTargetsController do
       }
     end
 
-    after do
-      FileUtils.rm_f('certs/dev.crt')
-    end
-
     context 'when creation is successful' do
       it 'creates the deployment target' do
         expect do

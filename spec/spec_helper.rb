@@ -82,6 +82,14 @@ RSpec.configure do |config|
       ]
     )
     Octokit::Client.stub(:new).and_return(fake_github_object)
+
+    #create dummy ssl certs dir
+    FileUtils::mkdir_p('dummy_certs')
+    PanamaxApi.stub(:ssl_certs_dir).and_return('dummy_certs/')
+  end
+
+  config.after(:each) do
+    FileUtils.rm_rf('dummy_certs')
   end
 end
 

@@ -26,7 +26,7 @@ describe DeploymentTarget do
   describe 'Active Record callbacks' do
     subject { deployment_targets(:target1) }
 
-    let(:file_name) { 'certs/dev.crt' }
+    let(:file_name) { "#{PanamaxApi.ssl_certs_dir}dev.crt" }
 
     describe 'before validating' do
       it 'sets the cert file' do

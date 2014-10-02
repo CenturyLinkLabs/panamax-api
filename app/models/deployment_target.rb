@@ -50,7 +50,7 @@ class DeploymentTarget < ActiveRecord::Base
   end
 
   def save_reference
-    self.cert_file = "certs/#{name.to_s.downcase}.crt"
+    self.cert_file = "#{PanamaxApi.ssl_certs_dir}#{name.to_s.downcase}.crt"
   end
 
   def write_certificate
