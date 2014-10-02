@@ -33,7 +33,9 @@ describe TemplateFileSerializer do
             type: 'ghi',
             categories: ['jkl'],
             expose: [8000],
-            environment: [{ 'variable' => 'mno', 'value' => 'pqr' }]
+            environment: [{ 'variable' => 'mno', 'value' => 'pqr' }],
+            volumes: [{ 'host_path' => '/tmp/foo', 'container_path' => '/tmp/bar' }],
+            volumes_from: [{ 'service' => 'baz' }]
           )
         ]
       )
@@ -63,6 +65,11 @@ images:
   environment:
   - variable: mno
     value: pqr
+  volumes:
+  - host_path: "/tmp/foo"
+    container_path: "/tmp/bar"
+  volumes_from:
+  - service: baz
       EXPECTED
     end
 

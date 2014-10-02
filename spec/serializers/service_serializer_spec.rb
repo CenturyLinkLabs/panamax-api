@@ -8,7 +8,7 @@ describe ServiceSerializer do
     double(:image_status,
       info: {
         'Config' => {
-          'ExposedPorts' => {'3000/tcp' => {} }
+          'ExposedPorts' => { '3000/tcp' => {} }
         }
       })
   end
@@ -29,6 +29,7 @@ describe ServiceSerializer do
       :ports,
       :expose,
       :volumes,
+      :volumes_from,
       :command,
       :app,
       :categories,

@@ -77,7 +77,8 @@ class AppsController < ApplicationController
       environment: [[:variable, :value, :required]],
       ports: [[:host_interface, :host_port, :container_port, :proto]],
       expose: [],
-      volumes: [[:host_path, :container_path]]
+      volumes: [[:host_path, :container_path]],
+      volumes_from: [[:service]]
     )
   end
 

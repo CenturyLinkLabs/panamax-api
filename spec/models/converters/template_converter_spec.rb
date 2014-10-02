@@ -27,6 +27,7 @@ describe Converters::TemplateConverter do
           environment: { var: 'val' },
           command: '/boom shaka',
           volumes: ['volumes'],
+          volumes_from: ['service1'],
           type: 'mysql'
         )
       end
@@ -118,6 +119,36 @@ describe Converters::TemplateConverter do
         app = subject.to_app
         s1, s2 = app.services
         expect(s2.links.first.linked_to_service).to eq s1
+      end
+    end
+
+    context 'with shared volumes' do
+
+      let(:image1) { Image.new(name: 'I1', source: 'I1:latest') }
+      let(:image2) { Image.new(name: 'I2', source: 'I2:latest') }
+
+      before do
+        image2.volumes_from = [{ 'service' => 'I1' }]
+        template.images = [image1, image2]
+      end
+
+      it 'creates a service for both images' do
+        app = subject.to_app
+        expect(app.services.size).to eq 2
+      end
+
+      it 'creates shared volumes where appropriate' do
+        app = subject.to_app
+        s1, s2 = app.services
+        expect(s1.volumes_from.size).to eq 0
+        expect(s2.volumes_from.size).to eq 1
+      end
+
+      it 'shared volumes linked to the services correctly' do
+        app = subject.to_app
+        s1, s2 = app.services
+        expect(s2.volumes_from.first.exported_from_service_id).to eq s2.id
+        expect(s2.volumes_from.first.mounted_on_service_id).to eq s1.id
       end
     end
 

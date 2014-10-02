@@ -49,8 +49,8 @@ class TemplatesController < ApplicationController
         expose: [],
         links: [[:service_id, :alias]],
         environment: [[:variable, :value, :required]],
-        links: [[:service_id, :alias]],
-        ports: [[:host_interface, :host_port, :container_port, :proto]]
+        ports: [[:host_interface, :host_port, :container_port, :proto]],
+        volumes_from: [[:service_id]]
       ]]
     )
   end

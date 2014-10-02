@@ -11,6 +11,8 @@ class ServiceSerializer < ActiveModel::Serializer
 
   has_many :links, serializer: ServiceLinkSerializer
 
+  has_many :volumes_from, serializer: SharedVolumeSerializer
+
   def load_state
     service_state[:load_state]
   end

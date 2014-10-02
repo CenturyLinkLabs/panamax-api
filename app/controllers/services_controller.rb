@@ -51,6 +51,7 @@ class ServicesController < ApplicationController
       ports: [[:host_interface, :host_port, :container_port, :proto]],
       expose: [],
       volumes: [[:host_path, :container_path]],
+      volumes_from: [[:service_id]],
       links: [[:service_id, :alias]],
       environment: [[:variable, :value, :required]]
     )

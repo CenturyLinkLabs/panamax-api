@@ -24,7 +24,12 @@
         }
       ],
       "category": "DB Tier",
-      "type": "mysql"
+      "type": "mysql",
+      "volumes_from": [
+        {
+          "service": "WP"
+        }
+      ],
     },
     {
       "name": "WP",
@@ -50,7 +55,7 @@
         }
       ],
       "volumes": [
-      {
+        {
           "host_path": "cache/",
           "container_path": "/tmp/cache"
         }

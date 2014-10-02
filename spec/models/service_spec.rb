@@ -180,7 +180,7 @@ describe Service do
         double(:image_status,
                info: {
                  'Config' => {
-                   'ExposedPorts' => {'3000/tcp' => {} }
+                   'ExposedPorts' => { '3000/tcp' => {} }
                  }
                })
       end
@@ -277,6 +277,33 @@ describe Service do
         end
 
         subject.update_with_relationships(attrs_with_volumes)
+      end
+    end
+
+    context 'when volumes_from are not provided' do
+      it 'updates with an empty volumes_from list' do
+        expect(subject).to receive(:update).with(hash_including(volumes_from: []))
+        subject.update_with_relationships(attrs)
+      end
+
+    end
+
+    context 'when volumes_from are provided' do
+      let(:attrs_with_volumes_from) do
+        attrs.merge(
+            volumes_from: [{ service_id: 1 }]
+        )
+      end
+
+      let(:shared_volume) { SharedVolume.new(exported_from_service_id: 1) }
+
+      before do
+        subject.stub_chain(:volumes_from, :find_or_initialize_by).and_return(shared_volume)
+      end
+
+      it 'populates the related shared volumes' do
+        expect(subject).to receive(:update).with(hash_including(volumes_from: [shared_volume]))
+        subject.update_with_relationships(attrs_with_volumes_from)
       end
     end
 

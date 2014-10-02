@@ -30,6 +30,7 @@ module TemplateBuilder
         image.expose = service_def['expose']
         image.volumes = volumes(service_def['volumes'])
         image.environment = service_def['environment']
+        image.volumes_from = shared_volumes(service_def['volumes_from'])
       end
     end
 
@@ -51,6 +52,12 @@ module TemplateBuilder
     def volumes(volumes_array)
       Array(volumes_array).map do |volume|
         ['host_path', 'container_path'].zip(volume.split(':')).to_h
+      end
+    end
+
+    def shared_volumes(vol_from_array)
+      Array(vol_from_array).map do |vol_from|
+        { 'service' => vol_from }
       end
     end
 

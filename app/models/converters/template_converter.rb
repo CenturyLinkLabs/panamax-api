@@ -20,6 +20,13 @@ module Converters
         linked_from_service.links = service_links_from_image(image)
       end
 
+      # Set-up shared volumes for services
+      template.images.each do |image|
+        next unless image.volumes_from?
+        the_service = find_service(image.name)
+        the_service.volumes_from = shared_volumes_from_image(image)
+      end
+
       App.new(
         name: template.name,
         from: "Template: #{template.name}",
@@ -58,6 +65,14 @@ module Converters
         ServiceLink.new(
           linked_to_service: find_service(link['service']),
           alias: link['alias']
+        )
+      end
+    end
+
+    def shared_volumes_from_image(image)
+      image.volumes_from.map do |vol_from|
+        SharedVolume.new(
+          exported_from_service: find_service(vol_from['service'])
         )
       end
     end
