@@ -26,6 +26,26 @@ describe RegistriesController do
     end
   end
 
+  describe 'PATCH/PUT #update' do
+    it 'updates the registry' do
+      update_params = { 'name' => 'biz' }
+      patch :update, { id: registry.id, format: :json }.merge(update_params)
+      expect(registry.reload.name).to eq 'biz'
+    end
+
+    it 'returns an HTTP 204 status code' do
+      put :update, id: registry.id, format: :json
+      expect(response.status).to eq 204
+    end
+
+    context 'when the record cannot be found' do
+      it 'returns an HTTP 500 status code' do
+        put :update, id: registry.id + 777, format: :json
+        expect(response.status).to eq 500
+      end
+    end
+  end
+
   describe 'DELETE #destroy' do
     it 'removes the supplied DeploymentTarget' do
       expect do

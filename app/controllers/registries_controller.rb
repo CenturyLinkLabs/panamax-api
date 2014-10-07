@@ -5,6 +5,12 @@ class RegistriesController < ApplicationController
     respond_with Registry.create(registry_params)
   end
 
+  def update
+    registry = Registry.find(params[:id])
+    registry.update(registry_params)
+    respond_with registry
+  end
+
   def destroy
     respond_with Registry.destroy(params[:id])
   end
