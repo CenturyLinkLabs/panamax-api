@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140929193656) do
+ActiveRecord::Schema.define(version: 20141007193548) do
 
   create_table "app_categories", force: true do |t|
     t.string   "name"
@@ -57,6 +57,13 @@ ActiveRecord::Schema.define(version: 20140929193656) do
 
   add_index "images", ["image_id"], name: "index_images_on_image_id", unique: true
   add_index "images", ["source"], name: "index_images_on_source"
+
+  create_table "registries", force: true do |t|
+    t.string   "name"
+    t.string   "endpoint_url"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "service_categories", force: true do |t|
     t.integer  "service_id"
