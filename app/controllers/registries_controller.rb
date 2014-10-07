@@ -1,6 +1,10 @@
 class RegistriesController < ApplicationController
   respond_to :json
 
+  def index
+    respond_with Registry.all
+  end
+
   def create
     respond_with Registry.create(registry_params)
   end

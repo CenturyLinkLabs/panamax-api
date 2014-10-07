@@ -4,6 +4,18 @@ describe RegistriesController do
 
   let(:registry) { registries(:registry1) }
 
+  describe 'GET #index' do
+    it 'returns a list of registries' do
+      get :index, format: :json
+      expect(response.body).to eq [RegistrySerializer.new(registry)].to_json
+    end
+
+    it 'returns an HTTP 200 status code' do
+      get :index, format: :json
+      expect(response.status).to eq 200
+    end
+  end
+
   describe 'POST #create' do
     let(:create_params) do
       {
