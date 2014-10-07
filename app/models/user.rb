@@ -41,7 +41,7 @@ class User < ActiveRecord::Base
   def retrieve_from_github(resource, default=nil)
     result = github_client.send(resource)
     block_given? ? yield(result) : result
-  rescue Octokit::Unauthorized
+  rescue Octokit::NotFound, Octokit::Unauthorized
     default
   end
 

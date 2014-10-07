@@ -161,6 +161,19 @@ describe User do
         expect(subject.email).to be_nil
       end
     end
+
+    context 'when the github token is unscoped for email' do
+
+      before do
+        fake_gh_client.stub(:emails)
+        .and_raise(Octokit::NotFound)
+      end
+
+      it 'returns nil' do
+        expect(subject.email).to be_nil
+      end
+    end
+
   end
 
   describe '#github_username' do
