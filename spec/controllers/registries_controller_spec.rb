@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe RegistriesController do
 
+  let(:registry) { registries(:registry1) }
+
   describe 'POST #create' do
     let(:create_params) do
       {
@@ -20,6 +22,26 @@ describe RegistriesController do
       it 'returns an HTTP 201 status code' do
         post :create, create_params.merge(format: :json)
         expect(response.status).to eq 201
+      end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    it 'removes the supplied DeploymentTarget' do
+      expect do
+        delete :destroy, id: registry.id, format: :json
+      end.to change { Registry.count }.by(-1)
+    end
+
+    it 'returns an HTTP 204 status code' do
+      delete :destroy, id: registry.id, format: :json
+      expect(response.status).to eq 204
+    end
+
+    context 'when the destroy fails' do
+      it 'returns an HTTP 500 status code' do
+        delete :destroy, id: registry.id + 777, format: :json
+        expect(response.status).to eq 500
       end
     end
   end

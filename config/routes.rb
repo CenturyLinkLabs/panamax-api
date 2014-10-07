@@ -30,7 +30,7 @@ PanamaxApi::Application.routes.draw do
                             only: [:index, :show, :create, :destroy]
   end
 
-  resources :registries, only: [:create]
+  resources :registries, only: [:create, :destroy]
 
   resources :local_images, only: [:index, :destroy]
   get 'local_images/*id', to: 'local_images#show'

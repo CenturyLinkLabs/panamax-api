@@ -6,7 +6,7 @@ class RegistriesController < ApplicationController
   end
 
   def destroy
-
+    respond_with Registry.destroy(params[:id])
   end
 
   private
