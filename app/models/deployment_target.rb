@@ -81,7 +81,7 @@ class DeploymentTarget < ActiveRecord::Base
       self.ssl_options = {
         verify_mode: OpenSSL::SSL::VERIFY_PEER,
         ca_file: cert_file
-      }
+      } unless Rails.env.development?
     end
   end
 end
