@@ -21,8 +21,10 @@ module TemplateGithub
     rescue Octokit::UnprocessableEntity
       resp = github_client.contents(repo, path: file_full_path)
       github_client.update_contents(repo, file_full_path, commit_message, resp.sha, contents, opts)
-    rescue Octokit::NotFound, Octokit::Unauthorized => ex
-      raise "Saving the template file failed: #{ex.message}."
+    rescue Octokit::NotFound
+      raise "Saving the template file failed due to insufficient privileges. Please select the access scope for the token to be at least 'repo' and 'user:email'."
+    rescue Octokit::Unauthorized
+      raise "Saving the template file failed due to missing, malformed or expired token."
     end
 
   end
