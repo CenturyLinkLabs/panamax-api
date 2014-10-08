@@ -12,3 +12,4 @@
 TemplateRepo.skip_callback(:create, :after, :reload_templates)
 TemplateRepo.find_or_create_by(name: 'centurylinklabs/panamax-public-templates')
 TemplateRepo.set_callback(:create, :after, :reload_templates)
+Registry.create(name: 'Docker Hub', endpoint_url: 'https://index.docker.io')
