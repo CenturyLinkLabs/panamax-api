@@ -1,7 +1,7 @@
 class RemoteImageSearchResultSerializer < ActiveModel::Serializer
   self.root = false
 
-  attributes :source, :description, :is_official, :is_trusted, :star_count
+  attributes :source, :description, :is_official, :is_trusted, :star_count, :registry_id
 
   def source
     object.id
