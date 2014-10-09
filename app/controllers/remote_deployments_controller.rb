@@ -12,8 +12,11 @@ class RemoteDeploymentsController < ApplicationController
 
   def create
     template = Template.find(params[:template_id])
-    template_yaml = TemplateFileSerializer.new(template).to_yaml
-    respond_with deployment_target.create_deployment(template_yaml), location: nil
+    override = TemplateBuilder.create(params[:override])
+
+    deployment = deployment_target.create_deployment(template, override)
+
+    respond_with deployment, location: nil
   end
 
   def destroy

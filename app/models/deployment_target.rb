@@ -19,8 +19,10 @@ class DeploymentTarget < ActiveRecord::Base
     remote_deployment_model.find(deployment_id)
   end
 
-  def create_deployment(template)
-    remote_deployment_model.create(template: template)
+  def create_deployment(template, override)
+    remote_deployment_model.create(
+      template: TemplateFileSerializer.new(template),
+      override: TemplateFileSerializer.new(override))
   end
 
   def delete_deployment(deployment_id)

@@ -9,6 +9,13 @@ describe DeploymentTarget do
     }
   end
 
+  let(:override) do
+    {
+      'name' => 'Wordpress Application',
+      'description' => 'a glob'
+    }
+  end
+
   let(:remote_deployment) { RemoteDeployment.new }
 
   let(:remote_deployments) do
@@ -133,8 +140,14 @@ describe DeploymentTarget do
 
   describe '#create_deployment' do
     it 'creates the deployment' do
-      expect(RemoteDeployment).to receive(:create).with(template: template)
-      subject.create_deployment(template)
+      expect(RemoteDeployment).to receive(:create) do |opts|
+        expect(opts.keys).to match_array([:template, :override])
+        expect(opts[:template]).to be_kind_of(TemplateFileSerializer)
+        expect(opts[:template].object).to eq template
+        expect(opts[:override]).to be_kind_of(TemplateFileSerializer)
+        expect(opts[:override].object).to eq override
+      end
+      subject.create_deployment(template, override)
     end
   end
 
