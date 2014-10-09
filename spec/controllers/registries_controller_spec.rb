@@ -7,7 +7,26 @@ describe RegistriesController do
   describe 'GET #index' do
     it 'returns a list of registries' do
       get :index, format: :json
-      expect(response.body).to eq [RegistrySerializer.new(registry)].to_json
+
+      expected = ActiveModel::ArraySerializer.new(
+        Registry.all,
+        each_serializer: RegistrySerializer).to_json
+      expect(response.body).to eq expected
+    end
+
+    it ' returns all registries when no limit is given' do
+      get :index, format: :json
+      expect(JSON.parse(response.body)).to have_exactly(2).items
+    end
+
+    it 'allows a limit parameter to limit the number of registries returned in the response' do
+      get :index, limit: 1, format: :json
+      expect(JSON.parse(response.body)).to have_exactly(1).item
+    end
+
+    it 'includes a Total-Count header with the registry count' do
+      get :index, format: :json
+      expect(response.headers['Total-Count']).to eq Registry.count
     end
 
     it 'returns an HTTP 200 status code' do

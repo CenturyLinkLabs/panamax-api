@@ -2,7 +2,8 @@ class RegistriesController < ApplicationController
   respond_to :json
 
   def index
-    respond_with Registry.all
+    headers['Total-Count'] = Registry.count
+    respond_with Registry.limit(params[:limit].presence)
   end
 
   def create

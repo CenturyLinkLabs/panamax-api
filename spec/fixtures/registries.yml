@@ -1,3 +1,7 @@
 registry1:
   name: quay
   endpoint_url: http://example.com
+registry2:
+  name: the-titanic
+  endpoint_url: http://example1.com
+
