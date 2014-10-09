@@ -25,9 +25,9 @@ describe UsersController do
 
       before do
         # Neuter model validations
-        User.any_instance.stub(:access_token_scope)
-        User.any_instance.stub(:email).and_return(email)
-        User.any_instance.stub(:valid?).and_return(true)
+        GithubTemplateRepoProvider.any_instance.stub(:access_token_scope)
+        GithubTemplateRepoProvider.any_instance.stub(:email).and_return(email)
+        GithubTemplateRepoProvider.any_instance.stub(:valid?).and_return(true)
         User.any_instance.stub(:subscribe)
         ENV['PANAMAX_ID'] = '123'
       end
@@ -35,7 +35,7 @@ describe UsersController do
       it 'changes the user attributes' do
         put :update, params.merge(format: :json)
 
-        expect(User.instance.github_access_token).to eq(
+        expect(User.instance.template_repo_providers.first.credentials.api_key).to eq(
           params[:github_access_token])
       end
 
@@ -92,12 +92,14 @@ describe UsersController do
       end
     end
 
-    context 'when the user fails validation' do
+    context 'when the template_repo_provider credentials are not valid' do
+
+      let(:template_repo_provider) { double('provider', valid?: false) }
 
       before do
+        subject.stub(:template_repo_provider).and_return(template_repo_provider)
         user = User.new
-        user.stub(:update)
-        user.stub(:valid?).and_return(false)
+        user.stub(:update_credentials_for).and_return false
         user.errors.add(:base, 'boom')
 
         User.stub(:instance).and_return(user)

@@ -18,7 +18,7 @@ class TemplatesController < ApplicationController
 
   def save
     template = Template.find(params[:id])
-    resp = template.save_to_repo(template_save_params)
+    resp = template_repo_provider.save_template(template, template_save_params)
     log_kiss_event('save-template', template_name: template.name)
     html_url = resp[:content][:html_url]
     render(nothing: true, location: html_url, status: :no_content)
@@ -58,7 +58,8 @@ class TemplatesController < ApplicationController
   def template_save_params
     params.permit(
       :repo,
-      :file_name
+      :file_name,
+      :template_repo_provider
     )
   end
 

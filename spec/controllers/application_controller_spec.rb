@@ -133,7 +133,7 @@ describe ApplicationController do
       let(:email) { 'foo@bar.com' }
 
       before do
-        User.stub(:instance).and_return(double(:user, email: email))
+        User.stub(:instance).and_return(double(:user, primary_email: email))
       end
 
       it 'logs the event with the user email address' do
@@ -148,7 +148,7 @@ describe ApplicationController do
 
       before do
         ENV['PANAMAX_ID'] = panamax_id
-        User.stub(:instance).and_return(double(:user, email: nil))
+        User.stub(:instance).and_return(double(:user, primary_email: nil))
       end
 
       it 'logs the event with the panamax ID' do
