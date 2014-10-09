@@ -35,7 +35,8 @@ describe TemplateFileSerializer do
             expose: [8000],
             environment: [{ 'variable' => 'mno', 'value' => 'pqr' }],
             volumes: [{ 'host_path' => '/tmp/foo', 'container_path' => '/tmp/bar' }],
-            volumes_from: [{ 'service' => 'baz' }]
+            volumes_from: [{ 'service' => 'baz' }],
+            deployment: { 'count' => 2 }
           )
         ]
       )
@@ -70,6 +71,8 @@ images:
     container_path: "/tmp/bar"
   volumes_from:
   - service: baz
+  deployment:
+    count: 2
       EXPECTED
     end
 

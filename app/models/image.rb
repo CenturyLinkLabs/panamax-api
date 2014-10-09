@@ -3,6 +3,8 @@ class Image < ActiveRecord::Base
 
   self.inheritance_column = :_type_disabled
 
+  attr_accessor :deployment
+
   serialize :categories, Array
   serialize :links, Array
   serialize :ports, Array
