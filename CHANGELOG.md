@@ -1,7 +1,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-Latest
+0.2.4 - 2014-10-10
+------------------
+### Added
+
+- Ability to add, update, list, and delete private registries (#27)
+
+### Fixed
+- Github exceptions when saving a template (#216 & #218)
+
+
+0.2.3 - 2014-02-02
 ------------------
 
 ### Added
