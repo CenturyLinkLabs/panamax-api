@@ -74,24 +74,48 @@ describe RemoteDeploymentsController do
         )
       end
 
+      let(:override) do
+        {
+          'name' => 'wordpress application',
+          'description' => 'glob'
+        }
+      end
+
+      let(:post_args) do
+        {
+          deployment_target_id: 44,
+          template_id: 21,
+          override: override,
+          format: :json
+        }
+      end
+
       before do
         Template.stub(:find).with(21).and_return(template)
         deployment_target.stub(:create_deployment)
       end
 
+      it 'turns the override into a Template' do
+        expect(TemplateBuilder).to receive(:create).with(override)
+        post :create, post_args
+      end
+
       it 'creates the deployment' do
-        expect(deployment_target).to receive(:create_deployment).with(TemplateFileSerializer.new(template).to_yaml)
-        post :create, deployment_target_id: 44, template_id: 21, format: :json
+        expect(deployment_target).to receive(:create_deployment)
+          .with(template, instance_of(Template))
+
+        post :create, post_args
       end
 
       it 'returns an HTTP 201 status code' do
-        post :create, deployment_target_id: 44, template_id: 21, format: :json
+        post :create, post_args
         expect(response.status).to eq 201
       end
 
       context 'when the given template does not exist' do
         before do
-          Template.stub(:find).with(13).and_raise(ActiveResource::ResourceNotFound.new(double('err', code: '404')))
+          Template.stub(:find).with(13).and_raise(
+            ActiveResource::ResourceNotFound.new(double('err', code: '404')))
         end
 
         it 'returns an HTTP 500 status code' do

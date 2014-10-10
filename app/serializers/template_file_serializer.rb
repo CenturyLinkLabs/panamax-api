@@ -12,7 +12,8 @@ class TemplateFileSerializer < ActiveModel::Serializer
       :environment,
       :volumes,
       :volumes_from,
-      :command
+      :command,
+      :deployment
 
     def category
       object.categories.first unless object.categories.blank?
