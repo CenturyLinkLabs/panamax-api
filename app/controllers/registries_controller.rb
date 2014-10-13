@@ -27,6 +27,6 @@ class RegistriesController < ApplicationController
   private
 
   def registry_params
-    params.permit(:name, :endpoint_url)
+    params.permit(:name, :endpoint_url, :enabled)
   end
 end

@@ -7,7 +7,7 @@ class Registry < ActiveRecord::Base
   end
 
   def self.search(term, limit=nil)
-    results = self.all.each_with_object([]) do |registry, a|
+    results = self.where(enabled: true).each_with_object([]) do |registry, a|
       a << registry.search(term)
     end.flatten
     limit ? results.first(limit) : results

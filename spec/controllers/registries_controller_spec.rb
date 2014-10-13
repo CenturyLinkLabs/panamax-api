@@ -39,7 +39,8 @@ describe RegistriesController do
     let(:create_params) do
       {
         'name' => 'top secret',
-        'endpoint_url' => 'http://boom.shaka'
+        'endpoint_url' => 'http://boom.shaka',
+        'enabled' => false
       }
     end
 

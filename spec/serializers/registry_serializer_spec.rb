@@ -8,7 +8,8 @@ describe RegistrySerializer do
     expected_keys = [
       :id,
       :name,
-      :endpoint_url
+      :endpoint_url,
+      :enabled
     ]
     expect(serialized.keys).to match_array expected_keys
   end

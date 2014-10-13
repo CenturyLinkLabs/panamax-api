@@ -64,6 +64,19 @@ describe Registry do
       expect(result.star_count).to eq search_result['star_count']
     end
 
+    context 'when a registry is not enabled' do
+      let(:docker_hub) { registries(:registry0) }
+
+      before do
+        docker_hub.update_attribute(:enabled, false)
+      end
+
+      it 'searches only the enabled registries' do
+        result = described_class.search(query)
+        expect(result.map(&:registry_id)).to_not include(docker_hub.id)
+      end
+    end
+
     context 'when a limit is provided' do
 
       let(:limit) { 1 }

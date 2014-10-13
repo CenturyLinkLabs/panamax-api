@@ -2,6 +2,8 @@ registry0:
   id: 0
   name: Docker Hub
   endpoint_url: https://index.docker.io
+  enabled: true
 registry1:
   name: quay
   endpoint_url: http://example.com
+  enabled: true
