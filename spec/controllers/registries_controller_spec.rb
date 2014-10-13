@@ -77,6 +77,25 @@ describe RegistriesController do
     end
   end
 
+  describe 'GET #show' do
+    it 'returns a successful status code' do
+      get :show, id: registry.id, format: :json
+      expect(response.status).to eq 200
+    end
+
+    it 'returns the registry matching the id' do
+      get :show, id: registry.id, format: :json
+      expect(response.body).to eq RegistrySerializer.new(registry).to_json
+    end
+
+    context 'when the record cannot be found' do
+      it 'returns an erroneous status code' do
+        get :show, id: registry.id + 97, format: :json
+        expect(response.status).to eq 500
+      end
+    end
+  end
+
   describe 'DELETE #destroy' do
     it 'removes the supplied DeploymentTarget' do
       expect do

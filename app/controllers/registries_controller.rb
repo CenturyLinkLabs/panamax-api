@@ -16,6 +16,10 @@ class RegistriesController < ApplicationController
     respond_with registry
   end
 
+  def show
+    respond_with(Registry.find(params[:id]))
+  end
+
   def destroy
     respond_with Registry.destroy(params[:id])
   end
