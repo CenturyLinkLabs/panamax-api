@@ -12,7 +12,7 @@ describe SearchController do
     let(:local_image) { LocalImage.new }
 
     before do
-      RemoteImage.stub(:search).and_return([remote_image])
+      Registry.stub(:search).and_return([remote_image])
       LocalImage.stub(:search).and_return([local_image])
     end
 
@@ -70,7 +70,7 @@ describe SearchController do
       let(:query) { 'wordpress' }
 
       it 'queries remote images with the search term and limit' do
-        expect(RemoteImage).to receive(:search).with(query, limit.to_i)
+        expect(Registry).to receive(:search).with(query, limit.to_i)
         get :index, q: query, limit: limit, type: 'remote_image', format: 'json'
       end
 
@@ -93,7 +93,7 @@ describe SearchController do
 
     context 'when type is not supplied' do
       it 'passes the query to the Image when searching the remote index' do
-        expect(RemoteImage).to receive(:search).with(query, limit.to_i)
+        expect(Registry).to receive(:search).with(query, limit.to_i)
         get :index, q: query, limit: limit, format: 'json'
       end
 

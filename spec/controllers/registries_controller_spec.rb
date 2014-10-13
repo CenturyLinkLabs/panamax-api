@@ -8,10 +8,10 @@ describe RegistriesController do
     it 'returns a list of registries' do
       get :index, format: :json
 
-      expected = ActiveModel::ArraySerializer.new(
-        Registry.all,
-        each_serializer: RegistrySerializer).to_json
-      expect(response.body).to eq expected
+      expect(response.body).to eq [
+        RegistrySerializer.new(registries(:registry0)),
+        RegistrySerializer.new(registry),
+      ].to_json
     end
 
     it ' returns all registries when no limit is given' do

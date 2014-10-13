@@ -34,6 +34,6 @@ class SearchController < ApplicationController
   end
 
   def wrapped_remote_images(q, limit)
-    RemoteImage.search(q, limit).wrap(RemoteImageSearchResultSerializer)
+    Registry.search(q, limit).wrap(RemoteImageSearchResultSerializer)
   end
 end
