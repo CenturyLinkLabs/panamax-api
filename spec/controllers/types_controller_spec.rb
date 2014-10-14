@@ -19,7 +19,20 @@ describe TypesController do
         { 'name' => 'Drupal' },
         { 'name' => 'Django' },
         { 'name' => 'Apache' },
-        { 'name' => 'Ubuntu' }
+        { 'name' => 'Ubuntu' },
+        { 'name' => 'Alfresco' },
+        { 'name' => 'Joomla' },
+        { 'name' => 'Liferay' },
+        { 'name' => 'Moodle' },
+        { 'name' => 'odoo' },
+        { 'name' => 'phpBB' },
+        { 'name' => 'Redmine' },
+        { 'name' => 'Subversion' },
+        { 'name' => 'SugarCRM' },
+        { 'name' => 'MAMP' },
+        { 'name' => 'MediaWiki' },
+        { 'name' => 'Trac' },
+        { 'name' => 'WAMP' }
       ].to_json
     end
   end
