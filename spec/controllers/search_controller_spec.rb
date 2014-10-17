@@ -31,12 +31,12 @@ describe SearchController do
       end
 
       it 'does not search remote images' do
-        expect(Image).to_not receive(:search_remote_index)
+        expect(Registry).to_not receive(:search)
         get :index, q: query, type: 'template', format: 'json'
       end
 
       it 'does not search local images' do
-        expect(Image).to_not receive(:local_with_repo_like)
+        expect(LocalImage).to_not receive(:search)
         get :index, q: query, type: 'template', format: 'json'
       end
     end
@@ -56,7 +56,7 @@ describe SearchController do
       end
 
       it 'does not search remote images' do
-        expect(Image).to_not receive(:search_remote_index)
+        expect(Registry).to_not receive(:search)
         get :index, q: query, type: 'local_image', format: 'json'
       end
 
@@ -81,7 +81,7 @@ describe SearchController do
       end
 
       it 'does not search local images' do
-        expect(Image).to_not receive(:local_with_repo_like)
+        expect(LocalImage).to_not receive(:search)
         get :index, q: query, type: 'remote_image', format: 'json'
       end
 
