@@ -14,7 +14,10 @@ class SearchController < ApplicationController
     {}.tap do |results|
       results[:templates] = wrapped_templates(q, limit) if types.include? 'template'
       results[:local_images] = wrapped_local_images(q, limit) if types.include? 'local_image'
-      results[:remote_images] = wrapped_remote_images(q, limit) if types.include? 'remote_image'
+
+      if types.include? 'remote_image'
+        results[:remote_images], results[:errors] = wrapped_remote_images(q, limit)
+      end
     end
   end
 
@@ -34,6 +37,7 @@ class SearchController < ApplicationController
   end
 
   def wrapped_remote_images(q, limit)
-    Registry.search(q, limit).wrap(RemoteImageSearchResultSerializer)
+    images, errors = Registry.search(q, limit)
+    return images.wrap(RemoteImageSearchResultSerializer), errors
   end
 end

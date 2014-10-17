@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Registry do
   let(:registry_client) do
-    double(:fake_registry_client)
+    double(:registry_client)
   end
 
   before do
@@ -20,9 +20,47 @@ describe Registry do
     end
   end
 
-  describe '.search' do
+  describe ".enabled" do
+    subject { Registry.enabled }
+    before { registries(:registry0).update_attribute(:enabled, false) }
 
+    it { should eq([ registries(:registry1) ]) }
+  end
+
+  describe '.search' do
+    let(:successful_registry) { double(:successful_registry) }
+    let(:errored_registry) { double(:errored_registry) }
+    let(:error_hash) { { summary: "Problem" } }
+    let(:first_image) { double }
+    let(:second_image) { double }
     let(:query) { 'foo' }
+    subject(:search) { described_class.search(query) }
+
+    before do
+      Registry.stub(:enabled).and_return([ successful_registry, errored_registry ])
+      successful_registry.stub(:search).and_return({ remote_images: [ first_image, second_image ] })
+      errored_registry.stub(:search).and_return({ error: error_hash })
+      search
+    end
+
+    it 'calls search on the registry with the terms' do
+      expect(successful_registry).to have_received(:search).with(query)
+      expect(errored_registry).to have_received(:search).with(query)
+    end
+
+    its(:first) { should eq([ first_image, second_image ]) }
+    its(:second) { should eq([ error_hash ]) }
+
+    context 'when a limit is provided' do
+      subject(:search) { described_class.search(query, 1) }
+      its(:first) { should eq([ first_image ]) }
+      its(:second) { should eq([ error_hash ]) }
+    end
+  end
+
+  describe '#search' do
+    let(:registry) { registries(:registry0) }
+    subject(:search) { registry.search("test") }
 
     let(:search_result) do
       {
@@ -36,54 +74,32 @@ describe Registry do
 
     let(:dummy_results) { 3.times.map { |i| search_result }}
 
-    before do
-      registry_client.stub(:search).and_return({
-        'results' => dummy_results
-      })
+    context 'when the RegistryClient raises an error' do
+      before { registry_client.stub(:search).and_raise(StandardError.new("Error details")) }
+      subject { search[:error] }
+
+      its([:registry_id]) { should eq(registry.id) }
+      its([:summary]) { should eq(I18n.t('registry_search_error')) }
+      its([:details]) { should eq('StandardError: Error details') }
     end
 
-    it 'passes the search term to the Docker API' do
-      expect(registry_client).to receive(:search).with(query)
-      described_class.search(query)
-    end
+    context 'when the RegistryClient search is successful' do
+      before { registry_client.stub(:search).and_return({ 'results' => dummy_results }) }
 
-    it 'returns a RemoteImage for each search result' do
-      result = described_class.search(query)
-
-      expect(result.map(&:class)).to eq 6.times.map { RemoteImage }
-    end
-
-    it 'returns RemoteImage instances populated with search result data' do
-      result = described_class.search(query).first
-
-      expect(result).to be_kind_of(RemoteImage)
-      expect(result.id).to eq search_result['name']
-      expect(result.description).to eq search_result['description']
-      expect(result.is_official).to eq search_result['is_official']
-      expect(result.is_trusted).to eq search_result['is_trusted']
-      expect(result.star_count).to eq search_result['star_count']
-    end
-
-    context 'when a registry is not enabled' do
-      let(:docker_hub) { registries(:registry0) }
-
-      before do
-        docker_hub.update_attribute(:enabled, false)
+      it 'returns a RemoteImage for each search result' do
+        expect(search[:remote_images].map(&:class)).to eq 3.times.map { RemoteImage }
       end
 
-      it 'searches only the enabled registries' do
-        result = described_class.search(query)
-        expect(result.map(&:registry_id)).to_not include(docker_hub.id)
-      end
-    end
+      it 'returns RemoteImage instances populated with search result data' do
+        result = search[:remote_images].first
 
-    context 'when a limit is provided' do
-
-      let(:limit) { 1 }
-
-      it 'returns only the specified number of results' do
-        result = described_class.search(query, limit)
-        expect(result.size).to eq limit
+        expect(result).to be_kind_of(RemoteImage)
+        expect(result.id).to eq search_result['name']
+        expect(result.description).to eq search_result['description']
+        expect(result.is_official).to eq search_result['is_official']
+        expect(result.is_trusted).to eq search_result['is_trusted']
+        expect(result.star_count).to eq search_result['star_count']
+        expect(result.registry_id).to eq registry.id
       end
     end
   end

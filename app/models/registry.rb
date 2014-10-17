@@ -6,16 +6,28 @@ class Registry < ActiveRecord::Base
     self.find(0)
   end
 
+  def self.enabled
+    where(enabled: true)
+  end
+
   def self.search(term, limit=nil)
-    results = self.where(enabled: true).each_with_object([]) do |registry, a|
-      a << registry.search(term)
-    end.flatten
-    limit ? results.first(limit) : results
+    errors = []
+    results = []
+    self.enabled.each do |registry|
+      response = registry.search(term)
+      results += response[:remote_images] if response[:remote_images].present?
+      errors << response[:error] if response[:error].present?
+    end
+
+    [
+      limit ? results.first(limit) : results,
+      errors
+    ]
   end
 
   def search(term)
     response = registry_client.search(term)
-    response["results"].map do |r|
+    images = response["results"].map do |r|
       RemoteImage.new(
         id: r['name'],
         description: r['description'],
@@ -25,6 +37,17 @@ class Registry < ActiveRecord::Base
         registry_id: id
       )
     end
+    {
+      remote_images: images
+    }
+  rescue StandardError => e
+    {
+      error: {
+        registry_id: id,
+        summary: I18n.t('registry_search_error'),
+        details: "#{e.class.name}: #{e.message}"
+      }
+    }
   end
 
   # At this time, find_by_name only populates the id and tags, getting
