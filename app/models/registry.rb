@@ -1,6 +1,6 @@
 class Registry < ActiveRecord::Base
   validates :name, presence: true
-  validates :endpoint_url, presence: true
+  validates :endpoint_url, presence: true, is_valid_url: true
 
   def self.docker_hub
     self.find(0)
