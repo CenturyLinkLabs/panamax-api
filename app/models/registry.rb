@@ -44,7 +44,7 @@ class Registry < ActiveRecord::Base
     {
       error: {
         registry_id: id,
-        summary: I18n.t('registry_search_error'),
+        summary: I18n.t('registry_search_error', name: name),
         details: "#{e.class.name}: #{e.message}"
       }
     }

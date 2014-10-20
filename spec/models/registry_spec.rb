@@ -79,8 +79,7 @@ describe Registry do
       subject { search[:error] }
 
       its([:registry_id]) { should eq(registry.id) }
-      its([:summary]) { should eq(I18n.t('registry_search_error')) }
-      its([:details]) { should eq('StandardError: Error details') }
+      its([:summary]) { should eq(I18n.t('registry_search_error', name: registry.name)) }
     end
 
     context 'when the RegistryClient search is successful' do

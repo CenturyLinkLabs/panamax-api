@@ -37,5 +37,5 @@ en:
     </ul>
 
   registry_connection_error: "Docker Registry API is not responding"
-  registry_search_error: "There was an error performing a search on one of your registries. The endpoint may be invalid or behind authorization."
+  registry_search_error: "There was an error performing a search on your registry, %{name}. The endpoint may be invalid or behind authorization."
   github_connection_error: "GitHub API is not responding"
