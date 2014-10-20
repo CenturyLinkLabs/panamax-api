@@ -12,7 +12,7 @@ describe SearchController do
     let(:local_image) { LocalImage.new }
 
     before do
-      Registry.stub(:search).and_return([remote_image])
+      Registry.stub(:search).and_return([[remote_image], []])
       LocalImage.stub(:search).and_return([local_image])
     end
 
@@ -31,12 +31,12 @@ describe SearchController do
       end
 
       it 'does not search remote images' do
-        expect(Image).to_not receive(:search_remote_index)
+        expect(Registry).to_not receive(:search)
         get :index, q: query, type: 'template', format: 'json'
       end
 
       it 'does not search local images' do
-        expect(Image).to_not receive(:local_with_repo_like)
+        expect(LocalImage).to_not receive(:search)
         get :index, q: query, type: 'template', format: 'json'
       end
     end
@@ -56,7 +56,7 @@ describe SearchController do
       end
 
       it 'does not search remote images' do
-        expect(Image).to_not receive(:search_remote_index)
+        expect(Registry).to_not receive(:search)
         get :index, q: query, type: 'local_image', format: 'json'
       end
 
@@ -69,25 +69,47 @@ describe SearchController do
     context 'when searching for remote images only' do
       let(:query) { 'wordpress' }
 
-      it 'queries remote images with the search term and limit' do
-        expect(Registry).to receive(:search).with(query, limit.to_i)
-        get :index, q: query, limit: limit, type: 'remote_image', format: 'json'
+      context "when all searches are successful" do
+        it 'queries remote images with the search term and limit' do
+          expect(Registry).to receive(:search).with(query, limit.to_i)
+          get :index, q: query, limit: limit, type: 'remote_image', format: 'json'
+        end
+
+        it 'only returns remote images' do
+          get :index, q: query, type: 'remote_image', format: 'json'
+          parsed_results = JSON.parse(response.body)
+          expect(parsed_results.keys).to match_array %w(remote_images q errors)
+        end
+
+        it 'does not search local images' do
+          expect(LocalImage).to_not receive(:search)
+          get :index, q: query, type: 'remote_image', format: 'json'
+        end
+
+        it 'does not search templates' do
+          expect(Template).to_not receive(:search)
+          get :index, q: query, type: 'remote_image', format: 'json'
+        end
       end
 
-      it 'only returns remote images' do
-        get :index, q: query, type: 'remote_image', format: 'json'
-        parsed_results = JSON.parse(response.body)
-        expect(parsed_results.keys).to match_array %w(remote_images q)
-      end
+      context 'when a search includes errors' do
+        let(:results) { double(:fake_results, wrap: []) }
+        let(:errors) { [ { summary: 'check before wreck' } ] }
+        let(:hash) { JSON.parse(response.body) }
 
-      it 'does not search local images' do
-        expect(Image).to_not receive(:local_with_repo_like)
-        get :index, q: query, type: 'remote_image', format: 'json'
-      end
+        before do
+          Registry.stub(:search).and_return([results, errors])
+          get :index, q: query, type: 'remote_image', format: 'json'
+        end
 
-      it 'does not search templates' do
-        expect(Template).to_not receive(:search)
-        get :index, q: query, type: 'remote_image', format: 'json'
+        it 'returns the results' do
+          expect(hash['remote_images']).to be_empty
+        end
+
+        it 'returns the errors' do
+          expect(hash['errors'].length).to eq(1)
+          expect(hash['errors'].first["summary"]).to eq("check before wreck")
+        end
       end
     end
 
