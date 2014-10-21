@@ -1,0 +1,8 @@
+default:
+  name: 'Github Public'
+
+github:
+  name: 'GitHub'
+  credentials_api_key: 'just an api key'
+  type: 'GithubTemplateRepoProvider'
+

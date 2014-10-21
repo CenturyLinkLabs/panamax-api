@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141013151215) do
+ActiveRecord::Schema.define(version: 20141014213759) do
 
   create_table "app_categories", force: true do |t|
     t.string   "name"
@@ -118,13 +118,27 @@ ActiveRecord::Schema.define(version: 20141013151215) do
   add_index "shared_volumes", ["exported_from_service_id"], name: "index_shared_volumes_on_exported_from_service_id"
   add_index "shared_volumes", ["mounted_on_service_id"], name: "index_shared_volumes_on_mounted_on_service_id"
 
-  create_table "template_repos", force: true do |t|
+  create_table "template_repo_providers", force: true do |t|
+    t.string   "type"
     t.string   "name"
+    t.string   "credentials_account"
+    t.text     "credentials_api_key"
+    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "template_repo_providers", ["user_id"], name: "index_template_repo_providers_on_user_id"
+
+  create_table "template_repos", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "template_repo_provider_id"
+  end
+
   add_index "template_repos", ["name"], name: "index_template_repos_on_name", unique: true
+  add_index "template_repos", ["template_repo_provider_id"], name: "index_template_repos_on_template_repo_provider_id"
 
   create_table "templates", force: true do |t|
     t.string   "name"
@@ -143,7 +157,6 @@ ActiveRecord::Schema.define(version: 20141013151215) do
   add_index "templates", ["name"], name: "index_templates_on_name"
 
   create_table "users", force: true do |t|
-    t.string "github_access_token"
   end
 
 end

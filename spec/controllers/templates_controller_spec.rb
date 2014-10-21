@@ -106,13 +106,15 @@ describe TemplatesController do
         file_name: 'somefile'
       }
     end
+    let(:template_repo_provider) { template_repo_providers(:github) }
 
     before do
-      Template.any_instance.stub(:save_to_repo).with(hash_including(params)).and_return(save_response)
+      template_repo_provider.stub(:save_template).with(template, hash_including(params)).and_return(save_response)
+      TemplateRepoProvider.stub(:find_or_create_default_for).with(User.instance).and_return(template_repo_provider)
     end
 
     it 'saves a template to a repo' do
-      expect_any_instance_of(Template).to receive(:save_to_repo).with(hash_including(params))
+      expect(template_repo_provider).to receive(:save_template).with(template, hash_including(params))
 
       post :save, params.merge(
           id: template.id,
@@ -148,7 +150,7 @@ describe TemplatesController do
     context 'when the template save fails' do
 
       before do
-        Template.any_instance.stub(:save_to_repo).with(hash_including(params)).and_raise('error')
+        template_repo_provider.stub(:save_template).with(template, hash_including(params)).and_raise('error')
       end
 
       it 'returns an internal_server_error status' do
@@ -159,6 +161,24 @@ describe TemplatesController do
         expect(response.status).to eq 500
       end
     end
+
+    context "when a template_repo_provider is given" do
+      before do
+        TemplateRepoProvider.unstub(:find_or_create_default_for)
+        TemplateRepoProvider.stub(:find).with(template_repo_provider.id).and_return(template_repo_provider)
+      end
+
+      it 'saves a template to a repo' do
+        expect(template_repo_provider).to receive(:save_template).with(template, hash_including(params))
+
+        post :save, params.merge(
+            id: template.id,
+            format: :json,
+            template_repo_provider: template_repo_provider.id
+        )
+      end
+    end
+
   end
 
 end

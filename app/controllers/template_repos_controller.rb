@@ -22,6 +22,6 @@ class TemplateReposController < ApplicationController
   private
 
   def template_repo_params
-    params.permit(:name)
+    params.permit(:name, :template_repo_provider)
   end
 end

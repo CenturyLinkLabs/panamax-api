@@ -34,11 +34,19 @@ class ApplicationController < ActionController::Base
   end
 
   def user_id
-    User.instance.email || panamax_id
+    User.instance.primary_email || panamax_id
   end
 
   def panamax_id
     ENV['PANAMAX_ID'] || ''
+  end
+
+  def template_repo_provider
+    if id = params[:template_repo_provider].presence
+      TemplateRepoProvider.find(id)
+    else
+      TemplateRepoProvider.find_or_create_default_for(User.instance)
+    end
   end
 
 end

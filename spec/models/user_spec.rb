@@ -1,19 +1,19 @@
 require 'spec_helper'
 
 describe User do
-  let(:fake_gh_client) { double(:fake_gh_client) }
+  let(:fake_gh_client) { Octokit::Client.new } # see spec_helper
 
   before do
-    Octokit::Client.stub(:new).and_return(fake_gh_client)
+    subject.template_repo_providers << template_repo_providers(:github)
   end
 
-  it { should respond_to :github_access_token }
+  it { should respond_to :template_repo_providers }
 
   describe '.instance' do
 
     context 'when a user has already been persisted' do
 
-      let(:user) { User.new(github_access_token: 'foo') }
+      let(:user) { User.new }
 
       before do
         user.save
@@ -40,187 +40,111 @@ describe User do
     end
   end
 
-  describe 'access token validations' do
-
-    it 'does not validate the access token on new instances' do
-      expect(User.new).to be_valid
+  describe "#valid?" do
+    before do
+      template_repo_providers(:github).stub(:valid?).and_return(false)
     end
 
-    context 'when the access token has "user" scope' do
-
-      before do
-        fake_gh_client.stub(:scopes).and_return(['user'])
-        subject.update(github_access_token: 'token')
-      end
-
-      it { should be_valid }
-      it { should have(:no).error_on(:github_access_token) }
-    end
-
-    context 'when the access token has "user:email" scope' do
-
-      before do
-        fake_gh_client.stub(:scopes).and_return(['user:email'])
-        subject.update(github_access_token: 'token')
-      end
-
-      it { should be_valid }
-      it { should have(:no).error_on(:github_access_token) }
-    end
-
-    context 'when the access token has none of the required scopes' do
-
-      before do
-        fake_gh_client.stub(:scopes).and_return(['foo'])
-        subject.update(github_access_token: 'token')
-      end
-
-      it { should_not be_valid }
-      it { should have(1).error_on(:github_access_token) }
-
-      it 'returns a "token too restrictive" message' do
-        expect(subject.errors_on(:github_access_token)).to include(
-          'token too restrictive')
-      end
-    end
-
-    context 'when the access token is no good at all' do
-
-      before do
-        fake_gh_client.stub(:scopes)
-          .and_raise(Octokit::Unauthorized)
-        subject.update(github_access_token: 'token')
-      end
-
-      it { should_not be_valid }
-      it { should have(1).error_on(:github_access_token) }
-
-      it 'returns an "invalid token" message' do
-        expect(subject.errors_on(:github_access_token)).to include(
-          'invalid token')
-      end
+    it "returns false if the user's template_repo_providers are not all valid" do
+      expect(subject.valid?).to be_false
     end
   end
 
   describe '#repos' do
-
-    let(:repo) { double(:repo, full_name: 'foo/bar') }
-
-    context 'when the github token is valid' do
-
-      before do
-        fake_gh_client.stub(:repos).and_return([repo])
-      end
-
-      it 'returns a list of repo full names' do
-        expect(subject.repos).to include(repo.full_name)
-      end
+    before do
+      template_repo_providers(:github).stub(:repos).and_return(['foo/bar', 'bar/foo'])
     end
 
-    context 'when the github token is invalid' do
+    it 'returns a hash' do
+      expect(subject.repos).to be_a Hash
+    end
 
-      before do
-        fake_gh_client.stub(:repos)
-          .and_raise(Octokit::Unauthorized)
-      end
+    it 'returns a hash with keys corresponding to the names of the providers' do
+      repo_names = subject.template_repo_providers.collect(&:name)
+      expect(subject.repos.keys).to match_array(repo_names)
+    end
 
-      it 'returns an empty list' do
-        expect(subject.repos).to eq []
+    it 'returns a hash with values corresponding to the repos of the providers' do
+      repos = subject.template_repo_providers.collect(&:repos)
+      expect(subject.repos.values).to match_array(repos)
+    end
+
+    context 'without any providers' do
+      it 'returns an empty hash' do
+        subject.stub(:template_repo_providers).and_return([])
+        expect(subject.repos).to eq({})
       end
     end
   end
 
   describe '#email' do
-    context 'when the github token is valid' do
 
-      let(:gh_email1) do
-        double(:gh_email_object, email: 'foo@bar.com', primary: false)
-      end
-      let(:gh_email2) do
-        double(:gh_email_object, email: 'bar@foo.com', primary: true)
-      end
-
-      before do
-        fake_gh_client.stub(:emails)
-          .and_return([gh_email1, gh_email2])
-      end
-
-      it 'returns the primary email retrieved from github' do
-        expect(subject.email).to eq gh_email2.email
-      end
+    it 'returns a hash' do
+      expect(subject.email).to be_a Hash
     end
 
-    context 'when the github token is invalid' do
-
-      before do
-        fake_gh_client.stub(:emails)
-          .and_raise(Octokit::Unauthorized)
-      end
-
-      it 'returns nil' do
-        expect(subject.email).to be_nil
-      end
+    it 'returns a hash with keys corresponding to the names of the providers' do
+      repo_names = subject.template_repo_providers.collect(&:name)
+      expect(subject.email.keys).to match_array(repo_names)
     end
 
-    context 'when the github token is unscoped for email' do
+    it 'returns a hash with values corresponding to the email of the providers' do
+      emails = subject.template_repo_providers.collect(&:email)
+      expect(subject.email.values).to match_array(emails)
+    end
 
-      before do
-        fake_gh_client.stub(:emails)
-        .and_raise(Octokit::NotFound)
-      end
-
-      it 'returns nil' do
-        expect(subject.email).to be_nil
+    context 'without any providers' do
+      it 'returns an empty hash' do
+        subject.stub(:template_repo_providers).and_return([])
+        expect(subject.email).to eq({})
       end
     end
 
   end
 
-  describe '#github_username' do
-    context 'when the github token is valid' do
+  describe '#primary_email' do
+    it 'returns the first email address in the hash of emails' do
 
-      let(:gh_user_object) { double(:gh_user_object, login: 'testuser') }
+    end
+  end
 
-      before do
-        fake_gh_client.stub(:user).and_return(gh_user_object)
-      end
+  describe '#username' do
 
-      it 'returns the username retrieved from github' do
-        expect(subject.github_username).to eq 'testuser'
+    it 'returns a hash' do
+      expect(subject.username).to be_a Hash
+    end
+
+    it 'returns a hash with keys corresponding to the names of the providers' do
+      repo_names = subject.template_repo_providers.collect(&:name)
+      expect(subject.email.keys).to match_array(repo_names)
+    end
+
+    it 'returns a hash with values corresponding to the usernames of the providers' do
+      usernames = subject.template_repo_providers.collect(&:username)
+      expect(subject.username.values).to match_array(usernames)
+    end
+
+    context 'without any providers' do
+      it 'returns an empty hash' do
+        subject.stub(:template_repo_providers).and_return([])
+        expect(subject.email).to eq({})
       end
     end
 
-    context 'when the github token is invalid' do
-
-      before do
-        fake_gh_client.stub(:user)
-          .and_raise(Octokit::Unauthorized)
-      end
-
-      it 'returns nil' do
-        expect(subject.github_username).to be_nil
-      end
-    end
   end
 
   describe '#subscribe' do
 
     let(:mailchimp_client) { double(:mailchimp_client) }
 
-    let(:gh_email) do
-      double(:gh_email_object, email: 'bar@foo.com', primary: true)
-    end
-
     before do
-      fake_gh_client.stub(:emails).and_return([gh_email])
-
       mailchimp_client.stub(:create_subscription)
       PanamaxAgent.stub(:mailchimp_client).and_return(mailchimp_client)
     end
 
     it 'creates a subscription with the mailchimp client' do
       expect(mailchimp_client).to receive(:create_subscription)
-        .with(gh_email.email)
+        .with(fake_gh_client.emails.first.email)
 
       subject.subscribe
     end
@@ -235,6 +159,24 @@ describe User do
       it 'returns false' do
         expect(subject.subscribe).to eq false
       end
+    end
+  end
+
+  describe '#update_credentials_for' do
+    before do
+      fake_gh_client.stub(:scopes).and_return([])
+    end
+
+    it 'updates the passed provider with the credentials passed as options' do
+      creds = { credentials_account: nil, credentials_api_key: '1234' }
+      template_repo_providers(:github).should_receive(:update).with(creds)
+      subject.update_credentials_for(template_repo_providers(:github), github_access_token: '1234')
+    end
+
+    it 'makes the user not valid if the provider update is not valid' do
+      template_repo_providers(:github).stub(:valid?).and_return(false)
+      subject.update_credentials_for(template_repo_providers(:github), github_access_token: '1234')
+      expect(subject.valid?).to be_false
     end
   end
 end

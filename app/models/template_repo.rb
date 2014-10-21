@@ -1,18 +1,21 @@
 class TemplateRepo < ActiveRecord::Base
 
+  DEFAULT_PROVIDER_NAME = 'Github Public'
+
+  belongs_to :template_repo_provider
+
   after_create :reload_templates
   after_destroy :purge_templates
+  after_initialize :set_default_provider
 
   validates :name, presence: true, uniqueness: true
 
-  def files
-    stream = open(archive_url)
-    reader = Gem::Package::TarReader.new(Zlib::GzipReader.new(stream))
+  def set_default_provider
+    self.template_repo_provider ||= TemplateRepoProvider.where(name: DEFAULT_PROVIDER_NAME).first!
+  end
 
-    reader.map do |item|
-      next if item.directory?
-      OpenStruct.new(name: item.full_name, content: item.read)
-    end.compact
+  def files
+    template_repo_provider.files_for(self)
   end
 
   def load_templates
@@ -38,9 +41,4 @@ class TemplateRepo < ActiveRecord::Base
     self.all.each(&:load_templates)
   end
 
-  private
-
-  def archive_url
-    "https://github.com/#{name}/archive/master.tar.gz"
-  end
 end

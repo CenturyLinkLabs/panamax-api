@@ -15,21 +15,21 @@ class UsersController < ApplicationController
       params[:subscribe] == 1 ||
       params[:subscribe] == '1'
 
-    user = User.instance
-    user.update(user_params)
+    @user = User.instance
+    @user.update_credentials_for(template_repo_provider, user_params)
 
-    if user.valid?
-      alias_kiss_user(user.email)
-      user.subscribe if params[:subscribe]
+    if template_repo_provider.valid?
+      alias_kiss_user(@user.primary_email)
+      @user.subscribe(@user.primary_email) if params[:subscribe]
     end
 
-    respond_with user
+    respond_with @user
   end
 
   private
 
   def user_params
-    params.permit(:github_access_token)
+    params.permit(:account, :api_key, :github_access_token, :template_repo_provider)
   end
 
   def alias_kiss_user(email)
@@ -37,4 +37,5 @@ class UsersController < ApplicationController
   rescue => ex
     logger.warn(ex.message)
   end
+
 end
