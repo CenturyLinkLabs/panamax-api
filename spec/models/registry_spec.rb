@@ -152,7 +152,29 @@ describe Registry do
 
         expect(result.tags).to eq tag_list_new_style.map { |k,v| k }
       end
+    end
+  end
 
+  describe '#prefix' do
+    context 'when the registry is docker hub' do
+      let(:docker_hub) { registries(:registry0) }
+      subject { docker_hub.prefix }
+
+      it { should be_blank }
+    end
+
+    context 'when the registry is not docker hub' do
+      let(:registry) { Registry.new(endpoint_url: 'http://example.com:5000') }
+      subject { registry.prefix }
+
+      it { should eq 'example.com:5000/' }
+    end
+
+    context 'when the registry is https' do
+      let(:registry) { Registry.new(endpoint_url: 'https://private.com:5000') }
+      subject { registry.prefix }
+
+      it { should eq 'private.com:5000/' }
     end
   end
 end
