@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 0.2.5 - 2014-10-20
 ------------------
+### Fixed
+- Ability to actually run an image from a private registry (#232)
+
+0.2.5 - 2014-10-20
+------------------
 ### Added
 
 - Private Registry Support (#230, #229, #224, #223, #222, #219)
