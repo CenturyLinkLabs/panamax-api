@@ -99,6 +99,7 @@ describe Registry do
         expect(result.is_trusted).to eq search_result['is_trusted']
         expect(result.star_count).to eq search_result['star_count']
         expect(result.registry_id).to eq registry.id
+        expect(result.registry_name).to eq registry.name
       end
     end
   end

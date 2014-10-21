@@ -34,7 +34,8 @@ class Registry < ActiveRecord::Base
         is_official: r['is_official'],
         is_trusted: r['is_trusted'],
         star_count: r['star_count'],
-        registry_id: id
+        registry_id: id,
+        registry_name: name
       )
     end
     {
