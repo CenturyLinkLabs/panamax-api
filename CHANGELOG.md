@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+Latest
+------
+### Added 
+- Support for new SCM service types
+
 0.2.5 - 2014-10-21
 ------------------
 ### Fixed
