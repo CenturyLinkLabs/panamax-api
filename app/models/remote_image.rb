@@ -2,6 +2,7 @@ class RemoteImage < ApiModel
 
   attr_accessor :id
   attr_accessor :registry_id
+  attr_accessor :registry_name
   attr_accessor :tags
   attr_accessor :description
   attr_accessor :is_official

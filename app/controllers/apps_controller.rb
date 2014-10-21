@@ -70,6 +70,7 @@ class AppsController < ApplicationController
   def app_params
     params.permit(
       :template_id,
+      :registry_id,
       :image,
       :type,
       :command,

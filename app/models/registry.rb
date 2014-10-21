@@ -34,7 +34,8 @@ class Registry < ActiveRecord::Base
         is_official: r['is_official'],
         is_trusted: r['is_trusted'],
         star_count: r['star_count'],
-        registry_id: id
+        registry_id: id,
+        registry_name: name
       )
     end
     {
@@ -50,6 +51,10 @@ class Registry < ActiveRecord::Base
     }
   end
 
+  def prefix
+    "#{endpoint_url_without_scheme}/" unless id == 0
+  end
+
   # At this time, find_by_name only populates the id and tags, getting
   # is_official, is_trusted and star_count would require another service call
   def find_image_by_name(name)
@@ -58,6 +63,14 @@ class Registry < ActiveRecord::Base
   end
 
   private
+
+  def endpoint_url_without_scheme
+    endpoint_url.gsub(/^#{parsed_endpoint_uri.scheme}:\/\//,'')
+  end
+
+  def parsed_endpoint_uri
+    URI.parse(endpoint_url)
+  end
 
   def coerce_tags(tags)
     tags.map { |k,v| k.try(:[], "name") || k }
