@@ -30,42 +30,14 @@ describe DeploymentTarget do
     it { should validate_uniqueness_of :name }
   end
 
-  describe 'Active Record callbacks' do
-    subject { deployment_targets(:target1) }
+  describe '#cert_file' do
+    let(:cert_contents) { 'abc123' }
+    let(:deployment_target) { described_class.new(auth_blob: Base64.encode64("a|b|c|#{cert_contents}")) }
 
-    let(:file_name) { "#{PanamaxApi.ssl_certs_dir}dev.crt" }
+    subject { deployment_target.cert_file }
 
-    describe 'before validating' do
-      it 'sets the cert file' do
-        subject.name= 'dev'
-        subject.valid?
-
-        expect(subject.cert_file).to eq file_name
-      end
-    end
-
-    describe 'before saving' do
-      let(:fake_file) { double(:file) }
-
-      before do
-        File.stub(:open).with(file_name, 'w+').and_yield(fake_file)
-      end
-
-      it 'writes the public cert to a file' do
-        fake_file.should receive(:write).with('certificate contents')
-
-        subject.update(
-          name: 'dev',
-          auth_blob: Base64.encode64('a|b|c|certificate contents')
-        )
-      end
-    end
-
-    describe 'after destroying' do
-      it 'removes the cert file' do
-        expect(FileUtils).to receive(:rm_f).with(subject.cert_file)
-        subject.destroy
-      end
+    it 'returns a file with the cert contents' do
+      expect(subject.read).to eq cert_contents
     end
   end
 
@@ -109,7 +81,7 @@ describe DeploymentTarget do
     end
 
     it 'sets the proper ssl options' do
-      subject.cert_file = 'certs/foo.crt'
+      subject.stub_chain(:cert_file, :path).and_return('certs/foo.crt')
 
       expect(remote_deployment_model.ssl_options).to eq({
         verify_mode: OpenSSL::SSL::VERIFY_PEER,

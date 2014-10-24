@@ -7,10 +7,6 @@ class DeploymentTarget < ActiveRecord::Base
   validates_presence_of :cert_file
   validates :auth_blob, auth_blob: true
 
-  before_validation :save_reference
-  before_save :write_certificate
-  after_destroy :delete_certificate
-
   def list_deployments
     remote_deployment_model.all
   end
@@ -30,7 +26,16 @@ class DeploymentTarget < ActiveRecord::Base
   end
 
   def public_cert
-    auth_parts[3].presence || File.read_if_exists(cert_file)
+    auth_parts[3]
+  end
+
+  def cert_file
+    unless @cert_file
+      @cert_file = Tempfile.new(name.to_s.downcase)
+      @cert_file.write(public_cert)
+      @cert_file.close
+    end
+    @cert_file
   end
 
   def endpoint_url
@@ -51,20 +56,6 @@ class DeploymentTarget < ActiveRecord::Base
     Base64.decode64(auth_blob.to_s).split('|')
   end
 
-  def save_reference
-    self.cert_file = "#{PanamaxApi.ssl_certs_dir}#{name.to_s.downcase}.crt"
-  end
-
-  def write_certificate
-    File.open(cert_file, 'w+') do |f|
-      f.write(public_cert)
-    end
-  end
-
-  def delete_certificate
-    FileUtils.rm_f(cert_file.to_s)
-  end
-
   # Class for Deployment model is dynamically generated because we need
   # to be able to set the site at runtime based on the endpoint for the
   # specific deployment target
@@ -72,7 +63,7 @@ class DeploymentTarget < ActiveRecord::Base
     site_url = self.endpoint_url
     username = self.username
     password = self.password
-    cert_file = self.cert_file
+    cert_file_path = self.cert_file.path
 
     Class.new(RemoteDeployment) do
       self.site = site_url
@@ -82,7 +73,7 @@ class DeploymentTarget < ActiveRecord::Base
 
       self.ssl_options = {
         verify_mode: OpenSSL::SSL::VERIFY_PEER,
-        ca_file: cert_file
+        ca_file: cert_file_path
       } unless Rails.env.development?
     end
   end

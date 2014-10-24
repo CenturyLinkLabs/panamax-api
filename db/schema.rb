@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141013151215) do
+ActiveRecord::Schema.define(version: 20141024170358) do
 
   create_table "app_categories", force: true do |t|
     t.string   "name"
@@ -31,7 +31,6 @@ ActiveRecord::Schema.define(version: 20141013151215) do
 
   create_table "deployment_targets", force: true do |t|
     t.string "name"
-    t.text   "cert_file"
     t.text   "auth_blob"
   end
 
