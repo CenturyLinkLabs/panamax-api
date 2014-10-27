@@ -5,6 +5,7 @@ require 'rspec/rails'
 require 'rspec/autorun'
 require 'coveralls'
 require 'simplecov'
+require 'webmock/rspec'
 
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
   SimpleCov::Formatter::HTMLFormatter,
@@ -91,6 +92,10 @@ RSpec.configure do |config|
   config.after(:each) do
     FileUtils.rm_rf('dummy_certs')
   end
+
+  # This will be the Rspec 3 default and can be safely removed upon
+  # upgrade.
+  config.treat_symbols_as_metadata_keys_with_true_values = true
 end
 
 def fixture_data(filename, path='support/fixtures')
