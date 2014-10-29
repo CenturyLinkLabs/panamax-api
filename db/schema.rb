@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141024170358) do
+ActiveRecord::Schema.define(version: 20141028153952) do
 
   create_table "app_categories", force: true do |t|
     t.string   "name"
@@ -27,6 +27,15 @@ ActiveRecord::Schema.define(version: 20141024170358) do
     t.string "name"
     t.string "from"
     t.text   "documentation"
+  end
+
+  create_table "deployment_target_metadata", force: true do |t|
+    t.integer  "deployment_target_id"
+    t.string   "agent_version"
+    t.string   "adapter_version"
+    t.string   "adapter_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "deployment_targets", force: true do |t|

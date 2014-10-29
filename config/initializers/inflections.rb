@@ -17,4 +17,5 @@
 
 ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.plural 'panamax', 'panamax'
+  inflect.irregular 'metadata', 'metadata'
 end
