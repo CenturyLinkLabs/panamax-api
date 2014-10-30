@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ServicesController, :allow_net_connect do
+describe ServicesController do
   let(:app) { App.first }
 
   let(:image_status) do
@@ -14,6 +14,9 @@ describe ServicesController, :allow_net_connect do
 
   before do
     Docker::Image.stub(:get).and_return(image_status)
+
+    # Prevent any API calls for retrieving service status
+    Service.any_instance.stub(:service_state).and_return({})
   end
 
   describe '#index' do

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ServiceSerializer, :allow_net_connect do
+describe ServiceSerializer do
 
   let(:service_model) { Service.new }
 
@@ -15,6 +15,9 @@ describe ServiceSerializer, :allow_net_connect do
 
   before do
     Docker::Image.stub(:get).and_return(image_status)
+
+    # Prevent any API calls for retrieving service status
+    Service.any_instance.stub(:service_state).and_return({})
   end
 
   it 'exposes the attributes to be jsonified' do
