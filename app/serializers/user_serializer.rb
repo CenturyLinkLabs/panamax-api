@@ -1,6 +1,4 @@
 class UserSerializer < ActiveModel::Serializer
-  self.root = false
-
   GROUPED_ATTRS = %i(email repos username)
 
   attributes *GROUPED_ATTRS

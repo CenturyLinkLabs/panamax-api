@@ -1,6 +1,4 @@
 class RepositorySerializer < ActiveModel::Serializer
-  self.root = false
-
   attributes :id, :tags
 
   def id
