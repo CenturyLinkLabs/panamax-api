@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ServicesController do
+describe ServicesController, :allow_net_connect do
   let(:app) { App.first }
 
   let(:image_status) do

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ServiceSerializer do
+describe ServiceSerializer, :allow_net_connect do
 
   let(:service_model) { Service.new }
 

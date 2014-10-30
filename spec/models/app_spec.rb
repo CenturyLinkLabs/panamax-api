@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe App do
+describe App, :allow_net_connect do
   subject { apps(:app1) }
   it { should have_many(:services) }
   it { should have_many(:categories).class_name('AppCategory').dependent(:destroy) }
