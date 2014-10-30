@@ -29,7 +29,12 @@ describe RemoteMetadataRefreshesController do
         end
 
         context "with a JSON format" do
-          its(:body) { should eq(DeploymentTargetMetadata.last.to_json) }
+          it "returns a JSON representation of the created DeploymentTargetMetadata" do
+            metadata = DeploymentTargetMetadata.last
+            serializer = DeploymentTargetMetadataSerializer.new(metadata)
+            expect(response.body).to eq(serializer.to_json)
+          end
+
           its(:status) { should eq(201) }
         end
       end
