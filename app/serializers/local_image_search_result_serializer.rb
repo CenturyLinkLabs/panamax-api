@@ -1,6 +1,4 @@
 class LocalImageSearchResultSerializer < ActiveModel::Serializer
-  self.root = false
-
   attributes :source, :tags, :description, :is_official, :is_trusted, :star_count
 
   def source

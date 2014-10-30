@@ -1,6 +1,4 @@
 class SharedVolumeSerializer < ActiveModel::Serializer
-  self.root = false
-
   attributes :service_id, :service_name, :errors
 
   def service_id
