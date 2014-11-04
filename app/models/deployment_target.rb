@@ -4,33 +4,36 @@ class DeploymentTarget < ActiveRecord::Base
   using FileReader
 
   validates :name, presence: true, uniqueness: true
-  validates_presence_of :cert_file
   validates :auth_blob, auth_blob: true
 
-  before_validation :save_reference
-  before_save :write_certificate
-  after_destroy :delete_certificate
-
   def list_deployments
-    remote_deployment_model.all
+    with_remote_deployment_model do |model|
+      model.all
+    end
   end
 
   def get_deployment(deployment_id)
-    remote_deployment_model.find(deployment_id)
+    with_remote_deployment_model do |model|
+      model.find(deployment_id)
+    end
   end
 
   def create_deployment(template, override)
-    remote_deployment_model.create(
-      template: TemplateFileSerializer.new(template),
-      override: TemplateFileSerializer.new(override))
+    with_remote_deployment_model do |model|
+      model.create(
+        template: TemplateFileSerializer.new(template),
+        override: TemplateFileSerializer.new(override))
+    end
   end
 
   def delete_deployment(deployment_id)
-    remote_deployment_model.delete(deployment_id)
+    with_remote_deployment_model do |model|
+      model.delete(deployment_id)
+    end
   end
 
   def public_cert
-    auth_parts[3].presence || File.read_if_exists(cert_file)
+    auth_parts[3]
   end
 
   def endpoint_url
@@ -51,18 +54,12 @@ class DeploymentTarget < ActiveRecord::Base
     Base64.decode64(auth_blob.to_s).split('|')
   end
 
-  def save_reference
-    self.cert_file = "#{PanamaxApi.ssl_certs_dir}#{name.to_s.downcase}.crt"
-  end
-
-  def write_certificate
-    File.open(cert_file, 'w+') do |f|
-      f.write(public_cert)
-    end
-  end
-
-  def delete_certificate
-    FileUtils.rm_f(cert_file.to_s)
+  def with_remote_deployment_model
+    @cert_file = Tempfile.new(name.to_s.downcase)
+    @cert_file.write(public_cert)
+    result = yield(remote_deployment_model)
+    @cert_file.close
+    result
   end
 
   # Class for Deployment model is dynamically generated because we need
@@ -72,7 +69,7 @@ class DeploymentTarget < ActiveRecord::Base
     site_url = self.endpoint_url
     username = self.username
     password = self.password
-    cert_file = self.cert_file
+    cert_file_path = @cert_file.path
 
     Class.new(RemoteDeployment) do
       self.site = site_url
@@ -82,7 +79,7 @@ class DeploymentTarget < ActiveRecord::Base
 
       self.ssl_options = {
         verify_mode: OpenSSL::SSL::VERIFY_PEER,
-        ca_file: cert_file
+        ca_file: cert_file_path
       } unless Rails.env.development?
     end
   end

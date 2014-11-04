@@ -30,43 +30,34 @@ describe DeploymentTarget do
     it { should validate_uniqueness_of :name }
   end
 
-  describe 'Active Record callbacks' do
-    subject { deployment_targets(:target1) }
-
-    let(:file_name) { "#{PanamaxApi.ssl_certs_dir}dev.crt" }
-
-    describe 'before validating' do
-      it 'sets the cert file' do
-        subject.name= 'dev'
-        subject.valid?
-
-        expect(subject.cert_file).to eq file_name
-      end
+  describe '#endpoint_url' do
+    subject do
+      described_class.new(
+        auth_blob: Base64.encode64('http://example.com|b|c|d')
+      ).endpoint_url
     end
 
-    describe 'before saving' do
-      let(:fake_file) { double(:file) }
+    it { should eq 'http://example.com' }
+  end
 
-      before do
-        File.stub(:open).with(file_name, 'w+').and_yield(fake_file)
-      end
-
-      it 'writes the public cert to a file' do
-        fake_file.should receive(:write).with('certificate contents')
-
-        subject.update(
-          name: 'dev',
-          auth_blob: Base64.encode64('a|b|c|certificate contents')
-        )
-      end
+  describe '#username' do
+    subject do
+      described_class.new(
+        auth_blob: Base64.encode64('a|bob|c|d')
+      ).username
     end
 
-    describe 'after destroying' do
-      it 'removes the cert file' do
-        expect(FileUtils).to receive(:rm_f).with(subject.cert_file)
-        subject.destroy
-      end
+    it { should eq 'bob' }
+  end
+
+  describe '#password' do
+    subject do
+      described_class.new(
+        auth_blob: Base64.encode64('a|b|pazzword|d')
+      ).password
     end
+
+    it { should eq 'pazzword' }
   end
 
   describe '#public_cert' do
@@ -74,20 +65,17 @@ describe DeploymentTarget do
       subject.auth_blob = Base64.encode64('a|b|c|certificate of authenticity')
       expect(subject.public_cert).to eq 'certificate of authenticity'
     end
-
-    it 'reads the public cert from the file when it is not present on the instance' do
-      subject.auth_blob = Base64.encode64('a|b|c|')
-      File.stub(:read_if_exists).and_return('certificate contents')
-      expect(subject.public_cert).to eq 'certificate contents'
-    end
-
-    it 'returns nil if neither the instance or the file contain the cert' do
-      expect(subject.public_cert).to eq nil
-    end
   end
 
-  describe '#remote_deplyment_model' do
-    let (:remote_deployment_model) { subject.send(:remote_deployment_model) }
+  describe '#with_remote_deployment_model' do
+    before do
+      fake_tmp_file = double(:fake_tmp_file, write: true, path: 'certs/foo.crt', close: true)
+      Tempfile.stub(:new).and_return(fake_tmp_file)
+    end
+
+    let (:remote_deployment_model) do
+      subject.send(:with_remote_deployment_model) { |model| model }
+    end
 
     it 'sets the proper user' do
       subject.auth_blob = Base64.encode64('a|bob|c|d')
@@ -109,8 +97,6 @@ describe DeploymentTarget do
     end
 
     it 'sets the proper ssl options' do
-      subject.cert_file = 'certs/foo.crt'
-
       expect(remote_deployment_model.ssl_options).to eq({
         verify_mode: OpenSSL::SSL::VERIFY_PEER,
         ca_file: 'certs/foo.crt'
