@@ -68,14 +68,23 @@ describe DeploymentTarget do
   end
 
   describe '#with_remote_deployment_model' do
+    let(:certificate_contents) { 'certificate of authenticity' }
+
     before do
-      fake_tmp_file = double(:fake_tmp_file, write: true, path: 'certs/foo.crt', close: true)
-      Tempfile.stub(:new).and_return(fake_tmp_file)
+      subject.auth_blob = Base64.encode64("a|b|c|#{certificate_contents}")
     end
 
-    let (:remote_deployment_model) do
+    it 'writes the file before calling the block' do
+      subject.should_receive(:remote_deployment_model).with do |cert_file|
+        expect(cert_file.read).to eq certificate_contents
+      end
       subject.send(:with_remote_deployment_model) { |model| model }
     end
+  end
+
+  describe '#remote_deployment_model' do
+    let(:fake_temp_file) { double(:fake_temp_file, path: 'certs/foo.crt') }
+    let(:remote_deployment_model) { subject.send(:remote_deployment_model, fake_temp_file) }
 
     it 'sets the proper user' do
       subject.auth_blob = Base64.encode64('a|bob|c|d')

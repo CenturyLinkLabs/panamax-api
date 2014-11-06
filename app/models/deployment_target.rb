@@ -55,31 +55,28 @@ class DeploymentTarget < ActiveRecord::Base
   end
 
   def with_remote_deployment_model
-    @cert_file = Tempfile.new(name.to_s.downcase)
-    @cert_file.write(public_cert)
-    result = yield(remote_deployment_model)
-    @cert_file.close
-    result
+    Tempfile.open(name.to_s.downcase) do |file|
+      file.write(public_cert)
+      file.rewind
+      yield(remote_deployment_model(file))
+    end
   end
 
   # Class for Deployment model is dynamically generated because we need
   # to be able to set the site at runtime based on the endpoint for the
   # specific deployment target
-  def remote_deployment_model
-    site_url = self.endpoint_url
-    username = self.username
-    password = self.password
-    cert_file_path = @cert_file.path
+  def remote_deployment_model(cert_file)
+    target = self
 
     Class.new(RemoteDeployment) do
-      self.site = site_url
+      self.site = target.endpoint_url
       self.element_name = 'deployment'
-      self.user = username
-      self.password = password
+      self.user = target.username
+      self.password = target.password
 
       self.ssl_options = {
         verify_mode: OpenSSL::SSL::VERIFY_PEER,
-        ca_file: cert_file_path
+        ca_file: cert_file.path
       } unless Rails.env.development?
     end
   end
