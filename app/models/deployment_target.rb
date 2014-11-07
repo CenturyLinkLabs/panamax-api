@@ -74,6 +74,8 @@ class DeploymentTarget < ActiveRecord::Base
       self.user = target.username
       self.password = target.password
 
+      has_one :status, class_name: Status
+
       self.ssl_options = {
         verify_mode: OpenSSL::SSL::VERIFY_PEER,
         ca_file: cert_file.path
