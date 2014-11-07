@@ -3,9 +3,8 @@ require 'spec_helper'
 describe RemoteMetadataRefreshesController do
   describe "#create" do
     let(:deployment_target) { deployment_targets(:target1) }
-    let(:format) { :json }
     subject(:create) do
-      post :create, deployment_target_id: deployment_target.id, format: format
+      post :create, deployment_target_id: deployment_target.id, format: :json
     end
 
     describe "when the agent endpoint responds"  do
@@ -20,24 +19,16 @@ describe RemoteMetadataRefreshesController do
       end
 
       describe "the response" do
-        before { create }
+        let(:hash) { JSON.parse(response.body) }
         subject { response }
+        before { create }
 
-        context "with the HTML format" do
-          let(:format) { :html }
-          it { should redirect_to(deployment_targets_path) }
+        it "returns a JSON representation of the created DeploymentTargetMetadata" do
+          metadata = DeploymentTargetMetadata.last
+          expect(hash['metadata']['id']).to eq(metadata.id)
         end
 
-        context "with a JSON format" do
-          let(:hash) { JSON.parse(response.body) }
-
-          it "returns a JSON representation of the created DeploymentTargetMetadata" do
-            metadata = DeploymentTargetMetadata.last
-            expect(hash['metadata']['id']).to eq(metadata.id)
-          end
-
-          its(:status) { should eq(201) }
-        end
+        its(:status) { should eq(201) }
       end
 
       it "persists a single DeploymentTargetMetadata" do
