@@ -2,6 +2,7 @@ require 'active_resource'
 
 class DeploymentTarget < ActiveRecord::Base
   include Deployments
+  include Metadata
   using FileReader
 
   validates :name, presence: true, uniqueness: true
