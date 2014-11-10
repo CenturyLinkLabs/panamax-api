@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe DeploymentTargetsController do
-
+  fixtures :deployment_targets
   let(:deployment_target) { deployment_targets(:target1) }
 
   describe 'GET #index' do

@@ -3,6 +3,8 @@ require 'spec_helper'
 describe KeywordsController do
 
   describe 'GET #index' do
+    fixtures :templates
+
     it 'returns all the keywords as JSON' do
       expected = [
         { keyword: 'blah', count: 1 },

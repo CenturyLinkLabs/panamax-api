@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe TemplateRepo do
+  fixtures :template_repo_providers, :template_repos
+
   it { should respond_to(:name) }
   it { should respond_to(:template_repo_provider) }
   it { should validate_uniqueness_of(:name) }

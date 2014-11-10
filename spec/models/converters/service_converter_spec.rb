@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Converters::ServiceConverter do
-
+  fixtures :services
   let(:service1) { services(:service1) }
   subject { described_class.new(service1) }
 
@@ -65,6 +65,8 @@ describe Converters::ServiceConverter do
       before do
         service1.categories.build(app_category: app_categories(:category1))
       end
+
+      it "TODO for Brian: has no test to trigger this fixture call"
     end
 
     context 'when handling services with volumes_from' do

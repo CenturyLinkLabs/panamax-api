@@ -204,6 +204,7 @@ describe GithubTemplateRepoProvider do
   end
 
   describe '#save_template' do
+    fixtures :templates
     let(:template) { Template.first }
     let(:contents_response) { double(:contents_response, sha: 'ccccccc') }
     let(:params) do

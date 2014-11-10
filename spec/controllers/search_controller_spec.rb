@@ -142,6 +142,7 @@ describe SearchController do
       end
 
       context 'querying templates' do
+        fixtures :templates
         let(:query) { 'wordpress' }
 
         before do

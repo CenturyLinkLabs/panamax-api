@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe User do
+  fixtures :template_repo_providers
+
   let(:fake_gh_client) { Octokit::Client.new } # see spec_helper
 
   before do

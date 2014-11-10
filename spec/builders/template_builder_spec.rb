@@ -13,6 +13,7 @@ describe TemplateBuilder do
   describe '.create' do
 
     context 'when an app_id is passed' do
+      fixtures :apps
       before { options[:app_id] = apps(:app1).id }
 
       it 'returns a template created from the application' do

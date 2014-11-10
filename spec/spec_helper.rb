@@ -55,8 +55,6 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = 'random'
 
-  config.global_fixtures = :all
-
   config.before(:each) do
     # Stub methods on Docker client
     Docker::Container.stub(:get).and_return({})

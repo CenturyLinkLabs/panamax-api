@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Converters::TemplateConverter do
 
   describe '#to_app' do
-
+    fixtures :templates
     let(:template) { templates(:wordpress) }
 
     subject { Converters::TemplateConverter.new(template) }

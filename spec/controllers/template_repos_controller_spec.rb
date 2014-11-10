@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe TemplateReposController do
+  fixtures :template_repos, :template_repo_providers
 
   describe '#index' do
 

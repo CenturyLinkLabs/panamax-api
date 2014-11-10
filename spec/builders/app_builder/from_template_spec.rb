@@ -3,6 +3,7 @@ require 'spec_helper'
 describe AppBuilder::FromTemplate do
 
   describe '.create_app' do
+    fixtures :templates
 
     let(:template) { templates(:wordpress) }
     let(:app) { App.new(name: 'myapp') }
