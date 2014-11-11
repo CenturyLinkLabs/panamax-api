@@ -7,7 +7,6 @@ gem 'faraday_middleware', '0.9.0'
 gem 'docker-api', '1.13.0', require: 'docker'
 gem 'fleet-api', '0.6.0', require: 'fleet'
 gem 'active_model_serializers', '0.9.0'
-gem 'activeresource', '4.0.0'
 gem 'octokit', '3.2.0'
 gem 'kmts', '2.0.1'
 
