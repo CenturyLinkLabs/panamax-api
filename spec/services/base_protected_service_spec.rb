@@ -7,70 +7,56 @@ describe BaseProtectedService do
   let(:password) { 'bar_password' }
   let(:ca_cert) { 'cacertificate' }
 
-  let(:response_body) { '{ "message": "authenticated" }' }
+  subject do
+    Class.new(described_class) do
+      def connection_tester
+        with_ssl_connection do |connection|
+          yield connection if block_given?
+          connection
+        end
+      end
+
+      def request_tester
+        with_ssl_connection do |connection|
+          connection.get '/foo'
+        end
+      end
+    end.new(endpoint_url: endpoint_url, user: user, password: password, ca_cert: ca_cert)
+  end
 
   describe '#with_ssl_connection' do
 
     context 'configuring ssl' do
 
-      let(:fake_file) do
-        double(:fake_file, path: '/tmp/fake', write: nil, close: nil, unlink: nil)
-      end
-
-      subject do
-        Class.new(described_class) do
-          def tester
-            with_ssl_connection { |connection| connection }
-          end
-        end.new(endpoint_url: endpoint_url, user: user, password: password, ca_cert: ca_cert)
-      end
-
-      before do
-        Tempfile.stub(:new).and_return(fake_file)
-      end
-
-      it 'configures SSL properly' do
-        expect(fake_file).to receive(:write).with(ca_cert)
-        subject.tester
-      end
-
-      it 'closes the certificate file' do
-        expect(fake_file).to receive(:close)
-        connection = subject.tester
+      it 'sets-up the CA certificate with the correct contents' do
+        subject.connection_tester do |connection|
+          expect(File.read(connection.ssl[:ca_file])).to eq ca_cert
+        end
       end
 
       it 'cleans-up the certificate file' do
-        expect(fake_file).to receive(:unlink)
-        connection = subject.tester
+        connection = subject.connection_tester
+        expect(File.exist?(connection.ssl[:ca_file])).to be_false
       end
 
       it 'verifies the server SSL certificate' do
-        connection = subject.tester
+        connection = subject.connection_tester
         expect(connection.ssl[:verify_mode]).to eq 1
       end
-
     end
 
     context 'when sending a request' do
 
-      subject do
-        Class.new(described_class) do
-
-          def tester
-            with_ssl_connection do |connection|
-              connection.get '/foo'
-            end
-          end
-        end.new(endpoint_url: endpoint_url, user: user, password: password, ca_cert: ca_cert)
-      end
+      let(:response_body) { '{ "message": "authenticated" }' }
 
       before do
-        stub_request(:get, 'foo_user:bar_password@endpoint.com/foo')
+        endpoint_host = URI.parse(endpoint_url).host
+        stub_request(:get, "#{user}:#{password}@#{endpoint_host}/foo")
           .to_return(body: response_body, status: 200)
       end
 
       it 'sends an authenticated request to the proper endpoint' do
-        response = subject.tester
+        response = subject.request_tester
         expect(response.body).to eq(JSON.parse(response_body))
       end
     end
