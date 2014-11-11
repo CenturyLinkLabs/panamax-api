@@ -1,4 +1,5 @@
 class DeploymentTarget < ActiveRecord::Base
+  include Deployments
   using FileReader
 
   validates :name, presence: true, uniqueness: true
