@@ -25,14 +25,18 @@ describe DeploymentTarget do
 
   describe '#refresh_metadata' do
     let(:deployment_target) { deployment_targets(:target1) }
-    before do
-      stub_agent_metadata_request(
-        deployment_target,
-        metadata: {
-          agent: { version: "1" },
-          adapter: { version: "2", type: "Test Type" }
-        }
+    let(:metadata_service) { double(find: metadata) }
+    let(:metadata) do
+      RemoteAgentMetadata.new(
+        agent: { "version" => "1" },
+        adapter: { "version" => "2", "type" => "Test Type" }
       )
+    end
+    before do
+      deployment_target.
+        stub(:new_agent_service).
+        with(AgentMetadataService).
+        and_return(metadata_service)
     end
     subject(:refresh_metadata) { deployment_target.refresh_metadata }
 
