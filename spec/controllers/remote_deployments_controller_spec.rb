@@ -98,7 +98,8 @@ describe RemoteDeploymentsController do
     let(:post_args) do
       {
         deployment_target_id: 44,
-        template_id: 21,
+        resource_id: 21,
+        resource_type: 'Template',
         override: override,
         format: :json
       }
@@ -107,6 +108,17 @@ describe RemoteDeploymentsController do
     before do
       Template.stub(:find).with(21).and_return(template)
       deployment_service.stub(:create).and_return(deployment)
+    end
+
+    context 'when given an App resource type' do
+      before do
+        post_args[:resource_type] = 'App'
+      end
+      it 'builds a template based on the app id' do
+        expect(TemplateBuilder).to receive(:create).with({ app_id: 21 }, false)
+        expect(TemplateBuilder).to receive(:create).with(override)
+        post :create, post_args
+      end
     end
 
     it 'turns the override into a Template' do
@@ -137,7 +149,7 @@ describe RemoteDeploymentsController do
       end
 
       it 'returns an HTTP 500 status code' do
-        post :create, deployment_target_id: 44, template_id: 13, format: :json
+        post :create, deployment_target_id: 44, resource_id: 13, format: :json
         expect(response.status).to eq 500
       end
     end

@@ -11,7 +11,6 @@ class RemoteDeploymentsController < ApplicationController
   end
 
   def create
-    template = Template.find(params[:template_id])
     override = TemplateBuilder.create(params[:override])
 
     deployment = deployment_service.create(template: template, override: override)
@@ -31,5 +30,14 @@ class RemoteDeploymentsController < ApplicationController
 
   def deployment_target
     @deployment_target ||= DeploymentTarget.find(params[:deployment_target_id])
+  end
+
+  def template
+    resource_id = params[:resource_id]
+    if params[:resource_type] == 'App'
+      TemplateBuilder.create({ app_id: resource_id }, false)
+    else
+      Template.find(resource_id)
+    end
   end
 end
