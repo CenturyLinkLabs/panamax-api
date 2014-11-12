@@ -21,6 +21,15 @@ class DeploymentTarget < ActiveRecord::Base
     auth_parts[2]
   end
 
+  def new_agent_service(klass)
+    klass.new(
+      endpoint_url: endpoint_url,
+      ca_cert: public_cert,
+      user: username,
+      password: password
+    )
+  end
+
   private
 
   def auth_parts

@@ -26,11 +26,7 @@ class RemoteDeploymentsController < ApplicationController
   private
 
   def deployment_service
-    @deployment_service ||= DeploymentService.new(
-      endpoint_url: deployment_target.endpoint_url,
-      ca_cert: deployment_target.public_cert,
-      user: deployment_target.username,
-      password: deployment_target.password)
+    @service ||= deployment_target.new_agent_service(DeploymentService)
   end
 
   def deployment_target
