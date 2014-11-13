@@ -41,7 +41,7 @@ describe BaseProtectedService do
 
       it 'verifies the server SSL certificate' do
         connection = subject.connection_tester
-        expect(connection.ssl[:verify_mode]).to eq 1
+        expect(connection.ssl[:verify]).to be_true
       end
     end
 

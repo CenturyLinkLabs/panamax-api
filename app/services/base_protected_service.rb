@@ -22,10 +22,11 @@ class BaseProtectedService
 
     options = {
       url: @endpoint_url,
-      ssl: { ca_file: ca_file.path }
+      ssl: {
+        ca_file: ca_file.path,
+        verify: verify_certificate?
+      }
     }
-
-    options[:ssl][:verify_mode] = OpenSSL::SSL::VERIFY_PEER unless Rails.env.development?
 
     Faraday.new(options) do |faraday|
       faraday.request :basic_auth, @user, @password
@@ -33,6 +34,10 @@ class BaseProtectedService
       faraday.response :json
       faraday.adapter Faraday.default_adapter
     end
+  end
+
+  def verify_certificate?
+    !Rails.env.development?
   end
 end
 
