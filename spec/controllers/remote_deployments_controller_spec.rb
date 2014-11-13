@@ -1,27 +1,16 @@
 require 'spec_helper'
 
 describe RemoteDeploymentsController do
-
-  let(:endpoint_url) { 'http://endpoint.com' }
-  let(:user) { 'foo_user' }
-  let(:password) { 'bar_password' }
-  let(:ca_cert) { 'cacertificate' }
-
-  let(:deployment_target) do
-    double(:target,
-      endpoint_url: endpoint_url,
-      public_cert: ca_cert,
-      username: user,
-      password: password)
-  end
-
+  let(:deployment_target) { double(:target) }
   let(:deployment_service) { double(:deployment_service) }
-
   let(:deployment) { RemoteDeployment.new(id: 123) }
 
   before do
     DeploymentTarget.stub(:find).with('44').and_return(deployment_target)
-    DeploymentService.stub(:new).and_return(deployment_service)
+    deployment_target.
+      stub(:new_agent_service).
+      with(DeploymentService).
+      and_return(deployment_service)
   end
 
   describe 'GET #index' do
@@ -35,16 +24,6 @@ describe RemoteDeploymentsController do
 
     before do
       deployment_service.stub(:all).and_return(deployments)
-    end
-
-    it 'instantiates the DeploymentService properly' do
-      expect(DeploymentService).to receive(:new).with(
-        endpoint_url: endpoint_url,
-        ca_cert: ca_cert,
-        user: user,
-        password: password)
-
-      get :index, deployment_target_id: 44, format: :json
     end
 
     it 'returns a list of deployments' do
@@ -62,16 +41,6 @@ describe RemoteDeploymentsController do
 
     before do
       deployment_service.stub(:find)
-    end
-
-    it 'instantiates the DeploymentService properly' do
-      expect(DeploymentService).to receive(:new).with(
-        endpoint_url: endpoint_url,
-        ca_cert: ca_cert,
-        user: user,
-        password: password)
-
-      get :show, deployment_target_id: 44, id: 22, format: :json
     end
 
     context 'when the resource exists' do
@@ -140,16 +109,6 @@ describe RemoteDeploymentsController do
       deployment_service.stub(:create).and_return(deployment)
     end
 
-    it 'instantiates the DeploymentService properly' do
-      expect(DeploymentService).to receive(:new).with(
-        endpoint_url: endpoint_url,
-        ca_cert: ca_cert,
-        user: user,
-        password: password)
-
-      post :create, post_args
-    end
-
     it 'turns the override into a Template' do
       expect(TemplateBuilder).to receive(:create).with(override)
       post :create, post_args
@@ -188,16 +147,6 @@ describe RemoteDeploymentsController do
 
     before do
       deployment_service.stub(:destroy)
-    end
-
-    it 'instantiates the DeploymentService properly' do
-      expect(DeploymentService).to receive(:new).with(
-        endpoint_url: endpoint_url,
-        ca_cert: ca_cert,
-        user: user,
-        password: password)
-
-      delete :destroy, deployment_target_id: 44, id: 13, format: :json
     end
 
     it 'removes the given deployment' do

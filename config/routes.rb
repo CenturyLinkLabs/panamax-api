@@ -28,6 +28,7 @@ PanamaxApi::Application.routes.draw do
   resources :deployment_targets do
     resources :deployments, controller: :remote_deployments,
                             only: [:index, :show, :create, :destroy]
+    post '/metadata/refresh', to: "remote_metadata_refreshes#create"
   end
 
   resources :registries, only: [:create, :destroy, :update, :index, :show]

@@ -43,4 +43,24 @@ describe DeploymentTarget do
       expect(subject.public_cert).to eq 'certificate of authenticity'
     end
   end
+
+  describe "#new_agent_service" do
+    fixtures :deployment_targets
+    let(:target) { deployment_targets(:target1) }
+    let(:service_class) { double(new: service_instance) }
+    let(:service_instance) { double }
+    subject(:new_agent_service) { target.new_agent_service(service_class) }
+    before { new_agent_service }
+
+    it "instantiates the passed-in class with the expected arguments" do
+      expect(service_class).to have_received(:new).with(
+        endpoint_url: target.endpoint_url,
+        ca_cert: target.public_cert,
+        user: target.username,
+        password: target.password
+      )
+    end
+
+    it { should eq(service_instance) }
+  end
 end

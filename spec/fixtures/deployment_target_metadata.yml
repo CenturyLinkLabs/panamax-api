@@ -1,0 +1,5 @@
+metadata1:
+  deployment_target: target_with_metadata
+  agent_version: 0.0.1
+  adapter_version: 0.0.2
+  adapter_type: Test Orchestrator

@@ -1,4 +1,5 @@
 class DeploymentTarget < ActiveRecord::Base
+  include Metadata
   using FileReader
 
   validates :name, presence: true, uniqueness: true
@@ -18,6 +19,15 @@ class DeploymentTarget < ActiveRecord::Base
 
   def password
     auth_parts[2]
+  end
+
+  def new_agent_service(klass)
+    klass.new(
+      endpoint_url: endpoint_url,
+      ca_cert: public_cert,
+      user: username,
+      password: password
+    )
   end
 
   private
