@@ -31,7 +31,7 @@ class DeploymentService < BaseProtectedService
   end
 
   def destroy(deployment_id)
-    response = with_ssl_connection do |connection|
+    with_ssl_connection do |connection|
       connection.delete "/deployments/#{deployment_id}"
     end
   end
