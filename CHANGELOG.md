@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+0.2.8 - 2014-11-13
+------------------
+### Added 
+- Ability to display Metadata for the agent and adapter (#248)
+
+### Removed
+- Active Resource dependency (#207)
+
 0.2.7 - 2014-11-10
 ------------------
 ### Added 
