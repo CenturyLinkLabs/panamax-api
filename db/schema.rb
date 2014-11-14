@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141028153952) do
+ActiveRecord::Schema.define(version: 20141114224701) do
 
   create_table "app_categories", force: true do |t|
     t.string   "name"
@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(version: 20141028153952) do
     t.string   "adapter_type"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "adapter_is_healthy"
   end
 
   create_table "deployment_targets", force: true do |t|

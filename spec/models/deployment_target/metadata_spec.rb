@@ -31,7 +31,7 @@ describe DeploymentTarget do
     let(:metadata) do
       RemoteAgentMetadata.new(
         agent: { "version" => "1" },
-        adapter: { "version" => "2", "type" => "Test Type" }
+        adapter: { "version" => "2", "type" => "Test Type", "isHealthy" => true }
       )
     end
     before do
@@ -55,6 +55,7 @@ describe DeploymentTarget do
         its(:agent_version) { should eq("1") }
         its(:adapter_version) { should eq("2") }
         its(:adapter_type) { should eq("Test Type") }
+        its(:adapter_is_healthy) { should be_true }
       end
 
       context "when metadata already exists for the target" do

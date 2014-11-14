@@ -10,7 +10,8 @@ module DeploymentTarget::Metadata
     create_metadata!(
       agent_version: resource.agent["version"],
       adapter_version: resource.adapter["version"],
-      adapter_type: resource.adapter["type"]
+      adapter_type: resource.adapter["type"],
+      adapter_is_healthy: resource.adapter["isHealthy"]
     )
   end
 end
