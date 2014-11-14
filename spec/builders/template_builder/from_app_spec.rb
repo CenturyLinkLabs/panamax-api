@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe TemplateBuilder::FromApp do
+  fixtures :apps
 
   let(:options) do
     {

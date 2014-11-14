@@ -13,6 +13,8 @@ describe Registry do
   it { should validate_presence_of(:endpoint_url) }
 
   describe '.docker_hub' do
+    fixtures :registries
+
     it 'returns the special docker hub record' do
       expect(described_class.docker_hub.id).to eq 0
       expect(described_class.docker_hub.name).to eq 'Docker Hub'
@@ -21,6 +23,7 @@ describe Registry do
   end
 
   describe ".enabled" do
+    fixtures :registries
     subject { Registry.enabled }
     before { registries(:registry0).update_attribute(:enabled, false) }
 
@@ -59,6 +62,7 @@ describe Registry do
   end
 
   describe '#search' do
+    fixtures :registries
     let(:registry) { registries(:registry0) }
     subject(:search) { registry.search("test") }
 
@@ -158,6 +162,7 @@ describe Registry do
 
   describe '#prefix' do
     context 'when the registry is docker hub' do
+      fixtures :registries
       let(:docker_hub) { registries(:registry0) }
       subject { docker_hub.prefix }
 

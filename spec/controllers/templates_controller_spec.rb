@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe TemplatesController do
+  fixtures :templates
 
   describe 'GET templates' do
 
@@ -92,6 +93,7 @@ describe TemplatesController do
   end
 
   describe '#save' do
+    fixtures :template_repo_providers
     let(:template) { Template.first }
     let(:save_response) do
       { content:

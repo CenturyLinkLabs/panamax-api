@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe RegistriesController do
-
+  fixtures :registries
   let(:registry) { registries(:registry1) }
 
   describe 'GET #index' do

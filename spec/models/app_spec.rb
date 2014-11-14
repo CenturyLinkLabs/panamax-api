@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe App do
+  fixtures :apps
   subject { apps(:app1) }
 
   before do
@@ -72,8 +73,7 @@ describe App do
   end
 
   describe '#add_service' do
-
-    fixtures :app_categories
+    fixtures :app_categories, :services
 
     let(:category) { subject.categories.first }
     let(:linked_to_service) { subject.services.last }

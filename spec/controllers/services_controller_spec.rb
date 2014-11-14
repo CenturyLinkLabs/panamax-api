@@ -1,8 +1,6 @@
 require 'spec_helper'
 
 describe ServicesController do
-  let(:app) { App.first }
-
   let(:image_status) do
     double(:image_status,
            info: {
@@ -20,6 +18,8 @@ describe ServicesController do
   end
 
   describe '#index' do
+    fixtures :apps
+    let(:app) { App.first }
 
     it 'returns an array' do
       get :index, app_id: app.id, format: :json
@@ -29,6 +29,8 @@ describe ServicesController do
   end
 
   describe '#show' do
+    fixtures :apps, :services
+    let(:app) { App.first }
 
     it 'returns a specific app' do
       get :show, app_id: app.id, id: Service.first.id, format: :json
@@ -175,6 +177,8 @@ describe ServicesController do
   end
 
   describe '#journal' do
+    fixtures :apps, :services
+    let(:app) { App.first }
 
     it 'returns the service journal' do
       get :journal, app_id: app.id, id: Service.first.id, format: :json
@@ -203,6 +207,7 @@ describe ServicesController do
   end
 
   describe '#create' do
+    fixtures :apps, :services
     let(:app) { apps(:app1) }
 
     let(:params) do

@@ -22,13 +22,13 @@ describe PanamaxAgent::Journal::Client do
         }
       ]
     end
+    let(:services) { 'foo' }
 
     before do
       subject.stub(:get_entries_by_fields).and_return(journal_lines)
     end
 
     it 'invokes the get_entries_by_fields method' do
-      services = 'foo'
       cursor = 'bar'
       expect(subject).to receive(:get_entries_by_fields).with({}, cursor)
       subject.list_journal_entries(services, cursor)

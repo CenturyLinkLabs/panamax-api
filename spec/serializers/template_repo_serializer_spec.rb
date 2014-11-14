@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe TemplateRepoSerializer do
+  fixtures :template_repo_providers
+
   let(:repo_model) { TemplateRepo.new }
 
   it 'exposes the attributes to be jsonified' do
@@ -14,8 +16,12 @@ describe TemplateRepoSerializer do
     expect(serialized.keys).to match_array expected_keys
   end
 
-  it 'calculates the Template count for the repository' do
-    template_count = Template.where(source: template_repos(:repo1).name).count
-    expect(TemplateRepoSerializer.new(template_repos(:repo1)).template_count).to eq template_count
+  context 'with existing TemplateRepos' do
+    fixtures :template_repos
+
+    it 'calculates the Template count for the repository' do
+      template_count = Template.where(source: template_repos(:repo1).name).count
+      expect(TemplateRepoSerializer.new(template_repos(:repo1)).template_count).to eq template_count
+    end
   end
 end

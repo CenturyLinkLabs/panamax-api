@@ -5,6 +5,8 @@ describe Converters::AppConverter do
   subject { described_class.new(apps(:app1)) }
 
   context '#to_template' do
+    fixtures :apps
+
     it 'creates a Template from the given App' do
       expect(subject.to_template).to be_a Template
     end

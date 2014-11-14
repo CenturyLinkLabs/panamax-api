@@ -8,6 +8,7 @@ describe Template do
   it { should validate_presence_of(:name) }
 
   describe '.all_keywords' do
+    fixtures :templates
     before do
       templates(:wordpress).update(keywords: 'wordpress, sizzle, two words')
       templates(:another).update(keywords: 'another,SiZzle')
@@ -25,6 +26,8 @@ describe Template do
   end
 
   describe '.search' do
+    fixtures :templates
+
     it 'returns templates with name or keyword matching the term' do
       expect(described_class.search('wp')).to match_array([templates(:wordpress), templates(:another)])
     end

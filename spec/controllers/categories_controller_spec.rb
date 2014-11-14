@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe CategoriesController do
-
+  fixtures :apps, :app_categories
   let(:app) { apps(:app1) }
 
   describe '#index' do

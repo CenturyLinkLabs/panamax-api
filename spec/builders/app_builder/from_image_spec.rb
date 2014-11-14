@@ -5,6 +5,8 @@ describe AppBuilder::FromImage do
   describe '.create_app' do
 
     context 'when a registry id is supplied' do
+      fixtures :registries
+
       let(:registry) { registries(:registry1) }
       let(:options) do
         {

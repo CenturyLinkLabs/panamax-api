@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe AppsController do
+  fixtures :apps
 
   describe '#index' do
 
@@ -54,7 +55,7 @@ describe AppsController do
   end
 
   describe '#create' do
-
+    fixtures :templates
     let(:template) { templates(:wordpress) }
 
     before do
