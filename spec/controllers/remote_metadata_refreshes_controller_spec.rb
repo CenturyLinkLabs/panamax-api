@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe RemoteMetadataRefreshesController do
   describe "#create" do
+    fixtures :deployment_targets
     let(:deployment_target) { deployment_targets(:target1) }
     subject(:create) do
       post :create, deployment_target_id: deployment_target.id, format: :json

@@ -24,7 +24,9 @@ describe DeploymentTargetSerializer do
     end
 
     context "with associated metadata" do
+      fixtures :deployment_targets, :deployment_target_metadata
       let(:deployment_target_model) { deployment_targets(:target_with_metadata) }
+
       its([:id]) { should eq(deployment_target_metadata(:metadata1).id) }
     end
   end

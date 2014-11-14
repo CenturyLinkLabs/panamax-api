@@ -1,21 +1,24 @@
 require 'spec_helper'
 
 describe DeploymentTarget do
-  let(:target) { deployment_targets(:target1) }
+  fixtures :deployment_targets
+  let(:deployment_target) { deployment_targets(:target1) }
 
   describe "#metadata" do
+    fixtures :deployment_target_metadata
+
     let(:metadata) { deployment_target_metadata(:metadata1) }
-    subject { target.metadata }
+    subject { deployment_target.metadata }
     before do
-      target.metadata = metadata
-      target.save!
-      target.reload
+      deployment_target.metadata = metadata
+      deployment_target.save!
+      deployment_target.reload
     end
 
     it { should eq(metadata) }
 
     describe "destruction" do
-      before { target.destroy }
+      before { deployment_target.destroy }
 
       it "does not leave orphaned metadata" do
         expect(DeploymentTargetMetadata.count).to be_zero
@@ -24,7 +27,6 @@ describe DeploymentTarget do
   end
 
   describe '#refresh_metadata' do
-    let(:deployment_target) { deployment_targets(:target1) }
     let(:metadata_service) { double(find: metadata) }
     let(:metadata) do
       RemoteAgentMetadata.new(

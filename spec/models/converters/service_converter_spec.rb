@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe Converters::ServiceConverter do
   fixtures :services
+  fixtures :app_categories
   let(:service1) { services(:service1) }
   subject { described_class.new(service1) }
 
@@ -63,10 +64,12 @@ describe Converters::ServiceConverter do
 
     context 'when handling service categories' do
       before do
-        service1.categories.build(app_category: app_categories(:category1))
+        service1.categories.create(app_category: app_categories(:category1))
       end
 
-      it "TODO for Brian: has no test to trigger this fixture call"
+      it 'populates the image categories' do
+        expect(subject.to_image.categories).to eq [app_categories(:category1).name]
+      end
     end
 
     context 'when handling services with volumes_from' do
