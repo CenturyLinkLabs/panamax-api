@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+0.2.9 - 2014-11-21
+------------------
+### Changed
+- Explicitely require fixtures in tests (#246)
+
 0.2.8 - 2014-11-13
 ------------------
 ### Added 
