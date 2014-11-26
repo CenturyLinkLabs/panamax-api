@@ -25,7 +25,7 @@ describe PanamaxAgent::Journal::Client do
     let(:services) { 'foo' }
 
     before do
-      subject.stub(:get_entries_by_fields).and_return(journal_lines)
+      allow(subject).to receive(:get_entries_by_fields).and_return(journal_lines)
     end
 
     it 'invokes the get_entries_by_fields method' do

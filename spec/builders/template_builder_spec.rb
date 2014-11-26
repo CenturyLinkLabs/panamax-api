@@ -64,7 +64,7 @@ describe TemplateBuilder do
     context 'when persisted flag is passed' do
       let(:strategy) { double(:strategy) }
       before do
-        TemplateBuilder::FromApp.stub(:new).and_return(strategy)
+        allow(TemplateBuilder::FromApp).to receive(:new).and_return(strategy)
       end
       it 'passes through to the strategy' do
         expect(strategy).to receive(:create_template).with(false)

@@ -11,7 +11,7 @@ describe AppBuilder do
       let(:options) { { template_id: 't123' } }
 
       before do
-        AppBuilder::FromTemplate.stub(:create_app).and_return(app)
+        allow(AppBuilder::FromTemplate).to receive(:create_app).and_return(app)
       end
 
       it 'invokes the FromTemplate strategy' do
@@ -29,7 +29,7 @@ describe AppBuilder do
       let(:options) { { image: 'foo/bar' } }
 
       before do
-        AppBuilder::FromImage.stub(:create_app).and_return(app)
+        allow(AppBuilder::FromImage).to receive(:create_app).and_return(app)
       end
 
       it 'invokes the FromImage strategy' do

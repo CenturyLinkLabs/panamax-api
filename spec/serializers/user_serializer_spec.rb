@@ -4,7 +4,7 @@ describe UserSerializer do
   let(:user_model) { User.new }
 
   before do
-    Octokit::Client.any_instance.stub(:repos).and_return([])
+    allow_any_instance_of(Octokit::Client).to receive(:repos).and_return([])
   end
 
   it 'exposes the attributes to be jsonified' do
@@ -23,7 +23,7 @@ describe UserSerializer do
     end
 
     before do
-      user_model.stub(:template_repo_providers).and_return([github_repo_provider])
+      allow(user_model).to receive(:template_repo_providers).and_return([github_repo_provider])
     end
 
     it 'exposes the attributes to be jsonified' do

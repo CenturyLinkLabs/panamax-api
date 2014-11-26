@@ -33,7 +33,7 @@ describe ServiceManager do
   subject { described_class.new(service) }
 
   before do
-    Fleet.stub(:new).and_return(fake_fleet_client)
+    allow(Fleet).to receive(:new).and_return(fake_fleet_client)
   end
 
   describe '.load' do
@@ -41,7 +41,7 @@ describe ServiceManager do
     let(:dummy_manager) { double(:dummy_manager, load: true) }
 
     before do
-      described_class.stub(new: dummy_manager)
+      allow(described_class).to receive(:new).and_return(dummy_manager)
     end
 
     it 'news an instance of itself' do
@@ -60,7 +60,7 @@ describe ServiceManager do
     let(:dummy_manager) { double(:dummy_manager, start: true) }
 
     before do
-      described_class.stub(new: dummy_manager)
+      allow(described_class).to receive(:new).and_return(dummy_manager)
     end
 
     it 'news an instance of itself' do
@@ -84,7 +84,7 @@ describe ServiceManager do
         alias: 'DB',
         linked_to_service: linked_to_service
       )
-      service.stub(docker_run_string: docker_run_string)
+      allow(service).to receive(:docker_run_string).and_return(docker_run_string)
     end
 
     it 'submits a service definition to the fleet service' do
@@ -141,7 +141,7 @@ describe ServiceManager do
     end
 
     before do
-      fake_fleet_client.stub(:status).and_return(fleet_state)
+      allow(fake_fleet_client).to receive(:status).and_return(fleet_state)
     end
 
     it 'retrieves service state from the fleet client' do
@@ -156,7 +156,7 @@ describe ServiceManager do
     context 'when an error occurs while querying fleet' do
 
       before do
-        fake_fleet_client.stub(:status).and_raise('boom')
+        allow(fake_fleet_client).to receive(:status).and_raise('boom')
       end
 
       it 'returns an empty hash' do

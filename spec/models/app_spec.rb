@@ -5,7 +5,7 @@ describe App do
   subject { apps(:app1) }
 
   before do
-    Service.any_instance.stub(:shutdown)
+    allow_any_instance_of(Service).to receive(:shutdown)
   end
 
   it { should have_many(:services) }
@@ -17,7 +17,10 @@ describe App do
     let(:s2) { Service.new(name: 's2') }
 
     before do
-      subject.services = [s1, s2].each { |s| s.stub(submit: true, start: true) }
+      subject.services = [s1, s2].each do |s|
+        allow(s).to receive(:submit).and_return(true)
+        allow(s).to receive(:start).and_return(true)
+      end
     end
 
     it 'submits each service' do
@@ -39,12 +42,12 @@ describe App do
     let(:s2) { Service.new(name: 's2') }
 
     before do
-      subject.stub(:sleep)
+      allow(subject).to receive(:sleep)
       subject.services = [s1, s2]
       subject.services.each do |s|
-        s.stub(:shutdown)
-        s.stub(:submit)
-        s.stub(:start)
+        allow(s).to receive(:shutdown)
+        allow(s).to receive(:submit)
+        allow(s).to receive(:start)
       end
     end
 
@@ -93,7 +96,7 @@ describe App do
     end
 
     before do
-      subject.stub(:resolve_name_conflicts).and_return(true)
+      allow(subject).to receive(:resolve_name_conflicts).and_return(true)
     end
 
     it 'creates a new service' do

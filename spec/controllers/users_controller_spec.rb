@@ -25,10 +25,10 @@ describe UsersController do
 
       before do
         # Neuter model validations
-        GithubTemplateRepoProvider.any_instance.stub(:access_token_scope)
-        GithubTemplateRepoProvider.any_instance.stub(:email).and_return(email)
-        GithubTemplateRepoProvider.any_instance.stub(:valid?).and_return(true)
-        User.any_instance.stub(:subscribe)
+        allow_any_instance_of(GithubTemplateRepoProvider).to receive(:access_token_scope)
+        allow_any_instance_of(GithubTemplateRepoProvider).to receive(:email).and_return(email)
+        allow_any_instance_of(GithubTemplateRepoProvider).to receive(:valid?).and_return(true)
+        allow_any_instance_of(User).to receive(:subscribe)
         ENV['PANAMAX_ID'] = '123'
       end
 
@@ -97,12 +97,12 @@ describe UsersController do
       let(:template_repo_provider) { double('provider', valid?: false) }
 
       before do
-        subject.stub(:template_repo_provider).and_return(template_repo_provider)
+        allow(subject).to receive(:template_repo_provider).and_return(template_repo_provider)
         user = User.new
-        user.stub(:update_credentials_for).and_return false
+        allow(user).to receive(:update_credentials_for).and_return false
         user.errors.add(:base, 'boom')
 
-        User.stub(:instance).and_return(user)
+        allow(User).to receive(:instance).and_return(user)
       end
 
       it 'returns the error message' do
@@ -116,7 +116,7 @@ describe UsersController do
       end
 
       it 'does NOT subscribe the user' do
-        User.any_instance.should_not_receive(:subscribe)
+        expect_any_instance_of(User).to_not receive(:subscribe)
         put :update, params.merge(format: :json)
       end
 

@@ -27,12 +27,6 @@ Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 
 RSpec.configure do |config|
-  # Allow the old and new syntax. This is probably a temporary situation, but
-  # that is going to be an enormous changeset that I'd rather do separately.
-  config.mock_with :rspec do |c|
-    c.syntax = [ :should, :expect ]
-  end
-
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
@@ -56,15 +50,15 @@ RSpec.configure do |config|
 
   config.before(:each) do
     # Stub methods on Docker client
-    Docker::Container.stub(:get).and_return({})
-    KMTS.stub(:record)
-    KMTS.stub(:alias)
+    allow(Docker::Container).to receive(:get).and_return({})
+    allow(KMTS).to receive(:record)
+    allow(KMTS).to receive(:alias)
 
     # Stub methods on PanamaxAgent::Journal::Client
     journal_client = double(:journal_client)
-    journal_client.stub(list_journal_entries: hash_from_fixture('journal'))
+    allow(journal_client).to receive(:list_journal_entries).and_return(hash_from_fixture('journal'))
 
-    PanamaxAgent.stub(journal_client: journal_client)
+    allow(PanamaxAgent).to receive(:journal_client).and_return(journal_client)
 
     # Stub methods on Octokit::Client
     fake_github_object = double(:fake_github,
@@ -79,11 +73,11 @@ RSpec.configure do |config|
               )
       ]
     )
-    Octokit::Client.stub(:new).and_return(fake_github_object)
+    allow(Octokit::Client).to receive(:new).and_return(fake_github_object)
 
     #create dummy ssl certs dir
     FileUtils::mkdir_p('dummy_certs')
-    PanamaxApi.stub(:ssl_certs_dir).and_return('dummy_certs/')
+    allow(PanamaxApi).to receive(:ssl_certs_dir).and_return('dummy_certs/')
   end
 
   config.after(:each) do

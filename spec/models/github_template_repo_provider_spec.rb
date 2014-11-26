@@ -4,7 +4,7 @@ describe GithubTemplateRepoProvider do
 
   let(:fake_gh_client) { Octokit::Client.new }
   before do
-    subject.stub(:github_client).and_return(fake_gh_client)
+    allow(subject).to receive(:github_client).and_return(fake_gh_client)
   end
 
   describe 'access token validations' do
@@ -17,7 +17,7 @@ describe GithubTemplateRepoProvider do
 
       before do
 
-        fake_gh_client.stub(:scopes).and_return(['user'])
+        allow(fake_gh_client).to receive(:scopes).and_return(['user'])
         subject.update(credentials_api_key: 'token')
       end
 
@@ -27,7 +27,7 @@ describe GithubTemplateRepoProvider do
     context 'when the access token has "user:email" scope' do
 
       before do
-        fake_gh_client.stub(:scopes).and_return(['user:email'])
+        allow(fake_gh_client).to receive(:scopes).and_return(['user:email'])
         subject.update(credentials_api_key: 'token')
       end
 
@@ -37,7 +37,7 @@ describe GithubTemplateRepoProvider do
     context 'when the access token has none of the required scopes' do
 
       before do
-        fake_gh_client.stub(:scopes).and_return(['foo'])
+        allow(fake_gh_client).to receive(:scopes).and_return(['foo'])
         subject.update(credentials_api_key: 'token')
         subject.valid?
       end
@@ -52,7 +52,7 @@ describe GithubTemplateRepoProvider do
     context 'when the access token is no good at all' do
 
       before do
-        fake_gh_client.stub(:scopes)
+        allow(fake_gh_client).to receive(:scopes)
         .and_raise(Octokit::Unauthorized)
         subject.update(credentials_api_key: 'token')
         subject.valid?
@@ -78,7 +78,7 @@ describe GithubTemplateRepoProvider do
     context 'when the github token is valid' do
 
       before do
-        fake_gh_client.stub(:repos).and_return([repo])
+        allow(fake_gh_client).to receive(:repos).and_return([repo])
       end
 
       it 'returns a list of repo full names' do
@@ -89,7 +89,7 @@ describe GithubTemplateRepoProvider do
     context 'when the github token is invalid' do
 
       before do
-        fake_gh_client.stub(:repos)
+        allow(fake_gh_client).to receive(:repos)
           .and_raise(Octokit::Unauthorized)
       end
 
@@ -105,7 +105,7 @@ describe GithubTemplateRepoProvider do
       let(:gh_user_object) { double(:gh_user_object, login: 'testuser') }
 
       before do
-        fake_gh_client.stub(:user).and_return(gh_user_object)
+        allow(fake_gh_client).to receive(:user).and_return(gh_user_object)
       end
 
       it 'returns the username retrieved from github' do
@@ -116,7 +116,7 @@ describe GithubTemplateRepoProvider do
     context 'when the github token is invalid' do
 
       before do
-        fake_gh_client.stub(:user)
+        allow(fake_gh_client).to receive(:user)
         .and_raise(Octokit::Unauthorized)
       end
 
@@ -137,7 +137,7 @@ describe GithubTemplateRepoProvider do
       end
 
       before do
-        fake_gh_client.stub(:emails)
+        allow(fake_gh_client).to receive(:emails)
         .and_return([gh_email1, gh_email2])
       end
 
@@ -149,7 +149,7 @@ describe GithubTemplateRepoProvider do
     context 'when the github token is invalid' do
 
       before do
-        fake_gh_client.stub(:emails)
+        allow(fake_gh_client).to receive(:emails)
         .and_raise(Octokit::Unauthorized)
       end
 
@@ -161,7 +161,7 @@ describe GithubTemplateRepoProvider do
     context 'when the github token is unscoped for email' do
 
       before do
-        fake_gh_client.stub(:emails)
+        allow(fake_gh_client).to receive(:emails)
         .and_raise(Octokit::NotFound)
       end
 
@@ -178,7 +178,7 @@ describe GithubTemplateRepoProvider do
     before do
       file_path = File.expand_path('../support/fixtures/sample.tar.gz', __dir__)
       file = File.open(file_path)
-      subject.stub(:open).and_return(file)
+      allow(subject).to receive(:open).and_return(file)
     end
 
     it 'returns an array of objects that respond to :name and :content' do
@@ -216,9 +216,9 @@ describe GithubTemplateRepoProvider do
     end
 
     before do
-      fake_gh_client.stub(:create_contents)
-      fake_gh_client.stub(:update_contents)
-      fake_gh_client.stub(:contents)
+      allow(fake_gh_client).to receive(:create_contents)
+      allow(fake_gh_client).to receive(:update_contents)
+      allow(fake_gh_client).to receive(:contents)
     end
 
     context 'when template file is saved to the repo' do
@@ -237,8 +237,8 @@ describe GithubTemplateRepoProvider do
 
     context 'when template file is saved again to the repo' do
       before do
-        fake_gh_client.stub(:create_contents).and_raise(Octokit::UnprocessableEntity)
-        fake_gh_client.stub(:contents).and_return(contents_response)
+        allow(fake_gh_client).to receive(:create_contents).and_raise(Octokit::UnprocessableEntity)
+        allow(fake_gh_client).to receive(:contents).and_return(contents_response)
       end
       it 'invokes update_contents on the github client' do
         expect(fake_gh_client).to receive(:contents)
@@ -276,8 +276,8 @@ describe GithubTemplateRepoProvider do
 
     context 'when template file cannot be updated to the repo' do
       before do
-        fake_gh_client.stub(:create_contents).and_raise(Octokit::UnprocessableEntity)
-        fake_gh_client.stub(:contents).and_raise(Octokit::NotFound)
+        allow(fake_gh_client).to receive(:create_contents).and_raise(Octokit::UnprocessableEntity)
+        allow(fake_gh_client).to receive(:contents).and_raise(Octokit::NotFound)
       end
       it 'should raise an error' do
         expect { subject.save_template(template, params) }.to raise_error
@@ -286,7 +286,7 @@ describe GithubTemplateRepoProvider do
 
     context 'when user does not have an auth token' do
       before do
-        subject.stub(:github_client).and_return(nil)
+        allow(subject).to receive(:github_client).and_return(nil)
       end
 
       it 'should raise an error' do
@@ -296,7 +296,7 @@ describe GithubTemplateRepoProvider do
 
     context 'when repo does not exist' do
       before do
-        fake_gh_client.stub(:create_contents).and_raise(Octokit::NotFound)
+        allow(fake_gh_client).to receive(:create_contents).and_raise(Octokit::NotFound)
       end
 
       it 'should raise an error' do
@@ -311,11 +311,11 @@ describe GithubTemplateRepoProvider do
     let(:gh_user_object) { double(:gh_user_object, login: 'testuser') }
 
     before do
-      fake_gh_client.stub(:user).and_return(gh_user_object)
+      allow(fake_gh_client).to receive(:user).and_return(gh_user_object)
     end
 
     it "only calls out to github for a specific resource once (memoized results) " do
-      fake_gh_client.should_receive(:user).at_most(:once)
+      expect(fake_gh_client).to receive(:user).at_most(:once)
       subject.username
       subject.username
     end

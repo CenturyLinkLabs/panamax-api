@@ -8,7 +8,7 @@ describe PanamaxAgent::Registry::Client::Repositories do
   let(:response) { double(:response) }
 
   before do
-    subject.stub(get: response)
+    allow(subject).to receive(:get).and_return(response)
   end
 
   describe '#list_repository_tags' do

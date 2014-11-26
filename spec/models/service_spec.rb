@@ -163,7 +163,7 @@ describe Service do
     context 'when the destroy fails' do
 
       before do
-        dummy_manager.stub(:destroy).and_raise('boom')
+        allow(dummy_manager).to receive(:destroy).and_raise('boom')
       end
 
       it 'ignores the failure' do
@@ -186,7 +186,7 @@ describe Service do
       end
 
       before do
-        Docker::Image.stub(:get).and_return(image_status)
+        allow(Docker::Image).to receive(:get).and_return(image_status)
       end
 
       it 'queries the Docker API with the base image name' do
@@ -211,7 +211,7 @@ describe Service do
       end
 
       before do
-        Docker::Image.stub(:get).and_return(image_status)
+        allow(Docker::Image).to receive(:get).and_return(image_status)
       end
 
       it 'queries the Docker API with the base image name' do
@@ -228,7 +228,7 @@ describe Service do
     context 'when there is a Docker error' do
 
       before do
-        Docker::Image.stub(:get).and_raise(Docker::Error::DockerError)
+        allow(Docker::Image).to receive(:get).and_raise(Docker::Error::DockerError)
       end
 
       it 'queries the Docker API with the base image name' do
@@ -249,7 +249,7 @@ describe Service do
     let(:attrs) { { name: 'new_name' } }
 
     before do
-      subject.stub(:update).and_return(true)
+      allow(subject).to receive(:update).and_return(true)
     end
 
     context 'when volumes are not provided' do
@@ -298,7 +298,7 @@ describe Service do
       let(:shared_volume) { SharedVolume.new(exported_from_service_id: 1) }
 
       before do
-        subject.stub_chain(:volumes_from, :find_or_initialize_by).and_return(shared_volume)
+        allow(subject).to receive_message_chain(:volumes_from, :find_or_initialize_by).and_return(shared_volume)
       end
 
       it 'populates the related shared volumes' do
@@ -398,7 +398,7 @@ describe Service do
       let(:service_link) { ServiceLink.new(linked_to_service_id: 1, alias: 'DB') }
 
       before do
-        subject.stub_chain(:links, :find_or_initialize_by).and_return(service_link)
+        allow(subject).to receive_message_chain(:links, :find_or_initialize_by).and_return(service_link)
       end
 
       it 'populates the related links' do
@@ -425,7 +425,7 @@ describe Service do
       let(:service_category) { ServiceCategory.new }
 
       before do
-        subject.stub_chain(:categories, :find_or_initialize_by).and_return(service_category)
+        allow(subject).to receive_message_chain(:categories, :find_or_initialize_by).and_return(service_category)
       end
 
       it 'looks for matching ServiceCategory' do

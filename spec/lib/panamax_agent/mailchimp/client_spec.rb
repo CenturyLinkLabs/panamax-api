@@ -11,7 +11,7 @@ describe PanamaxAgent::Mailchimp::Client do
     let(:email) { 'foo@bar.com' }
 
     before do
-      subject.stub(post: response)
+      allow(subject).to receive(:post).and_return(response)
     end
 
     it 'POSTs the email address to MailChimp' do

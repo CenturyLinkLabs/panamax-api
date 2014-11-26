@@ -18,8 +18,8 @@ describe ServiceJournal do
     let(:journal) { hash_from_fixture('journal') }
 
     before do
-      journal_client.stub(list_journal_entries: journal)
-      PanamaxAgent.stub(journal_client: journal_client)
+      allow(journal_client).to receive(:list_journal_entries).and_return(journal)
+      allow(PanamaxAgent).to receive(:journal_client).and_return(journal_client)
     end
 
     it 'invokes get_entries_by_fields on journal client' do

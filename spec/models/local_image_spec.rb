@@ -36,7 +36,7 @@ describe LocalImage do
   end
 
   before do
-    Docker::Image.stub(:all).and_return([local_image1, local_image2, local_image3])
+    allow(Docker::Image).to receive(:all).and_return([local_image1, local_image2, local_image3])
   end
 
   describe 'attributes' do
@@ -101,7 +101,7 @@ describe LocalImage do
     let(:image) { double(:image, delete: nil) }
 
     before do
-      Docker::Image.stub(:get).and_return(image)
+      allow(Docker::Image).to receive(:get).and_return(image)
     end
 
     it 'retrieves the image' do

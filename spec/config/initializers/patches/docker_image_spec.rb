@@ -15,7 +15,7 @@ describe 'Docker::Image patch' do
 
     let(:connection) do
       conn = Docker::Connection.new('unix:///var/run/docker.sock', {})
-      conn.stub(get: ([body].to_json))
+      allow(conn).to receive(:get).and_return([body].to_json)
       conn
     end
 

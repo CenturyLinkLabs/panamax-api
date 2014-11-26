@@ -12,8 +12,8 @@ describe SearchController do
     let(:local_image) { LocalImage.new }
 
     before do
-      Registry.stub(:search).and_return([[remote_image], []])
-      LocalImage.stub(:search).and_return([local_image])
+      allow(Registry).to receive(:search).and_return([[remote_image], []])
+      allow(LocalImage).to receive(:search).and_return([local_image])
     end
 
     context 'when searching for templates only' do
@@ -98,7 +98,7 @@ describe SearchController do
         let(:hash) { JSON.parse(response.body) }
 
         before do
-          Registry.stub(:search).and_return([results, errors])
+          allow(Registry).to receive(:search).and_return([results, errors])
           get :index, q: query, type: 'remote_image', format: 'json'
         end
 
@@ -146,8 +146,8 @@ describe SearchController do
         let(:query) { 'wordpress' }
 
         before do
-          Docker::Image.stub(:search).and_return(nil)
-          Docker::Image.stub(:all).and_return([])
+          allow(Docker::Image).to receive(:search).and_return(nil)
+          allow(Docker::Image).to receive(:all).and_return([])
         end
 
         it 'returns the templates with a name matching the query' do

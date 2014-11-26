@@ -4,7 +4,7 @@ describe 'panamax:templates:load' do
   include_context 'rake'
 
   before do
-    TemplateRepo.stub(:load_templates_from_all_repos)
+    allow(TemplateRepo).to receive(:load_templates_from_all_repos)
   end
 
   its(:prerequisites) { should include('environment') }
@@ -19,7 +19,7 @@ describe 'panamax:templates:unload' do
   include_context 'rake'
 
   before do
-    Template.stub(:destroy_all)
+    allow(Template).to receive(:destroy_all)
   end
 
   its(:prerequisites) { should include('environment') }

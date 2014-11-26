@@ -6,11 +6,12 @@ describe RemoteDeploymentsController do
   let(:deployment) { RemoteDeployment.new(id: 123) }
 
   before do
-    DeploymentTarget.stub(:find).with('44').and_return(deployment_target)
-    deployment_target.
-      stub(:new_agent_service).
+    allow(DeploymentTarget).to receive(:find).with('44').and_return(deployment_target)
+    allow(deployment_target).to(
+      receive(:new_agent_service).
       with(DeploymentService).
       and_return(deployment_service)
+    )
   end
 
   describe 'GET #index' do
@@ -23,7 +24,7 @@ describe RemoteDeploymentsController do
     end
 
     before do
-      deployment_service.stub(:all).and_return(deployments)
+      allow(deployment_service).to receive(:all).and_return(deployments)
     end
 
     it 'returns a list of deployments' do
@@ -40,13 +41,13 @@ describe RemoteDeploymentsController do
   describe 'GET #show' do
 
     before do
-      deployment_service.stub(:find)
+      allow(deployment_service).to receive(:find)
     end
 
     context 'when the resource exists' do
 
       before do
-        deployment_service.stub(:find).with('22').and_return(deployment)
+        allow(deployment_service).to receive(:find).with('22').and_return(deployment)
       end
 
       it 'returns the requested deployment' do
@@ -64,7 +65,7 @@ describe RemoteDeploymentsController do
       let(:error_message) { 'deployment not found' }
 
       before do
-        deployment_service.stub(:find).with('13').and_raise(error_message)
+        allow(deployment_service).to receive(:find).with('13').and_raise(error_message)
       end
 
       it 'returns the requested deployment' do
@@ -106,8 +107,8 @@ describe RemoteDeploymentsController do
     end
 
     before do
-      Template.stub(:find).with(21).and_return(template)
-      deployment_service.stub(:create).and_return(deployment)
+      allow(Template).to receive(:find).with(21).and_return(template)
+      allow(deployment_service).to receive(:create).and_return(deployment)
     end
 
     context 'when given an App resource type' do
@@ -145,7 +146,7 @@ describe RemoteDeploymentsController do
 
     context 'when the given template does not exist' do
       before do
-        Template.stub(:find).with(13).and_raise(ActiveRecord::RecordNotFound)
+        allow(Template).to receive(:find).with(13).and_raise(ActiveRecord::RecordNotFound)
       end
 
       it 'returns an HTTP 500 status code' do
@@ -158,7 +159,7 @@ describe RemoteDeploymentsController do
   describe 'DELETE #destroy' do
 
     before do
-      deployment_service.stub(:destroy)
+      allow(deployment_service).to receive(:destroy)
     end
 
     it 'removes the given deployment' do

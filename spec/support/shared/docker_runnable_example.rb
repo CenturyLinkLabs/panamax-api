@@ -168,7 +168,7 @@ shared_examples 'a docker runnable model' do
       let(:response) { { status: 'ALLGOOD' } }
 
       before do
-        Docker::Container.stub(:get).and_return(response)
+        allow(Docker::Container).to receive(:get).and_return(response)
       end
 
       it 'queries the Docker API with the service name' do
@@ -184,7 +184,7 @@ shared_examples 'a docker runnable model' do
     context 'when the docker API returns an error' do
 
       before do
-        Docker::Container.stub(:get).and_raise(Docker::Error::DockerError)
+        allow(Docker::Container).to receive(:get).and_raise(Docker::Error::DockerError)
       end
 
       it 'returns an empty hash' do

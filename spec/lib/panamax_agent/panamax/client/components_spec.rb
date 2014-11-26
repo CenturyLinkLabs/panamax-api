@@ -40,11 +40,11 @@ describe PanamaxAgent::Panamax::Client::Components do
   end
 
   before do
-    PanamaxAgent::Registry::Client.stub(:new).and_return(fake_registry_client)
-    fake_registry_client.stub(:list_repository_tags)
+    allow(PanamaxAgent::Registry::Client).to receive(:new).and_return(fake_registry_client)
+    allow(fake_registry_client).to receive(:list_repository_tags)
                         .with('panamax-ui')
                         .and_return(expected_components['panamax-ui']['versions'])
-    fake_registry_client.stub(:list_repository_tags)
+    allow(fake_registry_client).to receive(:list_repository_tags)
                         .with('panamax-api')
                         .and_return(expected_components['panamax-api']['versions'])
   end

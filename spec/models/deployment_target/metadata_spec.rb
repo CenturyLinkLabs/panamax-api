@@ -35,10 +35,11 @@ describe DeploymentTarget do
       )
     end
     before do
-      deployment_target.
-        stub(:new_agent_service).
+      allow(deployment_target).to(
+        receive(:new_agent_service).
         with(AgentMetadataService).
         and_return(metadata_service)
+      )
     end
     subject(:refresh_metadata) { deployment_target.refresh_metadata }
 

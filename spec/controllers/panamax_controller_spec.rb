@@ -22,7 +22,7 @@ describe PanamaxController do
     let(:client) { double(:client, list_components: components) }
 
     before do
-      PanamaxAgent.stub(panamax_client: client)
+      allow(PanamaxAgent).to receive(:panamax_client).and_return(client)
     end
 
     it 'invokes list_components on panamax client' do

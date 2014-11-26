@@ -89,7 +89,7 @@ describe TemplateReposController do
     let(:template_repo) { double('template_repo', reload_templates: true) }
 
     before do
-      TemplateRepo.stub(:find).and_return(template_repo)
+      allow(TemplateRepo).to receive(:find).and_return(template_repo)
     end
 
     it 'removes all templates associated with the repo' do
