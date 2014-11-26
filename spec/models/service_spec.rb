@@ -31,7 +31,7 @@ describe Service do
         { 'host_port' => 81, 'container_port' => 7070 }
       ]
 
-      expect(subject.valid?).to be_true
+      expect(subject.valid?).to be_truthy
       expect(subject.errors).to be_empty
     end
 
@@ -40,7 +40,7 @@ describe Service do
         { host_port: 80 },
         { host_port: 70 }
       ]
-      expect(subject.valid?).to be_false
+      expect(subject.valid?).to be_falsey
       expect(subject.errors[:ports]).to eq ["container port can't be blank"]
     end
 
@@ -49,7 +49,7 @@ describe Service do
         { 'host_port' => 80, 'container_port' => 8080 },
         { 'host_port' => 80, 'container_port' => 7070 }
       ]
-      expect(subject.valid?).to be_false
+      expect(subject.valid?).to be_falsey
       expect(subject.errors[:ports]).to eq ['host ports must be unique']
     end
 

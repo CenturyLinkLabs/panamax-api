@@ -48,7 +48,7 @@ describe User do
     end
 
     it "returns false if the user's template_repo_providers are not all valid" do
-      expect(subject.valid?).to be_false
+      expect(subject.valid?).to be_falsey
     end
   end
 
@@ -178,7 +178,7 @@ describe User do
     it 'makes the user not valid if the provider update is not valid' do
       template_repo_providers(:github).stub(:valid?).and_return(false)
       subject.update_credentials_for(template_repo_providers(:github), github_access_token: '1234')
-      expect(subject.valid?).to be_false
+      expect(subject.valid?).to be_falsey
     end
   end
 end

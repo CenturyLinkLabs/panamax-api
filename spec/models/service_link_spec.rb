@@ -31,13 +31,13 @@ describe ServiceLink do
       it 'errors when linked to and from ids match' do
         subject.linked_from_service_id = 3
         subject.linked_to_service_id = 3
-        expect(subject.valid?).to be_false
+        expect(subject.valid?).to be_falsey
         expect(subject.errors[:base]).to include "can't link to self"
       end
 
       it 'does not error if one of the ids is nil' do
         subject.linked_to_service = Service.new
-        expect(subject.valid?).to be_true
+        expect(subject.valid?).to be_truthy
       end
     end
   end

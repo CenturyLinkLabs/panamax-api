@@ -57,7 +57,7 @@ describe PanamaxAgent::Journal::Client do
       it 'returns only the journal lines for the service' do
         response = subject.list_journal_entries(services)
 
-        expect(response).to have(2).items
+        expect(response.length).to eq(2)
         expect(response).to include(journal_lines[0])
         expect(response).to include(journal_lines[2])
       end
@@ -70,7 +70,7 @@ describe PanamaxAgent::Journal::Client do
       it 'returns the journal lines for all the specified services' do
         response = subject.list_journal_entries(services)
 
-        expect(response).to have(3).items
+        expect(response.length).to eq(3)
         expect(response).to include(*journal_lines)
       end
     end

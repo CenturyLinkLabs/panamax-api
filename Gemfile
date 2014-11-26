@@ -11,7 +11,8 @@ gem 'octokit', '3.2.0'
 gem 'kmts', '2.0.1'
 
 group :test, :development do
-  gem 'rspec-rails', '2.14.2'
+  gem 'rspec-rails'
+  gem 'its'
 end
 
 group :test do

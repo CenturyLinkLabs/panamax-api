@@ -26,13 +26,13 @@ describe SharedVolume do
       it 'errors when volume from and mounted on service ids match' do
         subject.exported_from_service_id = 3
         subject.mounted_on_service_id = 3
-        expect(subject.valid?).to be_false
+        expect(subject.valid?).to be_falsey
         expect(subject.errors[:base]).to include "can't mount self"
       end
 
       it 'does not error if one of the ids is nil' do
         subject.exported_from_service = Service.new
-        expect(subject.valid?).to be_true
+        expect(subject.valid?).to be_truthy
       end
     end
   end

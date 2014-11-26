@@ -22,7 +22,6 @@ describe GithubTemplateRepoProvider do
       end
 
       it { should be_valid }
-      it { should have(:no).error_on(:credentials_api_key) }
     end
 
     context 'when the access token has "user:email" scope' do
@@ -33,7 +32,6 @@ describe GithubTemplateRepoProvider do
       end
 
       it { should be_valid }
-      it { should have(:no).error_on(:credentials_api_key) }
     end
 
     context 'when the access token has none of the required scopes' do
@@ -41,14 +39,13 @@ describe GithubTemplateRepoProvider do
       before do
         fake_gh_client.stub(:scopes).and_return(['foo'])
         subject.update(credentials_api_key: 'token')
+        subject.valid?
       end
 
       it { should_not be_valid }
-      it { should have(1).error_on(:credentials_api_key) }
 
       it 'returns a "token too restrictive" message' do
-        expect(subject.errors_on(:credentials_api_key)).to include(
-                                                               'token too restrictive')
+        expect(subject.errors[:credentials_api_key]).to include('token too restrictive')
       end
     end
 
@@ -58,14 +55,13 @@ describe GithubTemplateRepoProvider do
         fake_gh_client.stub(:scopes)
         .and_raise(Octokit::Unauthorized)
         subject.update(credentials_api_key: 'token')
+        subject.valid?
       end
 
       it { should_not be_valid }
-      it { should have(1).error_on(:credentials_api_key) }
 
       it 'returns an "invalid token" message' do
-        expect(subject.errors_on(:credentials_api_key)).to include(
-                                                               'invalid token')
+        expect(subject.errors[:credentials_api_key]).to include('invalid token')
       end
     end
   end

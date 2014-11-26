@@ -48,7 +48,7 @@ describe Template do
       let(:limit) { 1 }
 
       it 'limits the returned results to the specified count' do
-        expect(described_class.search('wp', limit)).to have(limit).items
+        expect(described_class.search('wp', limit).length).to eq(limit)
       end
     end
   end

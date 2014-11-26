@@ -2,7 +2,6 @@
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
-require 'rspec/autorun'
 require 'coveralls'
 require 'simplecov'
 require 'webmock/rspec'
@@ -28,13 +27,11 @@ Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 
 RSpec.configure do |config|
-  # ## Mock Framework
-  #
-  # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
-  #
-  # config.mock_with :mocha
-  # config.mock_with :flexmock
-  # config.mock_with :rr
+  # Allow the old and new syntax. This is probably a temporary situation, but
+  # that is going to be an enormous changeset that I'd rather do separately.
+  config.mock_with :rspec do |c|
+    c.syntax = [ :should, :expect ]
+  end
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
@@ -54,6 +51,8 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = 'random'
+
+  config.infer_spec_type_from_file_location!
 
   config.before(:each) do
     # Stub methods on Docker client
@@ -90,10 +89,6 @@ RSpec.configure do |config|
   config.after(:each) do
     FileUtils.rm_rf('dummy_certs')
   end
-
-  # This will be the Rspec 3 default and can be safely removed upon
-  # upgrade.
-  config.treat_symbols_as_metadata_keys_with_true_values = true
 end
 
 def fixture_data(filename, path='support/fixtures')

@@ -17,12 +17,12 @@ describe LocalImagesController do
 
     it 'without a limit parameter returns all images' do
       get :index, format: :json
-      expect(JSON.parse(response.body)).to have_exactly(2).items
+      expect(JSON.parse(response.body).length).to eq(2)
     end
 
     it 'allows a limit parameter to limit the number of images returned in the response' do
       get :index, limit: 1, format: :json
-      expect(JSON.parse(response.body)).to have_exactly(1).item
+      expect(JSON.parse(response.body).length).to eq(1)
     end
 
     it 'includes a Total-Count header with the image count' do

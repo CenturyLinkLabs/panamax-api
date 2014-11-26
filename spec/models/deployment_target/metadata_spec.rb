@@ -55,7 +55,7 @@ describe DeploymentTarget do
         its(:agent_version) { should eq("1") }
         its(:adapter_version) { should eq("2") }
         its(:adapter_type) { should eq("Test Type") }
-        its(:adapter_is_healthy) { should be_true }
+        its(:adapter_is_healthy) { should be_truthy }
       end
 
       context "when metadata already exists for the target" do

@@ -53,11 +53,11 @@ describe TemplateBuilder do
     context 'when invalid options are passed' do
       subject { described_class.create(nil) }
       it 'returns a template with errors' do
-        expect(subject.valid?).to be_false
+        expect(subject.valid?).to be_falsey
       end
 
       it 'returns an unpersisted template' do
-        expect(subject.persisted?).to be_false
+        expect(subject.persisted?).to be_falsey
       end
     end
 
