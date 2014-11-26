@@ -105,8 +105,11 @@ describe User do
   end
 
   describe '#primary_email' do
+    before do
+      allow(template_repo_providers(:github)).to receive(:email) { 'foo@example.com' }
+    end
     it 'returns the first email address in the hash of emails' do
-
+      expect(subject.primary_email).to eq 'foo@example.com'
     end
   end
 
