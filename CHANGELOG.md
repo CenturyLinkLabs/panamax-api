@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+0.2.10 - 2014-12-1
+------------------
+### Added
+- Health check in metadata response (#252)
+- Ability to pass an app id for deploying an app (#253)
+
+### Changed
+- Increased timeout for docker index search (#257, https://github.com/CenturyLinkLabs/panamax-ui/issues/424)
+
 0.2.9 - 2014-11-21
 ------------------
 ### Changed
