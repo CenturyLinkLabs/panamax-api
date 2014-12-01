@@ -111,8 +111,16 @@ describe TemplatesController do
     let(:template_repo_provider) { template_repo_providers(:github) }
 
     before do
-      allow(template_repo_provider).to receive(:save_template).with(template, hash_including(params)).and_return(save_response)
-      allow(TemplateRepoProvider).to receive(:find_or_create_default_for).with(User.instance).and_return(template_repo_provider)
+      allow(template_repo_provider).to(
+        receive(:save_template)
+        .with(template, hash_including(params))
+        .and_return(save_response)
+      )
+      allow(TemplateRepoProvider).to(
+        receive(:find_or_create_default_for)
+        .with(User.instance)
+        .and_return(template_repo_provider)
+      )
     end
 
     it 'saves a template to a repo' do
@@ -152,7 +160,11 @@ describe TemplatesController do
     context 'when the template save fails' do
 
       before do
-        allow(template_repo_provider).to receive(:save_template).with(template, hash_including(params)).and_raise('error')
+        allow(template_repo_provider).to(
+          receive(:save_template)
+          .with(template, hash_including(params))
+          .and_raise('error')
+        )
       end
 
       it 'returns an internal_server_error status' do

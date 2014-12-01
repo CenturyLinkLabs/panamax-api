@@ -36,9 +36,9 @@ describe DeploymentTarget do
     end
     before do
       allow(deployment_target).to(
-        receive(:new_agent_service).
-        with(AgentMetadataService).
-        and_return(metadata_service)
+        receive(:new_agent_service)
+        .with(AgentMetadataService)
+        .and_return(metadata_service)
       )
     end
     subject(:refresh_metadata) { deployment_target.refresh_metadata }

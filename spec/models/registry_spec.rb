@@ -41,8 +41,8 @@ describe Registry do
 
     before do
       allow(Registry).to receive(:enabled).and_return([ successful_registry, errored_registry ])
-      allow(successful_registry).to receive(:search).and_return({ remote_images: [ first_image, second_image ] })
-      allow(errored_registry).to receive(:search).and_return({ error: error_hash })
+      allow(successful_registry).to receive(:search).and_return(remote_images: [ first_image, second_image ])
+      allow(errored_registry).to receive(:search).and_return(error: error_hash)
       search
     end
 
@@ -79,7 +79,7 @@ describe Registry do
     let(:dummy_results) { 3.times.map { |i| search_result }}
 
     context 'when the RegistryClient raises an error' do
-      before { allow(registry_client).to receive(:search).and_raise(StandardError.new("Error details")) }
+      before { allow(registry_client).to receive(:search).and_raise(StandardError.new('Error details')) }
       subject { search[:error] }
 
       its([:registry_id]) { should eq(registry.id) }
@@ -87,7 +87,7 @@ describe Registry do
     end
 
     context 'when the RegistryClient search is successful' do
-      before { allow(registry_client).to receive(:search).and_return({ 'results' => dummy_results }) }
+      before { allow(registry_client).to receive(:search).and_return('results' => dummy_results) }
 
       it 'returns a RemoteImage for each search result' do
         expect(search[:remote_images].map(&:class)).to eq 3.times.map { RemoteImage }

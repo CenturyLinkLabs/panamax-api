@@ -8,9 +8,9 @@ describe RemoteDeploymentsController do
   before do
     allow(DeploymentTarget).to receive(:find).with('44').and_return(deployment_target)
     allow(deployment_target).to(
-      receive(:new_agent_service).
-      with(DeploymentService).
-      and_return(deployment_service)
+      receive(:new_agent_service)
+      .with(DeploymentService)
+      .and_return(deployment_service)
     )
   end
 
