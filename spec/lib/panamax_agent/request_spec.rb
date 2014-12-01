@@ -22,8 +22,8 @@ describe PanamaxAgent::Request do
   let(:connection) { double(:connection) }
 
   before do
-    connection.stub(:send).and_yield(request).and_return(response)
-    subject.stub(:connection).and_return(connection)
+    allow(connection).to receive(:send).and_yield(request).and_return(response)
+    allow(subject).to receive(:connection).and_return(connection)
   end
 
   [:get, :delete, :head, :put, :post].each do |method|
@@ -48,7 +48,7 @@ describe PanamaxAgent::Request do
       context 'when a Faraday::Error::ConnectionFailed error is raised' do
 
         before do
-          connection.stub(:send).and_raise(Faraday::Error::ConnectionFailed, 'oops')
+          allow(connection).to receive(:send).and_raise(Faraday::Error::ConnectionFailed, 'oops')
         end
 
         it 'raises a PanamaxAgent::ConnectionError' do
@@ -106,8 +106,8 @@ describe PanamaxAgent::Request do
         let(:options) { { querystring: { a: :b }, body: { c: :d } } }
 
         before do
-          request.stub(:params=)
-          request.stub(:body=)
+          allow(request).to receive(:params=)
+          allow(request).to receive(:body=)
         end
 
         it 'sets the querystring as request params' do

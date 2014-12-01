@@ -41,9 +41,9 @@ describe TemplateRepo do
 
     before do
       subject.name = 'my/repo'
-      subject.stub(:files).and_return([file1, file2])
-      subject.stub(:touch).and_return(true)
-      TemplateBuilder.stub(:create).and_return(template)
+      allow(subject).to receive(:files).and_return([file1, file2])
+      allow(subject).to receive(:touch).and_return(true)
+      allow(TemplateBuilder).to receive(:create).and_return(template)
     end
 
     it 'invokes the TemplateBuilder ONLY for .pmx files' do
@@ -63,7 +63,7 @@ describe TemplateRepo do
 
     it 'updates the updated_at value' do
       repo = template_repos(:repo1)
-      repo.stub(:files).and_return([])
+      allow(repo).to receive(:files).and_return([])
       expect { repo.load_templates }.to change(repo, :updated_at)
     end
 
@@ -74,7 +74,7 @@ describe TemplateRepo do
     let(:fake_repo) { double('fake_repo', load_templates: true) }
 
     before do
-      described_class.stub(:all).and_return([fake_repo])
+      allow(described_class).to receive(:all).and_return([fake_repo])
     end
 
     it 'invokes load_templates for each repo' do
@@ -94,7 +94,7 @@ describe TemplateRepo do
 
     it 'updates the updated_at value' do
       repo = template_repos(:repo1)
-      repo.stub(:files).and_return([])
+      allow(repo).to receive(:files).and_return([])
       expect { repo.reload_templates }.to change(repo, :updated_at)
     end
 

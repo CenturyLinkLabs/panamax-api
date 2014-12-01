@@ -7,7 +7,7 @@ describe PanamaxAgent::Registry::Client::Search do
   let(:response) { double(:response) }
 
   before do
-    subject.stub(get: response)
+    allow(subject).to receive(:get).and_return(response)
   end
 
   describe '#search' do

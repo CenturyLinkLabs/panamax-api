@@ -6,7 +6,7 @@ describe Registry do
   end
 
   before do
-    PanamaxAgent::Registry::Client.stub(:new).and_return(registry_client)
+    allow(PanamaxAgent::Registry::Client).to receive(:new).and_return(registry_client)
   end
 
   it { should validate_presence_of(:name) }
@@ -40,9 +40,9 @@ describe Registry do
     subject(:search) { described_class.search(query) }
 
     before do
-      Registry.stub(:enabled).and_return([ successful_registry, errored_registry ])
-      successful_registry.stub(:search).and_return({ remote_images: [ first_image, second_image ] })
-      errored_registry.stub(:search).and_return({ error: error_hash })
+      allow(Registry).to receive(:enabled).and_return([ successful_registry, errored_registry ])
+      allow(successful_registry).to receive(:search).and_return(remote_images: [ first_image, second_image ])
+      allow(errored_registry).to receive(:search).and_return(error: error_hash)
       search
     end
 
@@ -79,7 +79,7 @@ describe Registry do
     let(:dummy_results) { 3.times.map { |i| search_result }}
 
     context 'when the RegistryClient raises an error' do
-      before { registry_client.stub(:search).and_raise(StandardError.new("Error details")) }
+      before { allow(registry_client).to receive(:search).and_raise(StandardError.new('Error details')) }
       subject { search[:error] }
 
       its([:registry_id]) { should eq(registry.id) }
@@ -87,7 +87,7 @@ describe Registry do
     end
 
     context 'when the RegistryClient search is successful' do
-      before { registry_client.stub(:search).and_return({ 'results' => dummy_results }) }
+      before { allow(registry_client).to receive(:search).and_return('results' => dummy_results) }
 
       it 'returns a RemoteImage for each search result' do
         expect(search[:remote_images].map(&:class)).to eq 3.times.map { RemoteImage }
@@ -122,7 +122,7 @@ describe Registry do
       end
 
       before do
-        registry_client.stub(:list_repository_tags).and_return(tag_list_old_style)
+        allow(registry_client).to receive(:list_repository_tags).and_return(tag_list_old_style)
       end
 
       it 'passes the name to the registry client' do
@@ -149,7 +149,7 @@ describe Registry do
       end
 
       before do
-        registry_client.stub(:list_repository_tags).and_return(tag_list_new_style)
+        allow(registry_client).to receive(:list_repository_tags).and_return(tag_list_new_style)
       end
 
       it 'properly maps the tags' do

@@ -7,7 +7,7 @@ describe LocalImagesController do
     let(:images) { [LocalImage.new(id: 'foo'), LocalImage.new(id: 'bar')] }
 
     before do
-      LocalImage.stub(:all).and_return(images)
+      allow(LocalImage).to receive(:all).and_return(images)
     end
 
     it 'returns a list of images' do
@@ -17,12 +17,12 @@ describe LocalImagesController do
 
     it 'without a limit parameter returns all images' do
       get :index, format: :json
-      expect(JSON.parse(response.body)).to have_exactly(2).items
+      expect(JSON.parse(response.body).length).to eq(2)
     end
 
     it 'allows a limit parameter to limit the number of images returned in the response' do
       get :index, limit: 1, format: :json
-      expect(JSON.parse(response.body)).to have_exactly(1).item
+      expect(JSON.parse(response.body).length).to eq(1)
     end
 
     it 'includes a Total-Count header with the image count' do
@@ -43,7 +43,7 @@ describe LocalImagesController do
     context 'when image is found' do
 
       before do
-        LocalImage.stub(:find_by_id_or_name).and_return(image)
+        allow(LocalImage).to receive(:find_by_id_or_name).and_return(image)
       end
 
       it 'queries for the local image' do
@@ -60,7 +60,7 @@ describe LocalImagesController do
     context 'when image is not found' do
 
       before do
-        LocalImage.stub(:find_by_id_or_name).and_return(nil)
+        allow(LocalImage).to receive(:find_by_id_or_name).and_return(nil)
       end
 
       it 'returns an HTTP 404 status code' do
@@ -75,7 +75,7 @@ describe LocalImagesController do
     let(:id) { 'abc123' }
 
     before do
-      LocalImage.stub(:destroy).and_return(true)
+      allow(LocalImage).to receive(:destroy).and_return(true)
     end
 
     it 'destroys the image' do
@@ -91,7 +91,7 @@ describe LocalImagesController do
     context 'when a Conflict error is raised' do
 
       before do
-        LocalImage.stub(:destroy).and_raise(Excon::Errors::Conflict, 'oops')
+        allow(LocalImage).to receive(:destroy).and_raise(Excon::Errors::Conflict, 'oops')
       end
 
       it 'returns an error' do

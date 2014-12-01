@@ -2,7 +2,6 @@
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
-require 'rspec/autorun'
 require 'coveralls'
 require 'simplecov'
 require 'webmock/rspec'
@@ -28,14 +27,6 @@ Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 
 RSpec.configure do |config|
-  # ## Mock Framework
-  #
-  # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
-  #
-  # config.mock_with :mocha
-  # config.mock_with :flexmock
-  # config.mock_with :rr
-
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
@@ -55,17 +46,19 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = 'random'
 
+  config.infer_spec_type_from_file_location!
+
   config.before(:each) do
     # Stub methods on Docker client
-    Docker::Container.stub(:get).and_return({})
-    KMTS.stub(:record)
-    KMTS.stub(:alias)
+    allow(Docker::Container).to receive(:get).and_return({})
+    allow(KMTS).to receive(:record)
+    allow(KMTS).to receive(:alias)
 
     # Stub methods on PanamaxAgent::Journal::Client
     journal_client = double(:journal_client)
-    journal_client.stub(list_journal_entries: hash_from_fixture('journal'))
+    allow(journal_client).to receive(:list_journal_entries).and_return(hash_from_fixture('journal'))
 
-    PanamaxAgent.stub(journal_client: journal_client)
+    allow(PanamaxAgent).to receive(:journal_client).and_return(journal_client)
 
     # Stub methods on Octokit::Client
     fake_github_object = double(:fake_github,
@@ -80,20 +73,16 @@ RSpec.configure do |config|
               )
       ]
     )
-    Octokit::Client.stub(:new).and_return(fake_github_object)
+    allow(Octokit::Client).to receive(:new).and_return(fake_github_object)
 
     #create dummy ssl certs dir
     FileUtils::mkdir_p('dummy_certs')
-    PanamaxApi.stub(:ssl_certs_dir).and_return('dummy_certs/')
+    allow(PanamaxApi).to receive(:ssl_certs_dir).and_return('dummy_certs/')
   end
 
   config.after(:each) do
     FileUtils.rm_rf('dummy_certs')
   end
-
-  # This will be the Rspec 3 default and can be safely removed upon
-  # upgrade.
-  config.treat_symbols_as_metadata_keys_with_true_values = true
 end
 
 def fixture_data(filename, path='support/fixtures')

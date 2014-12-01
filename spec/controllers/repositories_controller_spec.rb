@@ -15,7 +15,7 @@ describe RepositoriesController do
       let(:image) { LocalImage.new(id: repository, tags: tags) }
 
       before do
-        LocalImage.stub(:find_by_name).and_return(image)
+        allow(LocalImage).to receive(:find_by_name).and_return(image)
       end
 
       it 'finds the local image' do
@@ -35,8 +35,8 @@ describe RepositoriesController do
 
       context 'when the registry is found by the supplied id' do
         before do
-          Registry.stub(:find_by_id).and_return(registry)
-          registry.stub(:find_image_by_name).and_return(image)
+          allow(Registry).to receive(:find_by_id).and_return(registry)
+          allow(registry).to receive(:find_image_by_name).and_return(image)
         end
 
         it 'looks up the registry' do
@@ -57,8 +57,8 @@ describe RepositoriesController do
 
       context 'when the registry cannot be located by id' do
         before do
-          Registry.stub(:find_by_id).and_return(nil)
-          registry.stub(:find_image_by_name).and_return(image)
+          allow(Registry).to receive(:find_by_id).and_return(nil)
+          allow(registry).to receive(:find_image_by_name).and_return(image)
         end
 
         it 'returns the first registry in the DB, which should be the docker index, since we seed that' do
@@ -72,8 +72,8 @@ describe RepositoriesController do
     context 'when a PanamaxAgent::ConnectionError is raised' do
 
       before do
-        Registry.stub(:find_by_id).and_return(registry)
-        registry.stub(:find_image_by_name)
+        allow(Registry).to receive(:find_by_id).and_return(registry)
+        allow(registry).to receive(:find_image_by_name)
           .and_raise(PanamaxAgent::ConnectionError, 'oops')
       end
 

@@ -24,7 +24,7 @@ describe PanamaxAgent do
   describe '.journal_client' do
 
     before do
-      PanamaxAgent.unstub(:journal_client)
+      allow(PanamaxAgent).to receive(:journal_client).and_call_original
     end
 
     it 'returns a Journal::Client instance' do

@@ -31,7 +31,7 @@ describe TemplateBuilder::FromFig do
       its(:documentation) { should eq options[:documentation] }
 
       it 'creates images for each service defined in fig.yml' do
-        expect(subject.images).to have_exactly(2).items
+        expect(subject.images.length).to eq(2)
         expect(subject.images.map(&:name)).to match_array(%w(web db))
         expect(subject.images.map(&:source)).to match_array(%w(wordpress mysql))
         expect(subject.images.find_by(name: 'web').ports).to eq([{ 'host_port' => '8080', 'container_port' => '80' }])
@@ -74,7 +74,7 @@ describe TemplateBuilder::FromFig do
     context 'when persisted flag is false' do
       it 'returns an unpersisted template ' do
         t = subject.create_template(false)
-        expect(t.persisted?).to be_false
+        expect(t.persisted?).to be_falsey
       end
     end
   end

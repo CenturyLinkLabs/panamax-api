@@ -14,10 +14,10 @@ describe ServiceSerializer do
   end
 
   before do
-    Docker::Image.stub(:get).and_return(image_status)
+    allow(Docker::Image).to receive(:get).and_return(image_status)
 
     # Prevent any API calls for retrieving service status
-    Service.any_instance.stub(:service_state).and_return({})
+    allow_any_instance_of(Service).to receive(:service_state).and_return({})
   end
 
   it 'exposes the attributes to be jsonified' do

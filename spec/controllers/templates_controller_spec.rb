@@ -51,7 +51,7 @@ describe TemplatesController do
       )
     end
 
-    before { TemplateBuilder.stub(:create).and_return templates(:wordpress) }
+    before { allow(TemplateBuilder).to receive(:create).and_return templates(:wordpress) }
 
     it 'calls out to the TemplateBuilder with permitted parameters' do
       expect(TemplateBuilder).to receive(:create).with(template_params)
@@ -64,13 +64,13 @@ describe TemplatesController do
     end
 
     it 'returns 422 if the template could not be persisted' do
-      TemplateBuilder.stub(:create).and_return templates(:wordpress).tap { |t| t.errors[:base] = 'bad' }
+      allow(TemplateBuilder).to receive(:create).and_return templates(:wordpress).tap { |t| t.errors[:base] = 'bad' }
       post :create, template_params.merge(format: :json)
       expect(response.status).to eq 422
     end
 
     it 'returns 500 if an exception occured during template creation' do
-      TemplateBuilder.stub(:create).and_raise 'boom'
+      allow(TemplateBuilder).to receive(:create).and_raise 'boom'
       post :create, template_params.merge(format: :json)
       expect(response.status).to eq 500
     end
@@ -111,8 +111,16 @@ describe TemplatesController do
     let(:template_repo_provider) { template_repo_providers(:github) }
 
     before do
-      template_repo_provider.stub(:save_template).with(template, hash_including(params)).and_return(save_response)
-      TemplateRepoProvider.stub(:find_or_create_default_for).with(User.instance).and_return(template_repo_provider)
+      allow(template_repo_provider).to(
+        receive(:save_template)
+        .with(template, hash_including(params))
+        .and_return(save_response)
+      )
+      allow(TemplateRepoProvider).to(
+        receive(:find_or_create_default_for)
+        .with(User.instance)
+        .and_return(template_repo_provider)
+      )
     end
 
     it 'saves a template to a repo' do
@@ -152,7 +160,11 @@ describe TemplatesController do
     context 'when the template save fails' do
 
       before do
-        template_repo_provider.stub(:save_template).with(template, hash_including(params)).and_raise('error')
+        allow(template_repo_provider).to(
+          receive(:save_template)
+          .with(template, hash_including(params))
+          .and_raise('error')
+        )
       end
 
       it 'returns an internal_server_error status' do
@@ -166,8 +178,8 @@ describe TemplatesController do
 
     context "when a template_repo_provider is given" do
       before do
-        TemplateRepoProvider.unstub(:find_or_create_default_for)
-        TemplateRepoProvider.stub(:find).with(template_repo_provider.id).and_return(template_repo_provider)
+        allow(TemplateRepoProvider).to receive(:find_or_create_default_for).and_call_original
+        allow(TemplateRepoProvider).to receive(:find).with(template_repo_provider.id).and_return(template_repo_provider)
       end
 
       it 'saves a template to a repo' do

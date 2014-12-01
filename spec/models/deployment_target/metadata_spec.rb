@@ -35,10 +35,11 @@ describe DeploymentTarget do
       )
     end
     before do
-      deployment_target.
-        stub(:new_agent_service).
-        with(AgentMetadataService).
-        and_return(metadata_service)
+      allow(deployment_target).to(
+        receive(:new_agent_service)
+        .with(AgentMetadataService)
+        .and_return(metadata_service)
+      )
     end
     subject(:refresh_metadata) { deployment_target.refresh_metadata }
 
@@ -55,7 +56,7 @@ describe DeploymentTarget do
         its(:agent_version) { should eq("1") }
         its(:adapter_version) { should eq("2") }
         its(:adapter_type) { should eq("Test Type") }
-        its(:adapter_is_healthy) { should be_true }
+        its(:adapter_is_healthy) { should be_truthy }
       end
 
       context "when metadata already exists for the target" do

@@ -53,18 +53,18 @@ describe TemplateBuilder do
     context 'when invalid options are passed' do
       subject { described_class.create(nil) }
       it 'returns a template with errors' do
-        expect(subject.valid?).to be_false
+        expect(subject.valid?).to be_falsey
       end
 
       it 'returns an unpersisted template' do
-        expect(subject.persisted?).to be_false
+        expect(subject.persisted?).to be_falsey
       end
     end
 
     context 'when persisted flag is passed' do
       let(:strategy) { double(:strategy) }
       before do
-        TemplateBuilder::FromApp.stub(:new).and_return(strategy)
+        allow(TemplateBuilder::FromApp).to receive(:new).and_return(strategy)
       end
       it 'passes through to the strategy' do
         expect(strategy).to receive(:create_template).with(false)

@@ -36,12 +36,12 @@ describe BaseProtectedService do
 
       it 'cleans-up the certificate file' do
         connection = subject.connection_tester
-        expect(File.exist?(connection.ssl[:ca_file])).to be_false
+        expect(File.exist?(connection.ssl[:ca_file])).to be_falsey
       end
 
       it 'verifies the server SSL certificate' do
         connection = subject.connection_tester
-        expect(connection.ssl[:verify]).to be_true
+        expect(connection.ssl[:verify]).to be_truthy
       end
     end
 

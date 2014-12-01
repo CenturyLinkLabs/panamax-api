@@ -12,12 +12,12 @@ describe AppsController do
 
     it 'without a limit parameter returns all apps' do
       get :index, format: :json
-      expect(JSON.parse(response.body)).to have_exactly(2).items
+      expect(JSON.parse(response.body).length).to eq(2)
     end
 
     it 'allows a limit parameter to limit the number of apps returned in the response' do
       get :index, limit: 1, format: :json
-      expect(JSON.parse(response.body)).to have_exactly(1).item
+      expect(JSON.parse(response.body).length).to eq(1)
     end
 
     it 'includes a Total-Count header with the App count' do
@@ -59,7 +59,7 @@ describe AppsController do
     let(:template) { templates(:wordpress) }
 
     before do
-      App.any_instance.stub(:run)
+      allow_any_instance_of(App).to receive(:run)
     end
 
     it 'creates a new app' do
@@ -115,7 +115,7 @@ describe AppsController do
     context 'when an error occurs' do
 
       before do
-        App.any_instance.stub(:run).and_raise('boom')
+        allow_any_instance_of(App).to receive(:run).and_raise('boom')
       end
 
       it 'does not create an app' do
@@ -138,7 +138,7 @@ describe AppsController do
     context 'when a PanamaxAgent::ConnectionError error occurs' do
 
       before do
-        App.any_instance.stub(:run).and_raise(PanamaxAgent::ConnectionError, 'oops')
+        allow_any_instance_of(App).to receive(:run).and_raise(PanamaxAgent::ConnectionError, 'oops')
       end
 
       it 'does not create an app' do
@@ -165,7 +165,7 @@ describe AppsController do
     let(:service_name) { app.services.first.name }
 
     before do
-      ServiceManager.any_instance.stub(:destroy).and_return(true)
+      allow_any_instance_of(ServiceManager).to receive(:destroy).and_return(true)
     end
 
     it 'deletes the app' do
@@ -196,7 +196,7 @@ describe AppsController do
     context 'when the journal API is not responding' do
 
       before do
-        App.any_instance.stub(:journal)
+        allow_any_instance_of(App).to receive(:journal)
           .and_raise(PanamaxAgent::ConnectionError, 'oops')
       end
 
@@ -219,8 +219,8 @@ describe AppsController do
     let(:app) { App.first }
 
     before do
-      App.stub(:find).and_return(app)
-      app.stub(:restart)
+      allow(App).to receive(:find).and_return(app)
+      allow(app).to receive(:restart)
     end
 
     it 'invokes restart on the app object' do
@@ -236,7 +236,7 @@ describe AppsController do
     context 'when a PanamaxAgent::ConnectionError error occurs' do
 
       before do
-        app.stub(:restart).and_raise(PanamaxAgent::ConnectionError, 'oops')
+        allow(app).to receive(:restart).and_raise(PanamaxAgent::ConnectionError, 'oops')
       end
 
       it 'returns the fleet error message' do
@@ -272,7 +272,7 @@ describe AppsController do
                                   documentation: "# Title\r\nSome *markdown*") }
 
     before do
-      TemplateBuilder.stub(:create).and_return(template)
+      allow(TemplateBuilder).to receive(:create).and_return(template)
     end
 
     it 'invokes the template builder' do

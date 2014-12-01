@@ -24,7 +24,7 @@ describe PanamaxAgent::Journal::Client::Entries do
   end
 
   before do
-    subject.stub(get: response)
+    allow(subject).to receive(:get).and_return(response)
   end
 
   describe '#get_entries_by_fields' do

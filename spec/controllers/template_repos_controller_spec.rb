@@ -16,12 +16,12 @@ describe TemplateReposController do
 
     it 'without a limit parameter returns all repos' do
       get :index, format: :json
-      expect(JSON.parse(response.body)).to have_exactly(2).items
+      expect(JSON.parse(response.body).length).to eq(2)
     end
 
     it 'allows a limit parameter to limit the number of repos returned in the response' do
       get :index, limit: 1, format: :json
-      expect(JSON.parse(response.body)).to have_exactly(1).item
+      expect(JSON.parse(response.body).length).to eq(1)
     end
 
     it 'includes a Total-Count header with the repo count' do
@@ -89,7 +89,7 @@ describe TemplateReposController do
     let(:template_repo) { double('template_repo', reload_templates: true) }
 
     before do
-      TemplateRepo.stub(:find).and_return(template_repo)
+      allow(TemplateRepo).to receive(:find).and_return(template_repo)
     end
 
     it 'removes all templates associated with the repo' do

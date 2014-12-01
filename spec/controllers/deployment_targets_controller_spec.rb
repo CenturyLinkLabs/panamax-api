@@ -31,7 +31,7 @@ describe DeploymentTargetsController do
 
     context 'when the desired target does not exist' do
       before do
-        DeploymentTarget.stub(:find).with('13').and_raise(ActiveRecord::RecordNotFound)
+        allow(DeploymentTarget).to receive(:find).with('13').and_raise(ActiveRecord::RecordNotFound)
       end
 
       it 'returns an HTTP 500 status code' do

@@ -26,7 +26,7 @@ describe TemplateBuilder::FromJson do
     context 'when persisted flag is false' do
       it 'returns an unpersisted template' do
         t = subject.create_template(false)
-        expect(t.persisted?).to be_false
+        expect(t.persisted?).to be_falsey
       end
     end
   end

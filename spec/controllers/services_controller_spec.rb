@@ -11,10 +11,10 @@ describe ServicesController do
   end
 
   before do
-    Docker::Image.stub(:get).and_return(image_status)
+    allow(Docker::Image).to receive(:get).and_return(image_status)
 
     # Prevent any API calls for retrieving service status
-    Service.any_instance.stub(:service_state).and_return({})
+    allow_any_instance_of(Service).to receive(:service_state).and_return({})
   end
 
   describe '#index' do
@@ -62,10 +62,10 @@ describe ServicesController do
     end
 
     before do
-      App.stub(:find).and_return(dummy_app)
-      dummy_app.stub_chain(:services, :find).and_return(dummy_service)
-      dummy_service.stub(:update_with_relationships).and_return(true)
-      dummy_app.stub(:restart)
+      allow(App).to receive(:find).and_return(dummy_app)
+      allow(dummy_app).to receive_message_chain(:services, :find).and_return(dummy_service)
+      allow(dummy_service).to receive(:update_with_relationships).and_return(true)
+      allow(dummy_app).to receive(:restart)
     end
 
     it 'updates attributes on the service' do
@@ -104,8 +104,8 @@ describe ServicesController do
     context 'when the service update fails' do
 
       before do
-        dummy_service.stub(:update_with_relationships).and_return(false)
-        dummy_service.stub(:errors).and_return(['some errors'])
+        allow(dummy_service).to receive(:update_with_relationships).and_return(false)
+        allow(dummy_service).to receive(:errors).and_return(['some errors'])
       end
 
       it 'does not restart the app' do
@@ -132,7 +132,7 @@ describe ServicesController do
     context 'when restart raises a PanamaxAgent::ConnectionError' do
 
       before do
-        dummy_app.stub(:restart).and_raise(PanamaxAgent::ConnectionError, 'oops')
+        allow(dummy_app).to receive(:restart).and_raise(PanamaxAgent::ConnectionError, 'oops')
       end
 
       it 'returns the fleet error message' do
@@ -154,9 +154,9 @@ describe ServicesController do
     let(:dummy_service) { double(:service) }
 
     before do
-      App.stub(:find).and_return(dummy_app)
-      dummy_app.stub_chain(:services, :find).and_return(dummy_service)
-      dummy_service.stub(:destroy).and_return(dummy_service)
+      allow(App).to receive(:find).and_return(dummy_app)
+      allow(dummy_app).to receive_message_chain(:services, :find).and_return(dummy_service)
+      allow(dummy_service).to receive(:destroy).and_return(dummy_service)
     end
 
     it 'calls destroy on the service' do
@@ -188,7 +188,7 @@ describe ServicesController do
     context 'when the journal API is not responding' do
 
       before do
-        Service.any_instance.stub(:journal)
+        allow_any_instance_of(Service).to receive(:journal)
           .and_raise(PanamaxAgent::ConnectionError, 'oops')
       end
 
@@ -219,7 +219,7 @@ describe ServicesController do
     end
 
     before do
-      App.any_instance.stub(:restart)
+      allow_any_instance_of(App).to receive(:restart)
     end
 
     it 'adds a new service' do
@@ -254,7 +254,7 @@ describe ServicesController do
     context 'when restart raises a PanamaxAgent::ConnectionError' do
 
       before do
-        App.any_instance.stub(:restart).and_raise(PanamaxAgent::ConnectionError, 'oops')
+        allow_any_instance_of(App).to receive(:restart).and_raise(PanamaxAgent::ConnectionError, 'oops')
       end
 
       it 'returns the fleet error message' do

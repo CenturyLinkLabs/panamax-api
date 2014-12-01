@@ -44,17 +44,17 @@ describe User do
 
   describe "#valid?" do
     before do
-      template_repo_providers(:github).stub(:valid?).and_return(false)
+      allow(template_repo_providers(:github)).to receive(:valid?).and_return(false)
     end
 
     it "returns false if the user's template_repo_providers are not all valid" do
-      expect(subject.valid?).to be_false
+      expect(subject.valid?).to be_falsey
     end
   end
 
   describe '#repos' do
     before do
-      template_repo_providers(:github).stub(:repos).and_return(['foo/bar', 'bar/foo'])
+      allow(template_repo_providers(:github)).to receive(:repos).and_return(['foo/bar', 'bar/foo'])
     end
 
     it 'returns a hash' do
@@ -73,7 +73,7 @@ describe User do
 
     context 'without any providers' do
       it 'returns an empty hash' do
-        subject.stub(:template_repo_providers).and_return([])
+        allow(subject).to receive(:template_repo_providers).and_return([])
         expect(subject.repos).to eq({})
       end
     end
@@ -97,7 +97,7 @@ describe User do
 
     context 'without any providers' do
       it 'returns an empty hash' do
-        subject.stub(:template_repo_providers).and_return([])
+        allow(subject).to receive(:template_repo_providers).and_return([])
         expect(subject.email).to eq({})
       end
     end
@@ -131,7 +131,7 @@ describe User do
 
     context 'without any providers' do
       it 'returns an empty hash' do
-        subject.stub(:template_repo_providers).and_return([])
+        allow(subject).to receive(:template_repo_providers).and_return([])
         expect(subject.email).to eq({})
       end
     end
@@ -143,8 +143,8 @@ describe User do
     let(:mailchimp_client) { double(:mailchimp_client) }
 
     before do
-      mailchimp_client.stub(:create_subscription)
-      PanamaxAgent.stub(:mailchimp_client).and_return(mailchimp_client)
+      allow(mailchimp_client).to receive(:create_subscription)
+      allow(PanamaxAgent).to receive(:mailchimp_client).and_return(mailchimp_client)
     end
 
     it 'creates a subscription with the mailchimp client' do
@@ -157,7 +157,7 @@ describe User do
     context 'when an error is raised' do
 
       before do
-        mailchimp_client.stub(:create_subscription)
+        allow(mailchimp_client).to receive(:create_subscription)
           .and_raise(PanamaxAgent::Error, 'boom')
       end
 
@@ -169,19 +169,19 @@ describe User do
 
   describe '#update_credentials_for' do
     before do
-      fake_gh_client.stub(:scopes).and_return([])
+      allow(fake_gh_client).to receive(:scopes).and_return([])
     end
 
     it 'updates the passed provider with the credentials passed as options' do
       creds = { credentials_account: nil, credentials_api_key: '1234' }
-      template_repo_providers(:github).should_receive(:update).with(creds)
+      expect(template_repo_providers(:github)).to receive(:update).with(creds)
       subject.update_credentials_for(template_repo_providers(:github), github_access_token: '1234')
     end
 
     it 'makes the user not valid if the provider update is not valid' do
-      template_repo_providers(:github).stub(:valid?).and_return(false)
+      allow(template_repo_providers(:github)).to receive(:valid?).and_return(false)
       subject.update_credentials_for(template_repo_providers(:github), github_access_token: '1234')
-      expect(subject.valid?).to be_false
+      expect(subject.valid?).to be_falsey
     end
   end
 end

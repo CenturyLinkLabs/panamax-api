@@ -10,7 +10,7 @@ describe AppBuilder::FromTemplate do
     let(:converter) { double(:converter, to_app: app) }
 
     before do
-      Converters::TemplateConverter.any_instance.stub(:to_app).and_return(app)
+      allow_any_instance_of(Converters::TemplateConverter).to receive(:to_app).and_return(app)
     end
 
     it 'instantiates a converter with the template' do
