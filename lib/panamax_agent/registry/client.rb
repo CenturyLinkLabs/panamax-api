@@ -20,7 +20,8 @@ module PanamaxAgent
 
       def default_options
         {
-          read_timeout: 15
+          read_timeout: 30,
+          open_timeout: 10
         }
       end
 
