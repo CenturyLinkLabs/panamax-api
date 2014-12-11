@@ -22,6 +22,10 @@ class RemoteDeploymentsController < ApplicationController
     respond_with deployment_service.destroy(params[:id])
   end
 
+  def redeploy
+    respond_with deployment_service.redeploy(params[:id]), location: nil, status: 201
+  end
+
   private
 
   def deployment_service

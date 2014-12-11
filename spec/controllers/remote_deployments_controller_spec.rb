@@ -172,4 +172,47 @@ describe RemoteDeploymentsController do
       expect(response.status).to eq 204
     end
   end
+
+  describe 'POST #redeploy' do
+
+    before do
+      allow(deployment_service).to receive(:redeploy)
+    end
+
+    context 'when the resource exists' do
+
+      before do
+        allow(deployment_service).to receive(:redeploy).with('22').and_return(deployment)
+      end
+
+      it 'returns a new deployment' do
+        get :redeploy, deployment_target_id: 44, id: 22, format: :json
+        expect(response.body).to eq deployment.to_json
+      end
+
+      it 'returns a HTTP 201 status code' do
+        get :redeploy, deployment_target_id: 44, id: 22, format: :json
+        expect(response.status).to eq 201
+      end
+    end
+
+    context 'when the resource does not exist' do
+      let(:error_message) { 'deployment not found' }
+
+      before do
+        allow(deployment_service).to receive(:redeploy).with('13').and_raise(error_message)
+      end
+
+      it 'returns the requested deployment' do
+        get :redeploy, deployment_target_id: 44, id: 13, format: :json
+        expect(response.body).to eq "{\"message\":\"#{error_message}\"}"
+      end
+
+      it 'returns a HTTP 500 status code' do
+        get :redeploy, deployment_target_id: 44, id: 13, format: :json
+        expect(response.status).to eq 500
+      end
+    end
+  end
+
 end

@@ -5,8 +5,10 @@ class DeploymentService < BaseProtectedService
       connection.get '/deployments'
     end
 
-    response.body.map do |deployment_params|
-      RemoteDeployment.new(deployment_params)
+    handle_agent_response(response) do
+      response.body.map do |deployment_params|
+        RemoteDeployment.new(deployment_params)
+      end
     end
   end
 
@@ -15,8 +17,7 @@ class DeploymentService < BaseProtectedService
       connection.get "/deployments/#{deployment_id}"
     end
 
-    raise 'deployment not found' if response.status == 404
-    RemoteDeployment.new(response.body)
+    handle_agent_response(response) { RemoteDeployment.new(response.body) }
   end
 
   def create(template:, override:)
@@ -27,12 +28,35 @@ class DeploymentService < BaseProtectedService
       }.to_json
     end
 
-    RemoteDeployment.new(response.body)
+    handle_agent_response(response) { RemoteDeployment.new(response.body) }
   end
 
   def destroy(deployment_id)
-    with_ssl_connection do |connection|
+    response = with_ssl_connection do |connection|
       connection.delete "/deployments/#{deployment_id}"
+    end
+
+    handle_agent_response(response)
+  end
+
+  def redeploy(deployment_id)
+    response = with_ssl_connection do |connection|
+      connection.post "/deployments/#{deployment_id}/redeploy"
+    end
+
+    handle_agent_response(response) { RemoteDeployment.new(response.body) }
+  end
+
+  private
+
+  def handle_agent_response(response)
+    case response.status
+    when 200..299
+      yield if block_given?
+    when 404
+      raise 'deployment not found'
+    else
+      raise response.body['message']
     end
   end
 end

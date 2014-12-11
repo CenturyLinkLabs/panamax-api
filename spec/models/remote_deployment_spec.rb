@@ -15,6 +15,8 @@ describe RemoteDeployment do
     it { should respond_to :service_ids= }
     it { should respond_to :status }
     it { should respond_to :status= }
+    it { should respond_to :redeployable }
+    it { should respond_to :redeployable= }
   end
 
 end
