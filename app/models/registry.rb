@@ -65,7 +65,9 @@ class Registry < ActiveRecord::Base
   private
 
   def endpoint_url_without_scheme
-    endpoint_url.gsub(/^#{parsed_endpoint_uri.scheme}:\/\//,'')
+    endpoint_url
+      .gsub(/^#{parsed_endpoint_uri.scheme}:\/\//, '')
+      .gsub(/\/+$/, '')
   end
 
   def parsed_endpoint_uri

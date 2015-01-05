@@ -182,5 +182,12 @@ describe Registry do
 
       it { should eq 'private.com:5000/' }
     end
+
+    context 'when endpoint url contains a trailing slash' do
+      let(:registry) { Registry.new(endpoint_url: 'http://example.com:5000/') }
+      subject { registry.prefix }
+
+      it { should eq 'example.com:5000/' }
+    end
   end
 end
