@@ -11,6 +11,7 @@ module PanamaxAgent
       :journal_api_url,
       :pmx_registry_api_url,
       :pmx_registry_api_version,
+      :stevedore_api_url,
       :mailchimp_api_url,
       :mailchimp_user,
       :mailchimp_id,
@@ -28,6 +29,7 @@ module PanamaxAgent
     DEFAULT_JOURNAL_API_URL = ENV['JOURNAL_ENDPOINT']
     DEFAULT_PMX_REGISTRY_API_URL = 'http://74.201.240.198:5000'
     DEFAULT_PMX_REGISTRY_API_VERSION = 'v1'
+    DEFAULT_STEVEDORE_API_URL = ENV['STEVEDORE_ENDPOINT']
     DEFAULT_MAILCHIMP_API_URL = 'http://centurylinklabs.us3.list-manage.com'
     DEFAULT_MAILCHIMP_USER = '021d5aea02a4ed5dec0c1c96c'
     DEFAULT_MAILCHIMP_ID = '7bb216c547'
@@ -55,6 +57,7 @@ module PanamaxAgent
       self.journal_api_url = DEFAULT_JOURNAL_API_URL
       self.pmx_registry_api_url = DEFAULT_PMX_REGISTRY_API_URL
       self.pmx_registry_api_version = DEFAULT_PMX_REGISTRY_API_VERSION
+      self.stevedore_api_url = DEFAULT_STEVEDORE_API_URL
       self.mailchimp_api_url = DEFAULT_MAILCHIMP_API_URL
       self.mailchimp_user = DEFAULT_MAILCHIMP_USER
       self.mailchimp_id = DEFAULT_MAILCHIMP_ID

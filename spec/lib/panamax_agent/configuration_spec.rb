@@ -15,6 +15,7 @@ describe PanamaxAgent::Configuration do
     its(:registry_api_url) { should eql PanamaxAgent::Configuration::DEFAULT_REGISTRY_API_URL }
     its(:registry_api_version) { should eql PanamaxAgent::Configuration::DEFAULT_REGISTRY_API_VERSION }
     its(:journal_api_url) { should eql PanamaxAgent::Configuration::DEFAULT_JOURNAL_API_URL }
+    its(:stevedore_api_url) { should eql PanamaxAgent::Configuration::DEFAULT_STEVEDORE_API_URL }
     its(:mailchimp_api_url) { should eql PanamaxAgent::Configuration::DEFAULT_MAILCHIMP_API_URL }
     its(:mailchimp_user) { should eql PanamaxAgent::Configuration::DEFAULT_MAILCHIMP_USER }
     its(:mailchimp_id) { should eql PanamaxAgent::Configuration::DEFAULT_MAILCHIMP_ID }
