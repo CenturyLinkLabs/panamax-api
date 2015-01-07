@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141114224701) do
+ActiveRecord::Schema.define(version: 20150107161739) do
 
   create_table "app_categories", force: true do |t|
     t.string   "name"
@@ -66,6 +66,38 @@ ActiveRecord::Schema.define(version: 20141114224701) do
 
   add_index "images", ["image_id"], name: "index_images_on_image_id", unique: true
   add_index "images", ["source"], name: "index_images_on_source"
+
+  create_table "job_steps", force: true do |t|
+    t.integer  "job_template_id"
+    t.integer  "order"
+    t.string   "name"
+    t.string   "source"
+    t.text     "environment"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "job_steps", ["job_template_id"], name: "index_job_steps_on_job_template_id"
+
+  create_table "job_templates", force: true do |t|
+    t.string   "name"
+    t.string   "description"
+    t.text     "documentation"
+    t.text     "environment"
+    t.string   "type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "jobs", force: true do |t|
+    t.integer  "job_template_id"
+    t.string   "key"
+    t.text     "environment"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "jobs", ["job_template_id"], name: "index_jobs_on_job_template_id"
 
   create_table "registries", force: true do |t|
     t.string   "name"
