@@ -11,7 +11,9 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
   Coveralls::SimpleCov::Formatter
 ]
 
-SimpleCov.start('rails')
+SimpleCov.start('rails') do
+  add_filter 'panamax.rake'
+end
 
 if ENV['CIRCLE_ARTIFACTS']
   dir = File.join('..', '..', '..', ENV['CIRCLE_ARTIFACTS'], 'coverage')
