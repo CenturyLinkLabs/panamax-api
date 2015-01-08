@@ -16,4 +16,20 @@ describe JobTemplate do
     expect(subject.job_steps.first).to eq step_a
     expect(subject.job_steps.second).to eq step_b
   end
+
+  describe '.load_templates' do
+    let(:child) { double(:child, read: '') }
+    let(:pathname) { double(:pathname) }
+
+    before do
+      allow(pathname).to receive(:each_child).and_yield(child)
+    end
+
+    it 'invokes the JobTemplateBuilder' do
+      expect(JobTemplateBuilder).to receive(:create).once
+      described_class.load_templates(pathname)
+    end
+
+  end
+
 end
