@@ -3,4 +3,5 @@ class JobTemplate < ActiveRecord::Base
 
   serialize :environment, Array
 
+  scope :cluster_job_templates, -> { where(type: 'ClusterJobTemplate') }
 end

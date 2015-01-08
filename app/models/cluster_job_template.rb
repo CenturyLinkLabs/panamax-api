@@ -1,0 +1,4 @@
+class ClusterJobTemplate < JobTemplate
+
+end
+

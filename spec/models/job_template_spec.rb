@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe JobTemplate do
   it { should have_many(:job_steps) }
+  it { should respond_to?(:cluster_job_templates) }
 
   let(:step_a) { JobStep.create(order: 1) }
   let(:step_b) { JobStep.create(order: 2) }
