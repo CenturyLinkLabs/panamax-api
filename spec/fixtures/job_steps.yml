@@ -1,0 +1,32 @@
+brightbox:
+  job_template: cluster_job_template
+  name: BrightBox CoreOS
+  source: centurylink/brightbox_coreos
+  environment:
+    - variable: APP_ID
+      value:
+      description: |
+        Enter your API ID. You can generate an API ID from your BrightBox Console
+    - variable: SECRET_ID
+      value:
+      description: |
+        Enter the Secret ID that is generated after you create your API ID.
+    - variable: NODE_COUNT
+      value:
+      description: |
+        Enter how many CoreOS nodes you want in your cluster. An additional node will be create to install the Remote
+        Agent and Adapter.
+    - variable: TYPE
+      description: |
+        Enter the size of node for your cluster. Valid values include: Nano, Mini, Small, Medium, Large, AL and XXL.
+    - variable: ETCD_API
+      value: 172.17.42.1:4001
+      description:
+agent_installer:
+  job_template: cluster_job_template
+  name: PMX Remote Agent Installer
+  source: centurylink/pmx_remote_installer
+  environment:
+    - variable: ETCD_API
+      value: 172.17.42.1:4001
+      description:

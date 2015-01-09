@@ -35,6 +35,8 @@ PanamaxApi::Application.routes.draw do
     post '/metadata/refresh', to: "remote_metadata_refreshes#create"
   end
 
+  resources :job_templates, only: [:index, :show]
+
   resources :registries, only: [:create, :destroy, :update, :index, :show]
 
   resources :local_images, only: [:index, :destroy]
