@@ -12,14 +12,14 @@ describe PanamaxAgent::Stevedore::Client::Jobs do
   end
 
   describe '#create_job' do
-    let(:job) { double(:job) }
+    let(:job_attrs) { { name: "job" } }
 
     it 'POSTs the job steps' do
       expect(subject).to receive(:post)
-                           .with('/jobs', job.to_json)
+                           .with('/jobs', job_attrs)
                            .and_return(response)
 
-      subject.create_job(job)
+      subject.create_job(job_attrs)
     end
 
   end

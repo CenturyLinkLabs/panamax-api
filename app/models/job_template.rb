@@ -1,5 +1,6 @@
 class JobTemplate < ActiveRecord::Base
-  has_many :job_steps, -> { order(:order) }
+  has_many :steps, -> { order(:order) }, class_name: 'JobStep'
+  has_many :jobs
 
   serialize :environment, Array
 
@@ -9,5 +10,9 @@ class JobTemplate < ActiveRecord::Base
     pathname.each_child do |template|
       JobTemplateBuilder.create(template.read)
     end
+  end
+
+  def override(other_template)
+
   end
 end

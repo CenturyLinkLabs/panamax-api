@@ -7,18 +7,18 @@ module JobTemplateBuilder
       @params = YAML.safe_load(template_contents || '')
     end
 
-    def create_template
-      job_steps_hash = params.delete('steps')
+    def create_template(persisted=true)
+      steps_hash = params.delete('steps')
       JobTemplate.new(params) do |template|
-        template.job_steps = create_job_steps(job_steps_hash) if job_steps_hash
-        template.save
+        template.steps = create_steps(steps_hash) if steps_hash
+        template.save if persisted
       end
     end
 
     private
-    def create_job_steps(job_steps_hash)
-      job_steps_hash.each_with_index.map do |job_step_hash, i|
-        JobStep.new(job_step_hash.merge({order: i}))
+    def create_steps(steps_hash)
+      steps_hash.each_with_index.map do |job_step_hash, i|
+        JobStep.new(job_step_hash.merge(order: i))
       end
     end
   end

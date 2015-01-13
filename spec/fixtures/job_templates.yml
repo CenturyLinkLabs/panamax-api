@@ -32,3 +32,8 @@ cluster_job_template:
      description: |
        Enter how many CoreOS nodes you want in your cluster. An additional node will be create to install the Remote Agent
        and Adapter.
+
+foo_job_template:
+  name: foo
+  type: FooJobTemplate
+  description: just some template

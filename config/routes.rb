@@ -37,6 +37,12 @@ PanamaxApi::Application.routes.draw do
 
   resources :job_templates, only: [:index, :show]
 
+  resources :jobs, only: [:index, :show, :create, :destroy] do
+    member do
+      get :log
+    end
+  end
+
   resources :registries, only: [:create, :destroy, :update, :index, :show]
 
   resources :local_images, only: [:index, :destroy]

@@ -4,9 +4,8 @@ module PanamaxAgent
       module Jobs
 
         JOBS_RESOURCE = 'jobs'
-
-        def create_job(job)
-          post(jobs_path, job.to_json)
+        def create_job(job_attrs)
+          post(jobs_path, job_attrs)
         end
 
         def list_jobs
