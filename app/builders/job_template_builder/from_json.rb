@@ -18,7 +18,7 @@ module JobTemplateBuilder
     private
     def create_steps(steps_hash)
       steps_hash.each_with_index.map do |job_step_hash, i|
-        JobStep.new(job_step_hash.merge(order: i))
+        JobTemplateStep.new(job_step_hash.merge(order: i))
       end
     end
   end

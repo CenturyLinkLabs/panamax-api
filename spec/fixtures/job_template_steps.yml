@@ -1,5 +1,5 @@
 brightbox:
-  job: cluster_job
+  job_template: cluster_job_template
   name: BrightBox CoreOS
   source: centurylink/brightbox_coreos
   environment:
@@ -23,7 +23,7 @@ brightbox:
       value: 172.17.42.1:4001
       description:
 agent_installer:
-  job: cluster_job
+  job_template: cluster_job_template
   name: PMX Remote Agent Installer
   source: centurylink/pmx_remote_installer
   environment:

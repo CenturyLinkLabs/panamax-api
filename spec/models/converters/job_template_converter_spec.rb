@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Converters::JobTemplateConverter do
-  fixtures :job_templates
+  fixtures :job_templates, :job_template_steps
 
   subject { described_class.new(job_templates(:cluster_job_template)) }
 

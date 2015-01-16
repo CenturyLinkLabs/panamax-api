@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150107161739) do
+ActiveRecord::Schema.define(version: 20150116172347) do
 
   create_table "app_categories", force: true do |t|
     t.string   "name"
@@ -68,7 +68,7 @@ ActiveRecord::Schema.define(version: 20150107161739) do
   add_index "images", ["source"], name: "index_images_on_source"
 
   create_table "job_steps", force: true do |t|
-    t.integer  "job_template_id"
+    t.integer  "job_id"
     t.integer  "order"
     t.string   "name"
     t.string   "source"
@@ -77,7 +77,19 @@ ActiveRecord::Schema.define(version: 20150107161739) do
     t.datetime "updated_at"
   end
 
-  add_index "job_steps", ["job_template_id"], name: "index_job_steps_on_job_template_id"
+  add_index "job_steps", ["job_id"], name: "index_job_steps_on_job_id"
+
+  create_table "job_template_steps", force: true do |t|
+    t.string   "name"
+    t.string   "source"
+    t.text     "environment"
+    t.integer  "order"
+    t.integer  "job_template_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "job_template_steps", ["job_template_id"], name: "index_job_template_steps_on_job_template_id"
 
   create_table "job_templates", force: true do |t|
     t.string   "name"
