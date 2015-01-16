@@ -126,4 +126,14 @@ describe JobManagement do
     end
   end
 
+  describe '#log' do
+    before do
+      allow(subject).to receive(:key).and_return('1234')
+    end
+
+    it 'gets the job log from stevedore' do
+      expect(fake_stevedore_client).to receive(:get_job_log).with(subject.key)
+      subject.log
+    end
+  end
 end

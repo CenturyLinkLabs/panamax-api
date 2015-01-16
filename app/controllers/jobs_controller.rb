@@ -16,24 +16,24 @@ class JobsController < ApplicationController
   end
 
   def show
-    # fetches job details for the given the job id
     job = Job.find_by_key(params[:id])
     respond_with job
   end
 
   def create
-    # creates a job from the template form data
     job = JobBuilder.create(job_params)
     job.start_job
     respond_with job
   end
 
   def destroy
-    # uses the stevedore client to destroy a job given the job id
+    # use the stevedore client to destroy a job given the job id
   end
 
   def log
-    # uses the stevedore client to retrieve job log given the job id
+    job = Job.find_by_key(params[:id])
+    log = job.log
+    respond_with log
   end
 
   private

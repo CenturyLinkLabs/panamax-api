@@ -18,6 +18,10 @@ module JobManagement
     destroy if stevedore_client.delete_job(self.key)
   end
 
+  def log
+    stevedore_client.get_job_log(self.key)
+  end
+
   private
 
   def job_state
