@@ -8,11 +8,20 @@ class JobTemplate < ActiveRecord::Base
 
   def self.load_templates(pathname)
     pathname.each_child do |template|
-      JobTemplateBuilder.create(template.read)
+      template_contents = YAML.safe_load(template.read || '')
+      JobTemplateBuilder.create(template_contents)
     end
   end
 
   def override(other_template)
-
+    self.environment.each do |var|
+      overidden = other_template.environment.find { |env| env['variable'] == var['variable'] }
+      if overidden
+        var.merge!(overidden)
+        other_template.environment.delete(overidden)
+      end
+    end
+    env = environment.concat(other_template[:environment])
+    self.environment = env
   end
 end

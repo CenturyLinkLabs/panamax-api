@@ -32,7 +32,26 @@ describe JobTemplate do
       expect(JobTemplateBuilder).to receive(:create).once
       described_class.load_templates(pathname)
     end
+  end
 
+  describe '#override' do
+    let(:job_template) do
+      JobTemplate.create('environment' => [{ 'variable' => 'foo', 'value' => 'bar' }])
+    end
+
+    let(:other_template) do
+      JobTemplate.create('environment' => [{ 'variable' => 'foo', 'value' => 'baz' }, { 'variable' => 'foo2', 'value' => 'quux' }])
+    end
+
+    it 'replaces existing environment variables with those in the other template' do
+      job_template.override(other_template)
+      expect(job_template.environment).to include('variable' => 'foo', 'value' => 'baz')
+    end
+
+    it 'adds new environment variables from the other template to the existing template' do
+      job_template.override(other_template)
+      expect(job_template.environment).to include('variable' => 'foo2', 'value' => 'quux')
+    end
   end
 
 end
