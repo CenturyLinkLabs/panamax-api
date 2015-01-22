@@ -8,6 +8,11 @@ class JobLiteSerializer < ActiveModel::Serializer
   end
 
   def environment
-    object.environment
+    return nil unless object.environment
+    object.environment.each_with_object([]) do |env_vars, arr|
+      arr << env_vars.each_with_object({}) do |(key, value), result|
+        result[key] = value.to_s
+      end
+    end
   end
 end

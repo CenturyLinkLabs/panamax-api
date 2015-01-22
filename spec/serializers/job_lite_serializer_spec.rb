@@ -14,9 +14,15 @@ describe JobLiteSerializer do
     expect(serialized.name).to eq jobs(:cluster_job).job_template.name
   end
 
-  it 'retreives environment variables from the job being serialized' do
-    serialized = described_class.new(jobs(:cluster_job))
-    expect(serialized.environment).to eq jobs(:cluster_job).environment
+  context 'when serializing job environment variables' do
+    let(:new_env_var) { { 'variable' => 'foo', 'value' => 8080 } }
+
+    it 'stringifies the job environment variable values' do
+      some_job = jobs(:cluster_job)
+      some_job.environment << new_env_var
+      serialized = described_class.new(some_job)
+      expect(serialized.environment.first['value']).to eq '8080'
+    end
   end
 
 end
