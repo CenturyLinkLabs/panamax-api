@@ -1,7 +1,7 @@
 require 'faraday'
 
 module PanamaxAgent
-  module Stevedore
+  module Dray
     module Connection
 
       def connection
@@ -16,7 +16,7 @@ module PanamaxAgent
 
       def connection_options
         {
-          url: stevedore_api_url,
+          url: dray_api_url,
           ssl: ssl_options,
           proxy: proxy
         }

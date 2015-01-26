@@ -4,10 +4,10 @@ describe JobSerializer do
   fixtures :jobs, :job_steps
 
   let(:state) { { 'status' => 'running', 'stepsCompleted' => '1' } }
-  let(:fake_stevedore_client) { double(:fake_stevedore_client, get_job: state) }
+  let(:fake_dray_client) { double(:fake_dray_client, get_job: state) }
 
   before do
-    allow(PanamaxAgent::Stevedore::Client).to receive(:new).and_return(fake_stevedore_client)
+    allow(PanamaxAgent::Dray::Client).to receive(:new).and_return(fake_dray_client)
   end
 
   it 'exposes the attributes to be jsonified' do

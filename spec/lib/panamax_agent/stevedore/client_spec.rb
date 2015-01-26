@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe PanamaxAgent::Stevedore::Client do
+describe PanamaxAgent::Dray::Client do
 
   describe 'default options' do
     it 'defaults the read_timeout to 30' do

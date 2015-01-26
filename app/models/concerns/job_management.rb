@@ -10,16 +10,16 @@ module JobManagement
   end
 
   def start_job
-    job_run = stevedore_client.create_job(job_attrs)
+    job_run = dray_client.create_job(job_attrs)
     update(key: job_run['id'])
   end
 
   def destroy_job
-    destroy if stevedore_client.delete_job(self.key)
+    destroy if dray_client.delete_job(self.key)
   end
 
   def log
-    stevedore_client.get_job_log(self.key)
+    dray_client.get_job_log(self.key)
   end
 
   private
@@ -29,13 +29,13 @@ module JobManagement
   end
 
   def get_state
-    stevedore_client.get_job(self.key)
+    dray_client.get_job(self.key)
   rescue
     {}
   end
 
-  def stevedore_client
-    PanamaxAgent.stevedore_client
+  def dray_client
+    PanamaxAgent.dray_client
   end
 
   def job_attrs

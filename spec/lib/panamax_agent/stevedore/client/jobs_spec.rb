@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe PanamaxAgent::Stevedore::Client::Jobs do
+describe PanamaxAgent::Dray::Client::Jobs do
 
-  subject { PanamaxAgent::Stevedore::Client.new }
+  subject { PanamaxAgent::Dray::Client.new }
 
   let(:job_id) { '1234-1234-1234' }
   let(:response) { double(:response) }

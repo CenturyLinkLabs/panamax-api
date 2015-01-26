@@ -25,7 +25,7 @@ class JobsController < ApplicationController
   end
 
   def destroy
-    # use the stevedore client to destroy a job given the job id
+    # use the dray client to destroy a job given the job id
   end
 
   def log

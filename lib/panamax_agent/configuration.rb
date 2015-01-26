@@ -11,7 +11,7 @@ module PanamaxAgent
       :journal_api_url,
       :pmx_registry_api_url,
       :pmx_registry_api_version,
-      :stevedore_api_url,
+      :dray_api_url,
       :mailchimp_api_url,
       :mailchimp_user,
       :mailchimp_id,
@@ -57,7 +57,7 @@ module PanamaxAgent
       self.journal_api_url = DEFAULT_JOURNAL_API_URL
       self.pmx_registry_api_url = DEFAULT_PMX_REGISTRY_API_URL
       self.pmx_registry_api_version = DEFAULT_PMX_REGISTRY_API_VERSION
-      self.stevedore_api_url = DEFAULT_STEVEDORE_API_URL
+      self.dray_api_url = DEFAULT_STEVEDORE_API_URL
       self.mailchimp_api_url = DEFAULT_MAILCHIMP_API_URL
       self.mailchimp_user = DEFAULT_MAILCHIMP_USER
       self.mailchimp_id = DEFAULT_MAILCHIMP_ID

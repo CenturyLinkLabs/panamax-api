@@ -1,5 +1,5 @@
 module PanamaxAgent
-  module Stevedore
+  module Dray
     class Client < PanamaxAgent::Client
       module Jobs
 

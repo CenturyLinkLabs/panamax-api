@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe PanamaxAgent::Stevedore::Connection do
+describe PanamaxAgent::Dray::Connection do
 
   describe 'registered middleware' do
 
-    subject { PanamaxAgent::Stevedore::Client.new.connection }
+    subject { PanamaxAgent::Dray::Client.new.connection }
 
     handlers = [
       FaradayMiddleware::EncodeJson,

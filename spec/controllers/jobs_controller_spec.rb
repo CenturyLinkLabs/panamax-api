@@ -7,8 +7,8 @@ describe JobsController do
 
   let(:create_response) { { 'id' => '1234' } }
 
-  let(:fake_stevedore_client) do
-    double(:fake_stevedore_client,
+  let(:fake_dray_client) do
+    double(:fake_dray_client,
            get_job: get_job_response,
            create_job: create_response,
            delete_job: true
@@ -16,7 +16,7 @@ describe JobsController do
   end
 
   before do
-    allow(PanamaxAgent::Stevedore::Client).to receive(:new).and_return(fake_stevedore_client)
+    allow(PanamaxAgent::Dray::Client).to receive(:new).and_return(fake_dray_client)
   end
 
   describe '#index' do

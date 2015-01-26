@@ -3,7 +3,7 @@ require 'panamax_agent/journal/client'
 require 'panamax_agent/mailchimp/client'
 require 'panamax_agent/panamax/client'
 require 'panamax_agent/registry/client'
-require 'panamax_agent/stevedore/client'
+require 'panamax_agent/dray/client'
 
 module PanamaxAgent
   extend Configuration
@@ -24,8 +24,8 @@ module PanamaxAgent
     PanamaxAgent::Mailchimp::Client.new(options)
   end
 
-  def self.stevedore_client(options={})
-    PanamaxAgent::Stevedore::Client.new(options)
+  def self.dray_client(options={})
+    PanamaxAgent::Dray::Client.new(options)
   end
 
   def self.configure

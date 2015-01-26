@@ -1,19 +1,19 @@
 require 'panamax_agent/client'
-# require 'panamax_agent/stevedore/client/jobs'
+# require 'panamax_agent/dray/client/jobs'
 
 module PanamaxAgent
-  module Stevedore
+  module Dray
     class Client < PanamaxAgent::Client
 
       def initialize(options={})
         options = default_options.merge(options)
         super
         @base_path = ''
-        # @base_path = stevedore_api_version
+        # @base_path = dray_api_version
       end
 
-      include PanamaxAgent::Stevedore::Connection
-      include PanamaxAgent::Stevedore::Client::Jobs
+      include PanamaxAgent::Dray::Connection
+      include PanamaxAgent::Dray::Client::Jobs
 
       protected
 
