@@ -1,4 +1,3 @@
 class ClusterJobTemplate < JobTemplate
 
 end
-

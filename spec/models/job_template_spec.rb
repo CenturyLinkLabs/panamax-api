@@ -40,7 +40,8 @@ describe JobTemplate do
     end
 
     let(:other_template) do
-      JobTemplate.create('environment' => [{ 'variable' => 'foo', 'value' => 'baz' }, { 'variable' => 'foo2', 'value' => 'quux' }])
+      JobTemplate.create('environment' => [{ 'variable' => 'foo', 'value' => 'baz' },
+                                           { 'variable' => 'foo2', 'value' => 'quux' }])
     end
 
     it 'replaces existing environment variables with those in the other template' do

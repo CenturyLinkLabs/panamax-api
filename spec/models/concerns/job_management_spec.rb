@@ -4,7 +4,7 @@ describe JobManagement do
   subject do
     Class.new do
       include JobManagement
-      attr :environment
+      attr_reader :environment
     end.new
   end
 
@@ -14,9 +14,9 @@ describe JobManagement do
 
   let(:fake_stevedore_client) do
     double(:fake_stevedore_client,
-      get_job: get_job_response,
-      create_job: create_response,
-      delete_job: true
+           get_job: get_job_response,
+           create_job: create_response,
+           delete_job: true
     )
   end
 

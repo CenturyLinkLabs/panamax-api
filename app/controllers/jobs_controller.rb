@@ -7,9 +7,7 @@ class JobsController < ApplicationController
     state = params[:state]
 
     jobs = Job.joins(:job_template).where(job_templates: { type: type })
-    if state
-      jobs = jobs.select { |job| job.status == state }
-    end
+    jobs.select { |job| job.status == state } if state
 
     headers['Total-Count'] = jobs.count
     respond_with jobs
