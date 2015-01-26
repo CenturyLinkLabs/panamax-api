@@ -44,10 +44,10 @@ describe JobTemplateBuilder do
       expect(t).to all(be_a(JobTemplateStep))
     end
 
-    it 'adds an order to each step' do
+    it 'adds a position to each step' do
       t = described_class.send(:create_steps, steps)
-      expect(t.first[:order]).to eq 1
-      expect(t[1][:order]).to eq 2
+      expect(t.first[:position]).to eq 1
+      expect(t[1][:position]).to eq 2
     end
   end
 end

@@ -5,8 +5,8 @@ describe JobTemplate do
   it { should respond_to?(:cluster_job_templates) }
   it { should respond_to?(:environment) }
 
-  let(:step_a) { JobTemplateStep.create(order: 1) }
-  let(:step_b) { JobTemplateStep.create(order: 2) }
+  let(:step_a) { JobTemplateStep.create(position: 1) }
+  let(:step_b) { JobTemplateStep.create(position: 2) }
 
   describe '#steps' do
     let(:steps) { [step_b, step_a] } # out of order

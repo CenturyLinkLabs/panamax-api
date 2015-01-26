@@ -19,9 +19,9 @@ module Converters
 
     private
 
-    def job_step_from_template_step(source, order)
+    def job_step_from_template_step(source, position)
       JobStep.new do |s|
-        s.order = order
+        s.position = position
         s.name = source.name
         s.source = source.source
         s.environment = source.environment

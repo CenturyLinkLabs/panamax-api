@@ -1,5 +1,5 @@
 class JobTemplate < ActiveRecord::Base
-  has_many :steps, -> { order(:order) }, class_name: 'JobTemplateStep'
+  has_many :steps, -> { order(:position) }, class_name: 'JobTemplateStep'
   has_many :jobs
 
   serialize :environment, Array

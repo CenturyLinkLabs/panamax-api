@@ -69,7 +69,7 @@ ActiveRecord::Schema.define(version: 20150116172347) do
 
   create_table "job_steps", force: true do |t|
     t.integer  "job_id"
-    t.integer  "order"
+    t.integer  "position"
     t.string   "name"
     t.string   "source"
     t.text     "environment"
@@ -83,7 +83,7 @@ ActiveRecord::Schema.define(version: 20150116172347) do
     t.string   "name"
     t.string   "source"
     t.text     "environment"
-    t.integer  "order"
+    t.integer  "position"
     t.integer  "job_template_id"
     t.datetime "created_at"
     t.datetime "updated_at"
