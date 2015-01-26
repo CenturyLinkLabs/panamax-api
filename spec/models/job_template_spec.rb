@@ -20,6 +20,12 @@ describe JobTemplate do
     end
   end
 
+  describe '.default_type' do
+    it 'is the cluster type' do
+      expect(described_class.default_type).to eq 'ClusterJobTemplate'
+    end
+  end
+
   describe '.load_templates' do
     let(:child) { double(:child, read: '') }
     let(:pathname) { double(:pathname) }
@@ -40,7 +46,8 @@ describe JobTemplate do
     end
 
     let(:other_template) do
-      JobTemplate.create('environment' => [{ 'variable' => 'foo', 'value' => 'baz' }, { 'variable' => 'foo2', 'value' => 'quux' }])
+      JobTemplate.create('environment' => [{ 'variable' => 'foo', 'value' => 'baz' },
+                                           { 'variable' => 'foo2', 'value' => 'quux' }])
     end
 
     it 'replaces existing environment variables with those in the other template' do

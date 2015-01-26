@@ -7,8 +7,8 @@ describe JobsController do
 
   let(:create_response) { { 'id' => '1234' } }
 
-  let(:fake_stevedore_client) do
-    double(:fake_stevedore_client,
+  let(:fake_dray_client) do
+    double(:fake_dray_client,
            get_job: get_job_response,
            create_job: create_response,
            delete_job: true
@@ -16,7 +16,7 @@ describe JobsController do
   end
 
   before do
-    allow(PanamaxAgent::Stevedore::Client).to receive(:new).and_return(fake_stevedore_client)
+    allow(PanamaxAgent::Dray::Client).to receive(:new).and_return(fake_dray_client)
   end
 
   describe '#index' do
@@ -25,31 +25,11 @@ describe JobsController do
       expect(JSON.parse(response.body)).to be_an Array
     end
 
-    it 'without a limit parameter returns all ClusterJobTemplates jobs' do
-      get :index, format: :json
-      expect(JSON.parse(response.body).length).to eq(1)
-    end
-
-    it 'allows a type parameter to limit the jobs returned in the response to those with a particular template type' do
-      get :index, type: 'FooJobTemplate', format: :json
-      expect(JSON.parse(response.body).length).to eq(1)
-    end
-
     it 'includes a Total-Count header with the job count' do
       get :index, format: :json
       expect(response.headers['Total-Count']).to eq(1)
     end
 
-    context 'when querying by job status' do
-      before do
-        allow_any_instance_of(Job).to receive(:status).and_return('success')
-      end
-
-      it 'allows a state parameter to limit the jobs returned in the response to those in a particular state' do
-        get :index, state: 'success', format: :json
-        expect(JSON.parse(response.body).length).to eq(1)
-      end
-    end
   end
 
   describe '#show' do

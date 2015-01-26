@@ -3,15 +3,8 @@ class JobsController < ApplicationController
   respond_to :json
 
   def index
-    type = params[:type] || 'ClusterJobTemplate'
-    state = params[:state]
-
-    jobs = Job.joins(:job_template).where(job_templates: { type: type })
-    if state
-      jobs = jobs.select { |job| job.status == state }
-    end
-
-    headers['Total-Count'] = jobs.count
+    jobs = Job.with_templates(params[:type], params[:state])
+    headers['Total-Count'] = jobs.size
     respond_with jobs
   end
 
@@ -27,7 +20,7 @@ class JobsController < ApplicationController
   end
 
   def destroy
-    # use the stevedore client to destroy a job given the job id
+    # use the dray client to destroy a job given the job id
   end
 
   def log

@@ -4,7 +4,7 @@ describe JobManagement do
   subject do
     Class.new do
       include JobManagement
-      attr :environment
+      attr_reader :environment
     end.new
   end
 
@@ -12,16 +12,16 @@ describe JobManagement do
 
   let(:create_response) { { 'id' => '1234' } }
 
-  let(:fake_stevedore_client) do
-    double(:fake_stevedore_client,
-      get_job: get_job_response,
-      create_job: create_response,
-      delete_job: true
+  let(:fake_dray_client) do
+    double(:fake_dray_client,
+           get_job: get_job_response,
+           create_job: create_response,
+           delete_job: true
     )
   end
 
   before do
-    allow(PanamaxAgent::Stevedore::Client).to receive(:new).and_return(fake_stevedore_client)
+    allow(PanamaxAgent::Dray::Client).to receive(:new).and_return(fake_dray_client)
   end
 
   describe '#status' do
@@ -35,7 +35,7 @@ describe JobManagement do
 
     context 'when the remote job has no status' do
       before do
-        allow(fake_stevedore_client).to receive(:get_job).and_return({})
+        allow(fake_dray_client).to receive(:get_job).and_return({})
       end
 
       it 'returns nil' do
@@ -55,7 +55,7 @@ describe JobManagement do
 
     context 'when the remote job has no completedSteps' do
       before do
-        allow(fake_stevedore_client).to receive(:get_job).and_return({})
+        allow(fake_dray_client).to receive(:get_job).and_return({})
       end
 
       it 'returns nil' do
@@ -79,7 +79,7 @@ describe JobManagement do
 
     context 'when creation fails' do
       before do
-        allow(fake_stevedore_client).to receive(:create_job).and_raise('boom')
+        allow(fake_dray_client).to receive(:create_job).and_raise('boom')
       end
 
       it 'raises the error and does not call update on the model' do
@@ -104,7 +104,7 @@ describe JobManagement do
 
     context 'when the client cannot delete the job' do
       before do
-        allow(fake_stevedore_client).to receive(:delete_job).and_return(nil)
+        allow(fake_dray_client).to receive(:delete_job).and_return(nil)
       end
 
       it 'should not call destroy on the model' do
@@ -116,7 +116,7 @@ describe JobManagement do
 
   context 'when attempts to retrieve the remote data fail' do
     before do
-      allow(fake_stevedore_client).to receive(:get_job).and_raise('boom')
+      allow(fake_dray_client).to receive(:get_job).and_raise('boom')
     end
 
     describe '#get_state' do
@@ -131,8 +131,8 @@ describe JobManagement do
       allow(subject).to receive(:key).and_return('1234')
     end
 
-    it 'gets the job log from stevedore' do
-      expect(fake_stevedore_client).to receive(:get_job_log).with(subject.key)
+    it 'gets the job log from dray' do
+      expect(fake_dray_client).to receive(:get_job_log).with(subject.key)
       subject.log
     end
   end

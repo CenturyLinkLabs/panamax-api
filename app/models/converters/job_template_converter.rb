@@ -7,7 +7,7 @@ module Converters
 
     def to_job
       job_steps = @job_template.steps.each_with_index.map do |step, i|
-        job_step_from_template_step(step, i+1)
+        job_step_from_template_step(step, i + 1)
       end
 
       Job.new(

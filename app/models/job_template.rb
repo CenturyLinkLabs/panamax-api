@@ -4,7 +4,11 @@ class JobTemplate < ActiveRecord::Base
 
   serialize :environment, Array
 
-  scope :cluster_job_templates, -> { where(type: 'ClusterJobTemplate') }
+  scope :cluster_job_templates, -> { where(type: self.default_type) }
+
+  def self.default_type
+    'ClusterJobTemplate'
+  end
 
   def self.load_templates(pathname)
     pathname.each_child do |template|
