@@ -27,12 +27,12 @@ describe JobsController do
 
     it 'without a limit parameter returns all ClusterJobTemplates jobs' do
       get :index, format: :json
-      expect(JSON.parse(response.body).length).to eq(1)
+      expect(JSON.parse(response.body).map { |j| j['key'] }).to eq(['1234-1234-abcd'])
     end
 
     it 'allows a type parameter to limit the jobs returned in the response to those with a particular template type' do
       get :index, type: 'FooJobTemplate', format: :json
-      expect(JSON.parse(response.body).length).to eq(1)
+      expect(JSON.parse(response.body).map { |j| j['key'] }).to eq(['111-111-abc'])
     end
 
     it 'includes a Total-Count header with the job count' do
