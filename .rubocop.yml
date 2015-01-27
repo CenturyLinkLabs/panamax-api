@@ -44,3 +44,9 @@ Style/RedundantSelf:
 
 Style/Documentation:
   Enabled: false
+
+Style/EmptyLinesAroundClassBody:
+  Enabled: false
+
+Style/EmptyLinesAroundModuleBody:
+  Enabled: false
