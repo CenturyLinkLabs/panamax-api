@@ -10,4 +10,11 @@ namespace :panamax do
       Template.destroy_all
     end
   end
+
+  namespace :job_templates do
+    desc 'Load job templates from file system'
+    task :load => :environment do
+      JobTemplate.load_templates(Rails.root.join('db','job_templates'))
+    end
+  end
 end

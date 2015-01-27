@@ -1,0 +1,7 @@
+cluster_job:
+  key: 1234-1234-abcd
+  job_template: cluster_job_template
+
+other_job:
+  key: 111-111-abc
+  job_template: foo_job_template

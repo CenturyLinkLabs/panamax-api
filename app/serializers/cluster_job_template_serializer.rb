@@ -1,0 +1,2 @@
+class ClusterJobTemplateSerializer < JobTemplateSerializer
+end
