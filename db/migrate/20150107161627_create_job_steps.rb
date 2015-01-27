@@ -2,7 +2,7 @@ class CreateJobSteps < ActiveRecord::Migration
   def change
     create_table :job_steps do |t|
       t.references :job, index: true
-      t.integer :order
+      t.integer :position
       t.string :name
       t.string :source
       t.text :environment

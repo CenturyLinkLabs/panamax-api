@@ -3,13 +3,9 @@ class JobsController < ApplicationController
   respond_to :json
 
   def index
-    type = params[:type] || 'ClusterJobTemplate'
-    state = params[:state]
+    jobs = Job.with_templates(params[:type], params[:state])
 
-    jobs = Job.joins(:job_template).where(job_templates: { type: type })
-    jobs.select { |job| job.status == state } if state
-
-    headers['Total-Count'] = jobs.count
+    headers['Total-Count'] = jobs.size
     respond_with jobs
   end
 

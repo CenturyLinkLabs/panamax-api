@@ -3,7 +3,7 @@ class JobTemplatesController < ApplicationController
   respond_to :json
 
   def index
-    type = params[:type] || 'ClusterJobTemplate'
+    type = params[:type] || JobTemplate.default_type
     respond_with JobTemplate.where(type: type)
   end
 

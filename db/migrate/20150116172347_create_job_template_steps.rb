@@ -4,7 +4,7 @@ class CreateJobTemplateSteps < ActiveRecord::Migration
       t.string :name
       t.string :source
       t.text :environment
-      t.integer :order
+      t.integer :position
       t.references :job_template, index: true
 
       t.timestamps

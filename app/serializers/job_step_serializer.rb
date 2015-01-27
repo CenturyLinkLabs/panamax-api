@@ -1,3 +1,3 @@
 class JobStepSerializer < ActiveModel::Serializer
-  attributes :id, :order, :name, :source, :environment
+  attributes :id, :position, :name, :source, :environment
 end

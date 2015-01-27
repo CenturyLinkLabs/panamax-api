@@ -5,8 +5,8 @@ describe JobTemplate do
   it { should respond_to?(:cluster_job_templates) }
   it { should respond_to?(:environment) }
 
-  let(:step_a) { JobTemplateStep.create(order: 1) }
-  let(:step_b) { JobTemplateStep.create(order: 2) }
+  let(:step_a) { JobTemplateStep.create(position: 1) }
+  let(:step_b) { JobTemplateStep.create(position: 2) }
 
   describe '#steps' do
     let(:steps) { [step_b, step_a] } # out of order
@@ -17,6 +17,19 @@ describe JobTemplate do
       expect(subject.steps).to match_array([step_b, step_a])
       expect(subject.steps.first).to eq step_a
       expect(subject.steps.second).to eq step_b
+    end
+  end
+
+  describe '.default_type' do
+    it 'is the cluster type' do
+      expect(described_class.default_type).to eq 'ClusterJobTemplate'
+    end
+
+    it 'blows up if the default type does not exist' do
+      stub_const('JobTemplate::TYPES', { nothing: 'here' })
+      expect do
+        described_class.default_type
+      end.to raise_error(KeyError)
     end
   end
 
