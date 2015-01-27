@@ -45,9 +45,20 @@ describe JobsController do
         allow_any_instance_of(Job).to receive(:status).and_return('success')
       end
 
-      it 'allows a state parameter to limit the jobs returned in the response to those in a particular state' do
+      it 'includes the jobs with the given status' do
         get :index, state: 'success', format: :json
-        expect(JSON.parse(response.body).length).to eq(1)
+        expect(JSON.parse(response.body).map { |j| j['key'] }).to eq(['1234-1234-abcd'])
+      end
+
+      context 'when limited by a status that none of the jobs posess' do
+        it 'returns no jobs ' do
+          get :index, state: 'bla', format: :json
+          expect(JSON.parse(response.body).length).to eql(0)
+        end
+        it 'displays the proper Total-Count' do
+          get :index, state: 'bla', format: :json
+          expect(response.headers['Total-Count']).to eq(0)
+        end
       end
     end
   end

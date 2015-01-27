@@ -6,10 +6,11 @@ class JobsController < ApplicationController
     type = params[:type] || JobTemplate.default_type
     state = params[:state]
 
+    # TODO: move this down
     jobs = Job.joins(:job_template).where(job_templates: { type: type })
-    jobs.select { |job| job.status == state } if state
+    jobs = jobs.select { |job| job.status == state } if state
 
-    headers['Total-Count'] = jobs.count
+    headers['Total-Count'] = jobs.size
     respond_with jobs
   end
 
