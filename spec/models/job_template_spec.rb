@@ -20,6 +20,19 @@ describe JobTemplate do
     end
   end
 
+  describe '.default_type' do
+    it 'is the cluster type' do
+      expect(described_class.default_type).to eq 'ClusterJobTemplate'
+    end
+
+    it 'blows up if the default type does not exist' do
+      stub_const('JobTemplate::TYPES', { nothing: 'here' })
+      expect do
+        described_class.default_type
+      end.to raise_error(KeyError)
+    end
+  end
+
   describe '.load_templates' do
     let(:child) { double(:child, read: '') }
     let(:pathname) { double(:pathname) }
