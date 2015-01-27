@@ -16,5 +16,11 @@ namespace :panamax do
     task :load => :environment do
       JobTemplate.load_templates(Rails.root.join('db','job_templates'))
     end
+
+    desc 'Clear local job template cache'
+    task :unload => :environment do
+      JobTemplateStep.destroy_all
+      JobTemplate.destroy_all
+    end
   end
 end
