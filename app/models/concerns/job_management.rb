@@ -15,7 +15,7 @@ module JobManagement
   end
 
   def destroy_job
-    destroy if dray_client.delete_job(self.key)
+    dray_client.delete_job(self.key)
   end
 
   def log

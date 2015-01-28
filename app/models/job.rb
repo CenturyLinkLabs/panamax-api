@@ -2,9 +2,13 @@ class Job < ActiveRecord::Base
   include JobManagement
 
   belongs_to :job_template
-  has_many :steps, -> { order(:order) }, class_name: 'JobStep'
+  has_many :steps, -> { order(:order) },
+           class_name: 'JobStep',
+           dependent: :destroy
 
   serialize :environment, Array
+
+  after_destroy :destroy_job
 
   def self.with_templates(type, state)
     type ||= JobTemplate.default_type

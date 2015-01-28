@@ -11,7 +11,7 @@ describe JobsController do
     double(:fake_dray_client,
            get_job: get_job_response,
            create_job: create_response,
-           delete_job: true
+           delete_job: nil
     )
   end
 
@@ -56,6 +56,20 @@ describe JobsController do
       post :create, template_id: job_templates(:cluster_job_template).id, format: :json
     end
 
+  end
+
+  describe '#destroy' do
+    let(:job) { Job.first }
+
+    before do
+      allow(Job).to receive(:find_by_key).with(Job.first.key).and_return(job)
+    end
+
+    it 'destroys the job model' do
+      expect do
+        delete :destroy, id: Job.first.key, format: :json
+      end.to change(Job, :count).by(-1)
+    end
   end
 
   describe '#log' do

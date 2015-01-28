@@ -20,7 +20,7 @@ class JobsController < ApplicationController
   end
 
   def destroy
-    # use the dray client to destroy a job given the job id
+    respond_with Job.find_by_key(params[:id]).destroy
   end
 
   def log

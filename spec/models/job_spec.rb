@@ -7,9 +7,9 @@ describe Job do
   it { should respond_to?(:status) }
   it { should respond_to?(:environment) }
 
-  describe '.with_templates' do
-    fixtures :jobs, :job_templates, :job_steps
+  fixtures :jobs, :job_templates, :job_steps
 
+  describe '.with_templates' do
     context 'when querying by job status' do
       let(:fake_dray) do
         double(:fake_dray,
@@ -44,4 +44,23 @@ describe Job do
       end
     end
   end
+
+  describe '#destroy' do
+    subject { described_class.first }
+
+    before do
+      allow(subject).to receive(:destroy_job)
+    end
+
+    it 'destroys the job steps' do
+      subject.destroy
+      expect(JobStep.where(job: subject)).to be_empty
+    end
+
+    it 'calls #destroy_job after the model is destroyed' do
+      expect(subject).to receive(:destroy_job)
+      subject.destroy
+    end
+  end
+
 end

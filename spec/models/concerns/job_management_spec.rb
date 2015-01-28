@@ -16,7 +16,7 @@ describe JobManagement do
     double(:fake_dray_client,
            get_job: get_job_response,
            create_job: create_response,
-           delete_job: true
+           delete_job: nil
     )
   end
 
@@ -93,25 +93,16 @@ describe JobManagement do
   end
 
   describe '#destroy_job' do
+
     before do
       allow(subject).to receive(:key).and_return('1234')
     end
 
-    it 'destroys the job' do
-      expect(subject).to receive(:destroy)
+    it 'calls delete_job on the dray client' do
+      expect(fake_dray_client).to receive(:delete_job).with('1234')
       subject.destroy_job
     end
 
-    context 'when the client cannot delete the job' do
-      before do
-        allow(fake_dray_client).to receive(:delete_job).and_return(nil)
-      end
-
-      it 'should not call destroy on the model' do
-        expect(subject).not_to receive(:destroy)
-        subject.destroy_job
-      end
-    end
   end
 
   context 'when attempts to retrieve the remote data fail' do
