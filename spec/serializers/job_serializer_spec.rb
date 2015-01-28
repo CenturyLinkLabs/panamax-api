@@ -12,7 +12,7 @@ describe JobSerializer do
 
   it 'exposes the attributes to be jsonified' do
     serialized = described_class.new(jobs(:cluster_job)).as_json
-    expected_keys = [:id, :key, :completed_steps, :status, :steps]
+    expected_keys = [:id, :key, :completed_steps, :status, :steps, :job_template_id]
     expect(serialized.keys).to match_array expected_keys
   end
 

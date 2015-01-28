@@ -1,5 +1,5 @@
 class JobSerializer < ActiveModel::Serializer
-  attributes :id, :key, :completed_steps, :status
+  attributes :id, :key, :completed_steps, :status, :job_template_id
 
   has_many :steps, serializer: JobStepSerializer
 
