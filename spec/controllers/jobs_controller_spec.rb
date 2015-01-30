@@ -47,13 +47,13 @@ describe JobsController do
     end
 
     it 'returns a job' do
-      post :create, template_id: job_templates(:cluster_job_template).id, format: :json
+      post :create, job_template_id: job_templates(:cluster_job_template).id, format: :json
       expect(response.body).to eq(JobSerializer.new(new_job).to_json)
     end
 
     it 'calls start_job on the job' do
       expect(new_job).to receive(:start_job)
-      post :create, template_id: job_templates(:cluster_job_template).id, format: :json
+      post :create, job_template_id: job_templates(:cluster_job_template).id, format: :json
     end
 
   end

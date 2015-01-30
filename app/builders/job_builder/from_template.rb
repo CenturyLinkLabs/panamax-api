@@ -2,9 +2,9 @@ module JobBuilder
   class FromTemplate
 
     def self.create_job(options)
-      fail 'no template id given' unless options[:template_id]
+      fail 'no template id given' unless options[:job_template_id]
 
-      template = JobTemplate.find(options[:template_id])
+      template = JobTemplate.find(options[:job_template_id])
       if options[:override]
         override = JobTemplateBuilder.create(options[:override], false)
         template.override(override)

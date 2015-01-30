@@ -33,7 +33,7 @@ class JobsController < ApplicationController
 
   def job_params
     params.permit(
-      :template_id,
+      :job_template_id,
       override: [[environment: [[:variable, :value, :description]]]]
     )
   end
