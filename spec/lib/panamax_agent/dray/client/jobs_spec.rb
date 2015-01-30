@@ -42,8 +42,8 @@ describe PanamaxAgent::Dray::Client::Jobs do
   describe '#get_job_log' do
 
     it 'GETs the job log' do
-      expect(subject).to receive(:get).with("/jobs/#{job_id}/log").and_return(response)
-      subject.get_job_log(job_id)
+      expect(subject).to receive(:get).with("/jobs/#{job_id}/log", index: 3).and_return(response)
+      subject.get_job_log(job_id, index: 3)
     end
 
     describe '#delete_job' do
