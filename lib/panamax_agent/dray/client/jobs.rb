@@ -16,8 +16,8 @@ module PanamaxAgent
           get(jobs_path(job_id))
         end
 
-        def get_job_log(job_id)
-          get(jobs_path(job_id, 'log'))
+        def get_job_log(job_id, options={})
+          get(jobs_path(job_id, 'log'), options)
         end
 
         def delete_job(job_id)

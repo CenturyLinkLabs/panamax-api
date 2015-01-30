@@ -18,8 +18,8 @@ module JobManagement
     dray_client.delete_job(self.key)
   end
 
-  def log
-    dray_client.get_job_log(self.key)
+  def log(index)
+    dray_client.get_job_log(self.key, index: index)
   end
 
   private

@@ -123,8 +123,8 @@ describe JobManagement do
     end
 
     it 'gets the job log from dray' do
-      expect(fake_dray_client).to receive(:get_job_log).with(subject.key)
-      subject.log
+      expect(fake_dray_client).to receive(:get_job_log).with(subject.key, index: 3)
+      subject.log(3)
     end
   end
 end

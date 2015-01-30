@@ -25,7 +25,7 @@ class JobsController < ApplicationController
 
   def log
     job = Job.find_by_key(params[:id])
-    log = job.log
+    log = job.log(params[:index])
     respond_with log
   end
 

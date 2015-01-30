@@ -76,11 +76,11 @@ describe JobsController do
     let(:log) { { 'lines' => [] } }
 
     before do
-      allow_any_instance_of(Job).to receive(:log).and_return(log)
+      allow_any_instance_of(Job).to receive(:log).with(3).and_return(log)
     end
 
     it 'returns the log data' do
-      get :log, id: Job.first.key, format: :json
+      get :log, id: Job.first.key, index: 3, format: :json
       expect(response.body).to eq(log.to_json)
     end
 
