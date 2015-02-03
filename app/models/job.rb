@@ -10,6 +10,8 @@ class Job < ActiveRecord::Base
 
   after_destroy :destroy_job
 
+  validates :environment, has_environment_variable_values: true
+
   def self.with_templates(type, state)
     type ||= JobTemplate.default_type
     jobs = self.joins(:job_template).where(job_templates: { type: type })

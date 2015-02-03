@@ -9,6 +9,20 @@ describe Job do
 
   fixtures :jobs, :job_templates, :job_steps
 
+  describe 'validations' do
+    it 'can be valid' do
+      subject.environment = [{ 'variable' => 'foo', 'value' => 'bar' }]
+      expect(subject.valid?).to be_truthy
+      expect(subject.errors).to be_empty
+    end
+
+    it 'validates environment variables have values' do
+      subject.environment = [{ 'variable' => 'foo', 'value' => '' }]
+      expect(subject.valid?).to be_falsey
+      expect(subject.errors[:environment]).to eq ["environment variable values can't be blank"]
+    end
+  end
+
   describe '.with_templates' do
     context 'when querying by job status' do
       let(:fake_dray) do
