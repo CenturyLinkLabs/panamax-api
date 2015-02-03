@@ -2,7 +2,7 @@ class DeploymentTarget < ActiveRecord::Base
   include Metadata
   using FileReader
 
-  validates :name, presence: true, uniqueness: true
+  validates :name, presence: true
   validates :auth_blob, auth_blob: true
 
   def public_cert
