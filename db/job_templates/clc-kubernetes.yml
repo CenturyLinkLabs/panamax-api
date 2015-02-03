@@ -9,6 +9,8 @@ documentation: |
   takes approx. 12+ mins and varies based on number of minions requested. An additional Panamax Remote Agent node and
   Kubernetes Master node is also created. If the job fails for any reason, please check the logs. Any nodes created
   prior to the error need manual deletion.
+vendor: CenturyLink Cloud
+adapter: Kubernetes
 environment:
 - variable: REMOTE_TARGET_NAME
   value:

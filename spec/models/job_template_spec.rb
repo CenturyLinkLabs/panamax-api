@@ -1,9 +1,25 @@
 require 'spec_helper'
 
 describe JobTemplate do
-  it { should have_many(:steps) }
-  it { should respond_to?(:cluster_job_templates) }
-  it { should respond_to?(:environment) }
+  it 'has many steps' do
+    expect(subject).to have_many(:steps)
+  end
+
+  it 'responds to .cluster_job_templates' do
+    expect(described_class.respond_to?(:cluster_job_templates)).to be_truthy
+  end
+
+  it 'responds to #environment' do
+    expect(subject.respond_to?(:environment)).to be_truthy
+  end
+
+  it 'responds to #vendor' do
+    expect(subject.respond_to?(:vendor)).to be_truthy
+  end
+
+  it 'responds to #adapter' do
+    expect(subject.respond_to?(:adapter)).to be_truthy
+  end
 
   let(:step_a) { JobTemplateStep.create(order: 1) }
   let(:step_b) { JobTemplateStep.create(order: 2) }

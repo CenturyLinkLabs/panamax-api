@@ -1,6 +1,8 @@
 cluster_job_template:
   name: BrightBox CoreOS Cluster with Remote Agent Installer
   type: ClusterJobTemplate
+  vendor: BrightBox
+  adapter: Fleet
   description: Short-description
   documentation: |
     [![image](http://brightbox.com/images/misc/logo.png)[BrightBox](http://brightbox.com/) - **Serious Cloud Hosting.**
