@@ -1,0 +1,40 @@
+name: AWS Kubernetes Cluster with Panamax Remote Agent
+description:
+  Automated kubernetes cluster creation in AWS with the Panamax Remote Agent pre-installed.
+  Requires an [AWS account.](http://aws.amazon.com/)
+documentation: |
+  Create a Kubernetes cluster on AWS, deployment ready from Panamax.
+  Visit the [AWS console](http://aws.amazon.com/) to collect required items to launch the job.
+  Deployment of cluster varies based on number of minions requested.
+  An additional Panamax Remote Agent node and Kubernetes Master node is also created.
+  If the job fails for any reason, please check the logs.
+  Any nodes created prior to the error need manual deletion.
+  Please reference the logs at the end of the job to collect the private key to access the nodes via ssh.
+environment:
+- variable: REMOTE_TARGET_NAME
+  value:
+  description: A friendly name for your Remote Deployment Target.
+- variable: AWS_ACCESS_KEY_ID
+  value:
+  description: AWS access key that has ability to create servers, assign IPs, create keys and security groups in EC2.
+- variable: AWS_SECRET_ACCESS_KEY
+  value:
+  description: Corresponding secret key for the access key specified.
+- variable: REGION
+  value: us-west-2a
+  description: Region and availability zone to deploy your cluster.
+- variable: MINION_COUNT
+  value: 2
+  description: Number of minions to include in your cluster. A master node is auto-created. Do not count the master node in this value.
+- variable: VM_SIZE
+  value: t2.micro
+  description: Size for each node in your cluster. The value should match the available sizes in the AWS console that are compatible with RHEL 7.
+steps:
+- name: Deploy AWS Cluster
+  source: centurylink/kube-cluster-deploy:aws
+- name: Install Kubernetes on Cluster
+  source: centurylink/kube-install:aws
+- name: Deploy Panamax Remote Agent Node
+  source: centurylink/agent-server-deploy:aws
+- name: Install Panamax Remote Agent, Adaptor and Remote Target Endpoint
+  source: centurylink/remote-agent-install:aws
