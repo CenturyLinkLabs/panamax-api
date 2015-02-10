@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+0.2.12 - 2015-2-10
+-------------------
+### Added
+- Support for job creation via Dray (#261, #264, #265, #266, #267, #268, #270, #271, #272, #274, #275)
+
 0.2.11 - 2014-12-17
 -------------------
 ### Added
