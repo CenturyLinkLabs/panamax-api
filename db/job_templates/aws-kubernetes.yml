@@ -3,16 +3,16 @@ name: AWS Kubernetes Cluster with Panamax Remote Agent
 vendor: Amazon Cloud
 adapter: Kubernetes
 description:
-  Automated kubernetes cluster creation in AWS with the Panamax Remote Agent pre-installed.
-  Requires an [AWS account.](http://aws.amazon.com/)
+  Automated kubernetes cluster creation on Amazon Web Services with the Panamax Remote Agent pre-installed.
+  Requires an [Amazon Web Services account.](http://aws.amazon.com/)
 documentation: |
-  Create a Kubernetes cluster on AWS, deployment ready from Panamax.
-  Visit the [AWS console](http://aws.amazon.com/) to collect required items to launch the job.
+  Create a Kubernetes cluster on Amazon Web Services, deployment ready from Panamax.
+  Visit the [Amazon Web Services console](http://aws.amazon.com/) to collect required items to launch the job.
   Deployment of cluster varies based on number of minions requested.
-  An additional Panamax Remote Agent node and Kubernetes Master node is also created.
+  Additionally, a Panamax Remote Agent node and Kubernetes Master node are also created.
   If the job fails for any reason, please check the logs.
   Any nodes created prior to the error need manual deletion.
-  Please reference the logs at the end of the job to collect the private key to access the nodes via ssh.
+  Please reference the logs at the end of the job to collect the private key to access your nodes via ssh.
 environment:
 - variable: REMOTE_TARGET_NAME
   value:
@@ -30,7 +30,7 @@ environment:
   value: 2
   description: Number of minions to include in your cluster. A master node is auto-created. Do not count the master node in this value.
 - variable: VM_SIZE
-  value: t2.micro
+  value: t2.small
   description: Size for each node in your cluster. The value should match the available sizes in the AWS console that are compatible with RHEL 7.
 steps:
 - name: Deploy AWS Cluster
