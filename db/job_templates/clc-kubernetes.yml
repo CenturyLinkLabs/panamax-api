@@ -1,4 +1,7 @@
+type: ClusterJobTemplate
 name: CenturyLink Cloud Kubernetes Cluster with Panamax Remote Agent
+vendor: CenturyLink Cloud
+adapter: Kubernetes
 description:
   Automated kubernetes cluster creation in CenturyLink Cloud with the Panamax Remote Agent pre-installed.
   Requires a [CLC account.](https://control.tier3.com/)
@@ -22,7 +25,7 @@ environment:
   description: Your CLC Password which you use to access the CLC dashboard.
 - variable: REGION
   value: WA1
-  description: Region to deploy your cluster. Valid values include:  CA1, CA2, CA3, DE1, GB3, IL1, NY1, UC1, UT1, VA1, WA1
+  description: "Region to deploy your cluster. Valid values include:  CA1, CA2, CA3, DE1, GB3, IL1, NY1, UC1, UT1, VA1, WA1"
 - variable: MINION_COUNT
   value: 2
   description: Number of minions to include in your cluster. A master node is auto-created. Do not count the master node in this value.
@@ -34,7 +37,7 @@ environment:
   description: Amount of memory for each node in your cluster. Select a value from 1 to 128. A minium of 2 is recommended.
 - variable: GROUP_ID
   value:
-  description: Server group id. Ex.: wa1-36474. You can find this value via the browser url on the CLC dashboard.
+  description: "Server group id. Ex.: wa1-36474. You can find this value via the browser url on the CLC dashboard."
 steps:
 - name: Deploy CenturyLink Cloud Cluster
   source: centurylink/kube-cluster-deploy:latest

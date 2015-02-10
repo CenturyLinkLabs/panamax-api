@@ -1,4 +1,7 @@
+type: ClusterJobTemplate
 name: AWS Kubernetes Cluster with Panamax Remote Agent
+vendor: Amazon Cloud
+adapter: Kubernetes
 description:
   Automated kubernetes cluster creation in AWS with the Panamax Remote Agent pre-installed.
   Requires an [AWS account.](http://aws.amazon.com/)
