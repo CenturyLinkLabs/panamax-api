@@ -40,10 +40,10 @@ environment:
   description: "Server group id. Ex.: wa1-36474. You can find this value via the browser url on the CLC dashboard."
 steps:
 - name: Deploy CenturyLink Cloud Cluster
-  source: centurylink/kube-cluster-deploy:latest
+  source: centurylink/cluster-deploy:clc.kube
 - name: Install Kubernetes on Cluster
   source: centurylink/kube-install:latest
 - name: Deploy Panamax Remote Agent Node
-  source: centurylink/agent-server-deploy:latest
+  source: centurylink/cluster-deploy:agent
 - name: Install Panamax Remote Agent, Adaptor and Remote Target Endpoint
   source: centurylink/remote-agent-install:latest
