@@ -31,7 +31,12 @@ class ServiceManager
   end
 
   def get_state
-    fleet_client.status(@service.unit_name)
+    states = fleet_client.get_unit_state(@service.unit_name)
+    {
+      load_state: states['systemdLoadState'],
+      active_state: states['systemdActiveState'],
+      sub_state: states['systemdSubState']
+    }
   rescue
     {}
   end
