@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+0.2.13 - 2015-2-17
+-------------------
+### Added
+- AWS Fleet job creation template (#276)
+
 0.2.12 - 2015-2-10
 -------------------
 ### Added
