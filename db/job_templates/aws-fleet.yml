@@ -20,10 +20,10 @@ environment:
   description: Region and availability zone to deploy your cluster. 
 - variable: NODE_COUNT
   value: 2
-  description: Number of minions to include in your cluster. A master node is auto-created. Do not count the master node in this value.
+  description: Number of nodes to include in your cluster.
 - variable: VM_SIZE
   value: t2.small
-  description: Size for each node in your cluster. The value should match the available sizes in the AWS console that are compatible with RHEL 7.
+  description: Size for each node in your cluster. The value should match the available sizes in the AWS console that are compatible with CoreOS.
 steps:
 - name: Deploy AWS Fleet Cluster
   source: centurylink/cluster-deploy:aws.fleet
