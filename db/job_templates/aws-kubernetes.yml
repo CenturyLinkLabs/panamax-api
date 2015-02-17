@@ -34,10 +34,10 @@ environment:
   description: Size for each node in your cluster. The value should match the available sizes in the AWS console that are compatible with RHEL 7.
 steps:
 - name: Deploy AWS Cluster
-  source: centurylink/kube-cluster-deploy:aws
+  source: centurylink/cluster-deploy:aws.kube
 - name: Install Kubernetes on Cluster
-  source: centurylink/kube-install:aws
+  source: centurylink/kube-install:latest
 - name: Deploy Panamax Remote Agent Node
-  source: centurylink/agent-server-deploy:aws
+  source: centurylink/cluster-deploy:agent
 - name: Install Panamax Remote Agent, Adaptor and Remote Target Endpoint
-  source: centurylink/remote-agent-install:aws
+  source: centurylink/remote-agent-install:latest
