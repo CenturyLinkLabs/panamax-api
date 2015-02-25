@@ -1,6 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+0.2.14 - 2015-2-25
+-------------------
+### Updated
+- AWS Fleet job creation template (#278)
+- Moved to 0.3.0 of panamax-ruby-base (see: https://github.com/CenturyLinkLabs/panamax-ruby-base/commit/08ef298b842f4e48fd254b3c931977ae7f109993)
+- Upgrade to fleet-api 1.0.0
+
+### Added
+- Submit services to fleet in sorted order (#277)
+
 0.2.13 - 2015-2-17
 -------------------
 ### Added
