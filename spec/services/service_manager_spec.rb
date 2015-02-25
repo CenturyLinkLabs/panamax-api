@@ -183,30 +183,26 @@ describe ServiceManager do
   describe '#get_state' do
 
     let(:fleet_state) do
-      {
-        'systemdLoadState' => 'a',
-        'systemdActiveState' => 'b',
-        'systemdSubState' => 'c'
-      }
+      { load: 'loaded', run: 'running' }
     end
 
     before do
-      allow(fake_fleet_client).to receive(:get_unit_state).and_return(fleet_state)
+      allow(fake_fleet_client).to receive(:status).and_return(fleet_state)
     end
 
     it 'retrieves service state from the fleet client' do
-      expect(fake_fleet_client).to receive(:get_unit_state).with(service.unit_name)
+      expect(fake_fleet_client).to receive(:status).with(service.unit_name)
       subject.get_state
     end
 
     it 'returns the states' do
-      expect(subject.get_state).to eq(load_state: 'a', active_state: 'b', sub_state: 'c')
+      expect(subject.get_state).to eq(load: 'loaded', run: 'running')
     end
 
     context 'when an error occurs while querying fleet' do
 
       before do
-        allow(fake_fleet_client).to receive(:get_unit_state).and_raise('boom')
+        allow(fake_fleet_client).to receive(:status).and_raise('boom')
       end
 
       it 'returns an empty hash' do
