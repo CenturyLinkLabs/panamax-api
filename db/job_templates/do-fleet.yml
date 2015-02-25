@@ -1,0 +1,30 @@
+type: ClusterJobTemplate
+name: DigitalOcean CoreOS Fleet Cluster with Panamax Remote Agent 
+vendor: DigitalOcean
+adapter: CoreOS Fleet
+description: Automated CoreOS Fleet cluster creation in DigitalOcean with the Panamax Remote Agent pre-installed. Requires a [DigitalOcean account.](https://www.digitalocean.com/)
+documentation: |
+  Create a CoreOS Fleet cluster on DigitalOcean, deployment ready from Panamax. Visit the [DigitalOcean console](https://www.digitalocean.com/) to collect required items to launch the job. Deployment of cluster varies based on number of nodes requested. Additionally, a Panamax Remote Agent node is also created. If the job fails for any reason, please check the logs. Any nodes created prior to the error need manual deletion. Please reference the logs at the end of the job to collect the private key to access the nodes via ssh.
+environment:
+- variable: REMOTE_TARGET_NAME
+  value:
+  description: A friendly name for your Remote Deployment Target.
+- variable: API_TOKEN
+  value:
+  description: DigitalOcean personal access token with read and write permissions.  
+- variable: REGION
+  value: nyc3
+  description: "Region to deploy your cluster. The region most have metadata and private networking features. Valid values include ams2, sgp1, lon1, nyc3 and ams3." 
+- variable: NODE_COUNT
+  value: 2
+  description: Number of nodes to include in your cluster.
+- variable: VM_SIZE
+  value: 1gb
+  description: "Size for each node in your cluster. Valid values include 512mb, 1gb, 2gb, 4gb, 8gb, 16gb, 32gb, 48gb and 64gb."
+steps:
+- name: Deploy DigitalOcean CoreOS Fleet Cluster
+  source: centurylink/cluster-deploy:do.fleet
+- name: Deploy Panamax Remote Agent Node
+  source: centurylink/cluster-deploy:agent
+- name: Install Panamax Remote Agent, Adaptor and Remote Target Endpoint
+  source: centurylink/remote-agent-install:latest
