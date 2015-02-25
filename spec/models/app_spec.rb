@@ -11,29 +11,6 @@ describe App do
   it { should have_many(:services) }
   it { should have_many(:categories).class_name('AppCategory').dependent(:destroy) }
 
-  describe '#sorted_services' do
-    let(:service_a) { Service.new(name: 'a') }
-    let(:service_b) { Service.new(name: 'b') }
-    let(:service_c) { Service.new(name: 'c') }
-
-    before do
-      service_a.links << ServiceLink.new(linked_to_service: service_b)
-      service_b.links << ServiceLink.new(linked_to_service: service_c)
-      allow(subject).to receive(:services).and_return(
-        [service_a, service_c, service_b])
-    end
-
-    it 'should return the same number of services as the original set' do
-      result = subject.sorted_services
-      expect(result.count).to eq subject.services.count
-    end
-
-    it 'sorts services so that dependent services come first' do
-      result = subject.sorted_services
-      expect(result).to match_array([service_c, service_b, service_a])
-    end
-  end
-
   describe '#run' do
 
     let(:s1) { Service.new(name: 's1') }
@@ -42,7 +19,6 @@ describe App do
     before do
       subject.services = [s1, s2].each do |s|
         allow(s).to receive(:submit).and_return(true)
-        allow(s).to receive(:load).and_return(true)
         allow(s).to receive(:start).and_return(true)
       end
     end
@@ -50,12 +26,6 @@ describe App do
     it 'submits each service' do
       expect(s1).to receive(:submit)
       expect(s2).to receive(:submit)
-      subject.run
-    end
-
-    it 'submits each service' do
-      expect(s1).to receive(:load)
-      expect(s2).to receive(:load)
       subject.run
     end
 
@@ -72,11 +42,11 @@ describe App do
     let(:s2) { Service.new(name: 's2') }
 
     before do
+      allow(subject).to receive(:sleep)
       subject.services = [s1, s2]
       subject.services.each do |s|
         allow(s).to receive(:shutdown)
         allow(s).to receive(:submit)
-        allow(s).to receive(:load)
         allow(s).to receive(:start)
       end
     end
@@ -87,15 +57,14 @@ describe App do
       subject.restart
     end
 
-    it 'submits each service' do
-      expect(s1).to receive(:submit)
-      expect(s2).to receive(:submit)
+    it 'does some sleeping' do
+      expect(subject).to receive(:sleep).with(1)
       subject.restart
     end
 
-    it 'loads each service' do
-      expect(s1).to receive(:load)
-      expect(s2).to receive(:load)
+    it 'submits each service' do
+      expect(s1).to receive(:submit)
+      expect(s2).to receive(:submit)
       subject.restart
     end
 
