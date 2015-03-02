@@ -8,13 +8,14 @@ class App < ActiveRecord::Base
 
   def run
     services.each(&:submit)
+    services.each(&:load)
     services.each(&:start)
   end
 
   def restart
     services.each(&:shutdown)
-    sleep(1)
     services.each(&:submit)
+    services.each(&:load)
     services.each(&:start)
   end
 

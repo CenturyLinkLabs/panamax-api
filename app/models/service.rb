@@ -59,6 +59,10 @@ class Service < ActiveRecord::Base
   end
 
   def submit
+    manager.submit
+  end
+
+  def load
     manager.load
   end
 
@@ -73,6 +77,7 @@ class Service < ActiveRecord::Base
   def restart
     self.shutdown
     self.submit
+    self.load
     self.start
   end
 
