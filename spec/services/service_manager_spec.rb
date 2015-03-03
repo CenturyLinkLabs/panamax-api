@@ -102,9 +102,7 @@ describe ServiceManager do
             'Service' => {
               'ExecStartPre' => "-/usr/bin/docker pull #{image_name}",
               'ExecStart' => docker_run_string,
-              'ExecStartPost' => "-/usr/bin/docker rm #{service_name}",
-              'ExecStop' => "-/usr/bin/docker kill #{service_name}",
-              'ExecStopPost' => "-/usr/bin/docker rm #{service_name}",
+              'ExecStop' => "-/usr/bin/docker stop #{service_name}",
               'Restart' => 'always',
               'RestartSec' => '10',
               'TimeoutStartSec' => '5min'
