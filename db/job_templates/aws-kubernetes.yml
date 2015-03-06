@@ -13,6 +13,7 @@ documentation: |
   If the job fails for any reason, please check the logs.
   Any nodes created prior to the error need manual deletion.
   Please reference the logs at the end of the job to collect the private key to access your nodes via ssh.
+  [Learn more about the Kubernetes adapter.](https://github.com/CenturyLinkLabs/panamax-ui/wiki/Kubernetes-Adapter)
 environment:
 - variable: REMOTE_TARGET_NAME
   value:
@@ -35,9 +36,17 @@ environment:
 steps:
 - name: Deploy AWS Cluster
   source: centurylink/cluster-deploy:aws.kube
+  beginDelimiter: "----BEGIN PANAMAX DATA----"
+  endDelimiter: "----END PANAMAX DATA----"
 - name: Install Kubernetes on Cluster
   source: centurylink/kube-install:latest
+  beginDelimiter: "----BEGIN PANAMAX DATA----"
+  endDelimiter: "----END PANAMAX DATA----"
 - name: Deploy Panamax Remote Agent Node
   source: centurylink/cluster-deploy:agent
+  beginDelimiter: "----BEGIN PANAMAX DATA----"
+  endDelimiter: "----END PANAMAX DATA----"
 - name: Install Panamax Remote Agent, Adaptor and Remote Target Endpoint
   source: centurylink/remote-agent-install:latest
+  beginDelimiter: "----BEGIN PANAMAX DATA----"
+  endDelimiter: "----END PANAMAX DATA----"
