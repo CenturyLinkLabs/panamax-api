@@ -4,7 +4,7 @@ vendor: Amazon Cloud
 adapter: CoreOS Fleet
 description: Automated CoreOS Fleet cluster creation in AWS with the Panamax Remote Agent pre-installed. Requires an [Amazon Web Services account.](http://aws.amazon.com/)
 documentation: |
-  Create a CoreOS Fleet cluster on AWS, deployment ready from Panamax. Visit the [Amazon Web Services console](http://aws.amazon.com/) to collect required items to launch the job. Deployment of cluster varies based on number of minions requested. Additionally, a Panamax Remote Agent node is also created. If the job fails for any reason, please check the logs. Any nodes created prior to the error need manual deletion. Please reference the logs at the end of the job to collect the private key to access the nodes via ssh.
+  Create a CoreOS Fleet cluster on AWS, deployment ready from Panamax. Visit the [Amazon Web Services console](http://aws.amazon.com/) to collect required items to launch the job. Deployment of cluster varies based on number of minions requested. Additionally, a Panamax Remote Agent node is also created. If the job fails for any reason, please check the logs. Any nodes created prior to the error need manual deletion. Please reference the logs at the end of the job to collect the private key to access the nodes via ssh. [Learn more about the Fleet adapter.](https://github.com/CenturyLinkLabs/panamax-ui/wiki/Fleet-Adapter)
 environment:
 - variable: REMOTE_TARGET_NAME
   value:
