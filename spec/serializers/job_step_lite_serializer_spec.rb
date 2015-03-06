@@ -5,7 +5,7 @@ describe JobStepLiteSerializer do
 
   it 'exposes the attributes to be serialized' do
     serialized = described_class.new(job_step).as_json
-    expected_keys = [:source]
+    expected_keys = [:source, :beginDelimiter, :endDelimiter]
     expect(serialized.keys).to match_array expected_keys
   end
 end
