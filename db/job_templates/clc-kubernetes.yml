@@ -38,7 +38,7 @@ environment:
   description: Amount of memory for each node in your cluster. Select a value from 1 to 128. A minium of 2 is recommended.
 - variable: GROUP_ID
   value:
-  description: "Server group id. Ex.: wa1-36474. You can find this value via the browser url on the CLC dashboard."
+  description: "Ex.: 6c880f737a2e4d35904265127fcfdd0cc. You can find this value via the url when browsing a group. Ex: https://control.ctl.io/manage#/wa1/group/6c880f737a2e4d35904265127fcfdd0cc"
 steps:
 - name: Deploy CenturyLink Cloud Cluster
   source: centurylink/cluster-deploy:clc.kube
