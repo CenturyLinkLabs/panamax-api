@@ -1,13 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-0.2.15 - 2015-3-9
+0.2.16 - 2015-3-9
 -------------------
 ### Updated
 - Dray integration (sends the new delimiters - #b89d423c167d7425d95eb75107a95031adabdec6)
 - Template Documentation
 
-0.2.14 - 2015-2-25
+0.2.15 - 2015-2-25
 -------------------
 ### Updated
 - AWS Fleet job creation template (#278)
