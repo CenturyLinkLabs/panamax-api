@@ -14,7 +14,9 @@ describe ServiceManager do
   end
 
   let(:fake_fleet_client) do
-    double(:fake_fleet_client,
+    double(
+      :fake_fleet_client,
+      submit: true,
       load: true,
       start: true,
       stop: true,
@@ -74,7 +76,7 @@ describe ServiceManager do
     end
   end
 
-  describe '#load' do
+  describe '#submit' do
 
     let(:linked_to_service) { Service.new(name: 'linked_to_service') }
     let(:docker_run_string) { 'docker run some stuff' }
@@ -88,7 +90,7 @@ describe ServiceManager do
     end
 
     it 'submits a service definition to the fleet service' do
-      expect(fake_fleet_client).to receive(:load) do |name, service_def|
+      expect(fake_fleet_client).to receive(:submit) do |name, service_def|
         expect(name).to eq service.unit_name
         expect(service_def).to eq(
           {
@@ -100,9 +102,7 @@ describe ServiceManager do
             'Service' => {
               'ExecStartPre' => "-/usr/bin/docker pull #{image_name}",
               'ExecStart' => docker_run_string,
-              'ExecStartPost' => "-/usr/bin/docker rm #{service_name}",
-              'ExecStop' => "-/usr/bin/docker kill #{service_name}",
-              'ExecStopPost' => "-/usr/bin/docker rm #{service_name}",
+              'ExecStop' => "-/usr/bin/docker stop #{service_name}",
               'Restart' => 'always',
               'RestartSec' => '10',
               'TimeoutStartSec' => '5min'
@@ -111,6 +111,28 @@ describe ServiceManager do
         )
       end
 
+      subject.submit
+    end
+
+    it 'returns the result of the fleet call' do
+      expect(subject.submit).to eql true
+    end
+  end
+
+  describe '#load' do
+    before do
+      allow(fake_fleet_client).to receive(:get_unit_state)
+        .and_return('systemdLoadState' => 'loaded')
+    end
+
+    it 'sends a destroy message to the fleet client' do
+      expect(fake_fleet_client).to receive(:load).with(service.unit_name)
+      subject.load
+    end
+
+    it 'polls the unit state' do
+      expect(fake_fleet_client).to receive(:get_unit_state)
+        .and_return('systemdLoadState' => 'loaded')
       subject.load
     end
 
@@ -119,7 +141,7 @@ describe ServiceManager do
     end
   end
 
-  [:start, :stop, :destroy].each do |method|
+  [:start, :stop].each do |method|
 
     describe "##{method}" do
 
@@ -134,29 +156,55 @@ describe ServiceManager do
     end
   end
 
+  describe '#destroy' do
+    before do
+      allow(fake_fleet_client).to receive(:get_unit_state)
+        .and_raise(Fleet::NotFound, 'oops')
+    end
+
+    it 'sends a destroy message to the fleet client' do
+      expect(fake_fleet_client).to receive(:destroy).with(service.unit_name)
+      subject.destroy
+    end
+
+    it 'polls the unit state' do
+      expect(fake_fleet_client).to receive(:get_unit_state)
+        .and_raise(Fleet::NotFound, 'oops')
+      subject.destroy
+    end
+
+    it 'returns the result of the fleet call' do
+      expect(subject.destroy).to eql true
+    end
+  end
+
   describe '#get_state' do
 
     let(:fleet_state) do
-      { load: 'loaded', run: 'running' }
+      {
+        'systemdLoadState' => 'a',
+        'systemdActiveState' => 'b',
+        'systemdSubState' => 'c'
+      }
     end
 
     before do
-      allow(fake_fleet_client).to receive(:status).and_return(fleet_state)
+      allow(fake_fleet_client).to receive(:get_unit_state).and_return(fleet_state)
     end
 
     it 'retrieves service state from the fleet client' do
-      expect(fake_fleet_client).to receive(:status).with(service.unit_name)
+      expect(fake_fleet_client).to receive(:get_unit_state).with(service.unit_name)
       subject.get_state
     end
 
     it 'returns the states' do
-      expect(subject.get_state).to eq(load: 'loaded', run: 'running')
+      expect(subject.get_state).to eq(load_state: 'a', active_state: 'b', sub_state: 'c')
     end
 
     context 'when an error occurs while querying fleet' do
 
       before do
-        allow(fake_fleet_client).to receive(:status).and_raise('boom')
+        allow(fake_fleet_client).to receive(:get_unit_state).and_raise('boom')
       end
 
       it 'returns an empty hash' do

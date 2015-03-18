@@ -3,7 +3,9 @@ require 'spec_helper'
 describe Service do
 
   let(:dummy_manager) do
-    double(:dummy_manager,
+    double(
+      :dummy_manager,
+      submit: true,
       load: true,
       start: true,
       destroy: true,
@@ -124,9 +126,16 @@ describe Service do
   end
 
   describe '#submit' do
+    it 'invokes submit on the service manager' do
+      expect(dummy_manager).to receive(:submit)
+      subject.submit
+    end
+  end
+
+  describe '#load' do
     it 'invokes load on the service manager' do
       expect(dummy_manager).to receive(:load)
-      subject.submit
+      subject.load
     end
   end
 
@@ -147,6 +156,11 @@ describe Service do
   describe '#restart' do
     it 'invokes destroy on the service manager' do
       expect(dummy_manager).to receive(:destroy)
+      subject.restart
+    end
+
+    it 'invokes submit on the service manager' do
+      expect(dummy_manager).to receive(:submit)
       subject.restart
     end
 

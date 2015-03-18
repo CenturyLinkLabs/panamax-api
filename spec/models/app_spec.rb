@@ -19,6 +19,7 @@ describe App do
     before do
       subject.services = [s1, s2].each do |s|
         allow(s).to receive(:submit).and_return(true)
+        allow(s).to receive(:load).and_return(true)
         allow(s).to receive(:start).and_return(true)
       end
     end
@@ -26,6 +27,12 @@ describe App do
     it 'submits each service' do
       expect(s1).to receive(:submit)
       expect(s2).to receive(:submit)
+      subject.run
+    end
+
+    it 'submits each service' do
+      expect(s1).to receive(:load)
+      expect(s2).to receive(:load)
       subject.run
     end
 
@@ -42,11 +49,11 @@ describe App do
     let(:s2) { Service.new(name: 's2') }
 
     before do
-      allow(subject).to receive(:sleep)
       subject.services = [s1, s2]
       subject.services.each do |s|
         allow(s).to receive(:shutdown)
         allow(s).to receive(:submit)
+        allow(s).to receive(:load)
         allow(s).to receive(:start)
       end
     end
@@ -57,14 +64,15 @@ describe App do
       subject.restart
     end
 
-    it 'does some sleeping' do
-      expect(subject).to receive(:sleep).with(1)
-      subject.restart
-    end
-
     it 'submits each service' do
       expect(s1).to receive(:submit)
       expect(s2).to receive(:submit)
+      subject.restart
+    end
+
+    it 'loads each service' do
+      expect(s1).to receive(:load)
+      expect(s2).to receive(:load)
       subject.restart
     end
 

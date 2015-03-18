@@ -2,6 +2,9 @@ require 'fleet'
 
 class ServiceManager
 
+  POLL_LENGTH = 5
+  POLL_INTERVAL = 0.5
+
   def self.load(service)
     new(service).load
   end
@@ -14,8 +17,22 @@ class ServiceManager
     @service = service
   end
 
+  def submit
+    fleet_client.submit(@service.unit_name, service_def_from_service(@service))
+  end
+
   def load
-    fleet_client.load(@service.unit_name, service_def_from_service(@service))
+    fleet_client.load(@service.unit_name)
+
+    # Poll unit state until it is successfully loaded
+    poll do
+      begin
+        state = fleet_client.get_unit_state(@service.unit_name)
+        state['systemdLoadState'] == 'loaded'
+      rescue Fleet::NotFound
+        false
+      end
+    end
   end
 
   def start
@@ -28,10 +45,25 @@ class ServiceManager
 
   def destroy
     fleet_client.destroy(@service.unit_name)
+
+    # Poll unit state until it can't be found
+    poll do
+      begin
+        fleet_client.get_unit_state(@service.unit_name)
+        false
+      rescue Fleet::NotFound
+        true
+      end
+    end
   end
 
   def get_state
-    fleet_client.status(@service.unit_name)
+    states = fleet_client.get_unit_state(@service.unit_name)
+    {
+      load_state: states['systemdLoadState'],
+      active_state: states['systemdActiveState'],
+      sub_state: states['systemdSubState']
+    }
   rescue
     {}
   end
@@ -61,9 +93,7 @@ class ServiceManager
     service_block = {
       'ExecStartPre' => "-/usr/bin/docker pull #{service.from}",
       'ExecStart' => service.docker_run_string,
-      'ExecStartPost' => docker_rm,
-      'ExecStop' => "-/usr/bin/docker kill #{service.name}",
-      'ExecStopPost' => docker_rm,
+      'ExecStop' => "-/usr/bin/docker stop #{service.name}",
       'Restart' => 'always',
       'RestartSec' => '10',
       'TimeoutStartSec' => '5min'
@@ -73,5 +103,13 @@ class ServiceManager
       'Unit' => unit_block,
       'Service' => service_block
     }
+  end
+
+  def poll(length=POLL_LENGTH, &block)
+    result = (length / POLL_INTERVAL).to_i.times do
+      break :success if block.call
+      sleep(POLL_INTERVAL)
+    end
+    result == :success
   end
 end
