@@ -1,5 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
+0.2.17 - 2015-3-19
+-------------------
+### Updated
+- Always send the refresh flag to Dray (#282)
+- Use New Fleet API: v1.1.0
 
 0.2.16 - 2015-3-9
 -------------------
