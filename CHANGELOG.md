@@ -1,6 +1,6 @@
 # Changelog
 All notable changes to this project will be documented in this file.
-0.2.17 - 2015-3-19
+0.3.0 - 2015-3-19
 -------------------
 ### Updated
 - Always send the refresh flag to Dray (#282)
