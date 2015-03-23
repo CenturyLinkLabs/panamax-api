@@ -9,6 +9,7 @@ gem 'fleet-api', '1.1.0', require: 'fleet'
 gem 'active_model_serializers', '0.9.0'
 gem 'octokit', '3.2.0'
 gem 'kmts', '2.0.1'
+gem 'tzinfo-data', '1.2015.2'
 
 group :test, :development do
   gem 'rspec-rails'
