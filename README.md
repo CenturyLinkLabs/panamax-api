@@ -3,6 +3,7 @@
 [Panamax](http://panamax.io) is a containerized app creator with an open-source app marketplace hosted in GitHub. Panamax provides a friendly interface for users of Docker, Fleet & CoreOS. With Panamax, you can easily create, share, and deploy any containerized app no matter how complex it might be. Learn more at [Panamax.io](http://panamax.io) or browse the [Panamax Wiki](https://github.com/CenturyLinkLabs/panamax-ui/wiki).
 
 # Panamax API
+[![](https://badge.imagelayers.io/centurylink/panamax-api.svg)](https://imagelayers.io/?images=centurylink/panamax-api:latest 'Get your own badge on imagelayers.io')
 ![Master_Build_Status](https://circleci.com/gh/CenturyLinkLabs/panamax-api/tree/master.png?circle-token=efb1740d6408884a8e02518ad59b71bd4f81a627)
 [![Coverage Status](https://coveralls.io/repos/CenturyLinkLabs/panamax-api/badge.png)](https://coveralls.io/r/CenturyLinkLabs/panamax-api)
 
