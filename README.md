@@ -85,18 +85,18 @@ If you get tired of manually starting these services there are [instructions](ht
 	docker run -it \
 	  -v /home/core/panamax-api:/var/app/panamax-api \
 	  -v /run/docker.sock:/run/docker.sock \
-	  -p 8888:3000 
-	  -e "FLEETCTL_ENDPOINT=http://10.1.42.1:4001" 
+	  -v /run/fleet.sock:/run/fleet.sock \
+	  -p 8888:3000 \
 	  -e "JOURNAL_ENDPOINT=http://10.1.42.1:19531" \
 	  centurylink/panamax-ruby-base /bin/bash
 	  
 The first `-v` argument bind mounts the *panamax-api* source directory into the container. The container path you use for the volume mount can be anything you choose (it's */var/app/panamax-api* in the example above). Obviously, the host path must match the the directory in CoreOS where the code was shared.
 
-The second `-v` argument bind mounts the Docker daemon's API socket into the container. This is how the Panamax API is able to interact with the Docker daemon from inside the container.
+The second and third `-v` arguments bind mount the Docker and fleet daemon's respective API sockets into the container. This is how the Panamax API is able to interact with the Docker and fleet daemon from inside the container.
 
 The `-p` argument creates a mapping between port 3000 in the container (the default port used by the Rails application) and port 8888 on CoreOS (note that host port here needs to match the guest port specified by the mapping in the *Vagrantfile*). This gives us a network path from the local machine, through CoreOS, to the application running inside the *panamax-api* container.
 
-The two `-e` arguments are used to inject the endpoints for the Fleet and Journal APIs. The IP address used in these environment variables should match that of the *docker0* network interfact in CoreOS. You should be able to use the values shown above as-is, but we've seen a few occasions where the *docker0* interface is assigned a different address. You can check the address assigned to the *docker0* interface by running `ifconfig` at the CoreOS prompt.
+The `-e` argument is used to inject the endpoint for the Journal API. The IP address used in this environment variable should match that of the *docker0* network interfact in CoreOS. You should be able to use the value shown above as-is, but we've seen a few occasions where the *docker0* interface is assigned a different address. You can check the address assigned to the *docker0* interface by running `ifconfig` at the CoreOS prompt.
 
 ### Start the Application
 
