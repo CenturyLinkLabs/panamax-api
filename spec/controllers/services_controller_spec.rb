@@ -90,6 +90,17 @@ describe ServicesController do
         )
       end
 
+      it 'bypass restart when restart is false' do
+        expect(dummy_app).to_not receive(:restart)
+
+        put :update, params.merge(
+          app_id: '1',
+          id: '2',
+          restart: 'false',
+          format: :json
+        )
+      end
+
       it 'returns a successful status' do
         put :update, params.merge(
           app_id: '1',

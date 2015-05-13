@@ -17,8 +17,9 @@ class ServicesController < ApplicationController
   end
 
   def update
+    restart = params[:restart] != 'false'
     service = app.services.find(params[:id])
-    service.update_with_relationships(service_params) && app.restart
+    service.update_with_relationships(service_params) && app.restart if restart
     respond_with service
   rescue PanamaxAgent::ConnectionError => ex
     handle_exception(ex, :fleet_connection_error)
