@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+0.3.2 - 2015-5-29
+-------------------
+### Added
+- Allow updating service without restarting (#285)
+
 0.3.1 - 2015-3-31
 -------------------
 ### Updated
