@@ -47,4 +47,11 @@ describe TemplateBuilder::FromApp do
     end
 
   end
+
+  describe '.create_compose' do
+    it 'converts an app to a Compose model given the app_id' do
+      expect(subject.create_compose).to be_a Compose
+    end
+  end
+
 end

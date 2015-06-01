@@ -9,12 +9,20 @@ module TemplateBuilder
     end
 
     def create_template(persisted=true)
-      app = App.find(app_id)
       Converters::AppConverter.new(app).to_template.tap do |template|
         template.assign_attributes(options)
         template.save if persisted
       end
     end
 
+    def create_compose
+      Converters::AppConverter.new(app).to_compose
+    end
+
+    private
+
+    def app
+      App.find(app_id)
+    end
   end
 end
