@@ -16,4 +16,15 @@ describe Converters::AppConverter do
     end
   end
 
+  context '#to_compose' do
+    fixtures :apps, :services
+
+    it 'creates a Compose model from the given App' do
+      expect(subject.to_compose).to be_a Compose
+    end
+
+    it "converts the App's Services to the Compose model's ComposeServices" do
+      expect(subject.to_compose.services.size).to eq apps(:app1).services.size
+    end
+  end
 end
