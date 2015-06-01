@@ -293,4 +293,35 @@ describe AppsController do
     end
 
   end
+
+  describe '#compose_yml' do
+    fixtures :services
+
+    let(:app) { App.first }
+    let(:converter) { double('converter', to_compose_yaml: '---\n') }
+
+    before do
+      allow(Converters::AppConverter).to receive(:new).with(app).and_return(converter)
+    end
+
+    it 'invokes the app converter' do
+      expect(Converters::AppConverter).to receive(:new).with(app)
+      get :compose_yml, id: app.id
+    end
+
+    it 'returns the textual representation of the compose yaml version of the app' do
+      get :compose_yml, id: app.id, format: :text
+      expect(response.body).to eq('---\n')
+    end
+
+    it 'returns the yaml representation of the compose yaml version of the app' do
+      get :compose_yml, id: app.id, format: :yaml
+      expect(response.body).to eq('---\n')
+    end
+
+    it 'returns the json representation of the compose yaml version of the app' do
+      get :compose_yml, id: app.id, format: :json
+      expect(response.body).to eq('{"compose_yaml":"---\\\\n"}')
+    end
+  end
 end

@@ -12,11 +12,17 @@ module Converters
       Template.new(name: app.name, documentation: app.documentation, images: images)
     end
 
+    def to_compose_yaml
+      compose_hash = app.services.each_with_object({}) do |service, hash|
+        hash.merge!(ServiceConverter.new(service).to_compose_hash)
+      end
+      compose_hash.to_yaml
+    end
+
     private
 
     def service_to_image(service)
       ServiceConverter.new(service).to_image
     end
-
   end
 end

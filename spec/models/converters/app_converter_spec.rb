@@ -16,4 +16,17 @@ describe Converters::AppConverter do
     end
   end
 
+  context '#to_compose_yaml' do
+    fixtures :apps, :services
+
+    it 'creates a yaml string from the given App' do
+      expect(subject.to_compose_yaml).to be_a String
+    end
+
+    it 'creates a yaml representation with the same services as the App' do
+      yaml = subject.to_compose_yaml
+      rb = YAML.load(yaml)
+      expect(rb.keys).to match_array apps(:app1).services.map(&:name)
+    end
+  end
 end

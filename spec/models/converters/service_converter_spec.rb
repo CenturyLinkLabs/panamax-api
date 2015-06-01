@@ -4,7 +4,58 @@ describe Converters::ServiceConverter do
   fixtures :services
   fixtures :app_categories
   let(:service1) { services(:service1) }
+  let(:service2) { services(:service2) }
   subject { described_class.new(service1) }
+
+  describe '#to_compose_hash' do
+    it 'creates a hash from the given Service' do
+      expect(subject.to_compose_hash).to be_a Hash
+    end
+
+    it 'copies the service name' do
+      expect(subject.to_compose_hash.keys.first).to eq service1.name
+    end
+
+    it 'copies the exposed ports' do
+      expect(subject.to_compose_hash.values.first['expose']).to eq service1.expose
+    end
+
+    it 'converts the service ports' do
+      service1.ports << {
+        'host_interface' => '127.0.0.1',
+        'host_port' => 8080,
+        'container_port' => 8081,
+        'proto' => 'UDP'
+      }
+      expect(subject.to_compose_hash.values.first['ports']).to eq(['3306:3306', '127.0.0.1:8080:8081/udp'])
+    end
+
+    it 'converts the service links when present'do
+      service1.links << ServiceLink.new(linked_to_service: service2, alias: 'other')
+      expect(subject.to_compose_hash.values.first['links']).to eq(['my-other-service:other'])
+    end
+
+    it 'does not include the service links when not present'do
+      expect(subject.to_compose_hash.values.first['links']).to be_nil
+    end
+
+    it 'converts the service environment variables'do
+      expect(subject.to_compose_hash.values.first['environment']).to eq(['MYSQL_ROOT_PASSWORD=pass@word01'])
+    end
+
+    it 'converts the service volumes'do
+      expect(subject.to_compose_hash.values.first['volumes']).to eq(['/var/panamax:/var/app/panamax'])
+    end
+
+    it 'converts the service volumes_from'do
+      service1.volumes_from << SharedVolume.new(exported_from_service: service2)
+      expect(subject.to_compose_hash.values.first['volumes_from']).to eq(['my-other-service'])
+    end
+
+    it 'copies the service command' do
+      expect(subject.to_compose_hash.values.first['command']).to eq(service1.command)
+    end
+  end
 
   describe '#to_image' do
 

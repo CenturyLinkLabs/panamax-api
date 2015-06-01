@@ -56,6 +56,15 @@ class AppsController < ApplicationController
     render json: { template: TemplateFileSerializer.new(template).to_yaml }
   end
 
+  def compose_yml
+    app = App.find(params[:id])
+    compose_yaml = Converters::AppConverter.new(app).to_compose_yaml
+    respond_to do |format|
+      format.any(:yaml, :text) { render text: compose_yaml }
+      format.json { render json: { compose_yaml: compose_yaml } }
+    end
+  end
+
   private
 
   def app_update_params
