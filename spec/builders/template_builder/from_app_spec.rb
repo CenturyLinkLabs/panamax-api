@@ -15,43 +15,47 @@ describe TemplateBuilder::FromApp do
 
   context '.create_template' do
 
-    it 'converts an app to a template given the app_id' do
-      expect(subject.create_template).to be_a Template
-    end
+    context('when the as_compose option is present') do
+      before do
+        options[:as_compose] = 'checked'
+      end
 
-    describe 'assigns the options provided to the template' do
-      subject { described_class.new(apps(:app1), options).create_template }
-      its(:name) { should eq apps(:app1).name }
-      its(:description) { should eq options[:description] }
-      its(:keywords) { should eq options[:keywords] }
-      its(:type) { should eq options[:type] }
-      its(:documentation) { should eq options[:documentation] }
-    end
-
-    it 'persists the template if valid' do
-      expect(subject.create_template).to be_persisted
-    end
-
-    it 'returns a template with errors if the template cannot be persisted' do
-      options[:name] = nil
-      t = described_class.new(apps(:app1), options).create_template
-      expect(t).to_not be_persisted
-      expect(t.errors).to_not be_empty
-    end
-
-    context 'when persisted flag is false' do
-      it 'returns an unpersisted template ' do
-        t = subject.create_template(false)
-        expect(t.persisted?).to be_falsey
+      it 'coverts the app to a compose yaml' do
+        expect(subject.create_template).to be_a Compose
       end
     end
 
-  end
+    context('when the as_compose option is not present') do
+      it 'converts an app to a template given the app_id' do
+        expect(subject.create_template).to be_a Template
+      end
 
-  describe '.create_compose' do
-    it 'converts an app to a Compose model given the app_id' do
-      expect(subject.create_compose).to be_a Compose
+      describe 'assigns the options provided to the template' do
+        subject { described_class.new(apps(:app1), options).create_template }
+        its(:name) { should eq apps(:app1).name }
+        its(:description) { should eq options[:description] }
+        its(:keywords) { should eq options[:keywords] }
+        its(:type) { should eq options[:type] }
+        its(:documentation) { should eq options[:documentation] }
+      end
+
+      it 'persists the template if valid' do
+        expect(subject.create_template).to be_persisted
+      end
+
+      it 'returns a template with errors if the template cannot be persisted' do
+        options[:name] = nil
+        t = described_class.new(apps(:app1), options).create_template
+        expect(t).to_not be_persisted
+        expect(t.errors).to_not be_empty
+      end
+
+      context 'when persisted flag is false' do
+        it 'returns an unpersisted template ' do
+          t = subject.create_template(false)
+          expect(t.persisted?).to be_falsey
+        end
+      end
     end
   end
-
 end
