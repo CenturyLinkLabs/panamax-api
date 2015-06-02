@@ -4,7 +4,58 @@ describe Converters::ServiceConverter do
   fixtures :services
   fixtures :app_categories
   let(:service1) { services(:service1) }
+  let(:service2) { services(:service2) }
   subject { described_class.new(service1) }
+
+  describe '#to_compose_service' do
+    it 'creates a ComposeService from the given Service' do
+      expect(subject.to_compose_service).to be_a ComposeService
+    end
+
+    it 'copies the service name' do
+      expect(subject.to_compose_service.name).to eq service1.name
+    end
+
+    it 'copies the exposed ports' do
+      expect(subject.to_compose_service.expose).to eq service1.expose
+    end
+
+    it 'converts the service ports' do
+      service1.ports << {
+        'host_interface' => '127.0.0.1',
+        'host_port' => 8080,
+        'container_port' => 8081,
+        'proto' => 'UDP'
+      }
+      expect(subject.to_compose_service.ports).to eq(['3306:3306', '127.0.0.1:8080:8081/udp'])
+    end
+
+    it 'converts the service links when present'do
+      service1.links << ServiceLink.new(linked_to_service: service2, alias: 'other')
+      expect(subject.to_compose_service.links).to eq(['my-other-service:other'])
+    end
+
+    it 'does not include the service links when not present'do
+      expect(subject.to_compose_service.links).to be_nil
+    end
+
+    it 'converts the service environment variables'do
+      expect(subject.to_compose_service.environment).to eq(['MYSQL_ROOT_PASSWORD=pass@word01'])
+    end
+
+    it 'converts the service volumes'do
+      expect(subject.to_compose_service.volumes).to eq(['/var/panamax:/var/app/panamax'])
+    end
+
+    it 'converts the service volumes_from'do
+      service1.volumes_from << SharedVolume.new(exported_from_service: service2)
+      expect(subject.to_compose_service.volumes_from).to eq(['my-other-service'])
+    end
+
+    it 'copies the service command' do
+      expect(subject.to_compose_service.command).to eq(service1.command)
+    end
+  end
 
   describe '#to_image' do
 

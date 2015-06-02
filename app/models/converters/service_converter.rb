@@ -24,6 +24,59 @@ module Converters
       )
     end
 
+    def to_compose_service
+      ComposeService.new(name: service.name, image: service.from).tap do |s|
+        s.ports = compose_ports if compose_ports.present?
+        s.links = compose_links if compose_links.present?
+        s.expose = service.expose if service.expose
+        s.environment = compose_environment if compose_environment.present?
+        s.volumes = compose_volume if compose_volume.present?
+        s.volumes_from = compose_volumes_from if compose_volumes_from.present?
+        s.command = service.command if service.command
+      end
+    end
+
+    concerning :ComposeConversion do
+      def compose_ports
+        return unless service.ports
+        service.ports.map do |port|
+          option = ''
+          if port['host_interface'] || port['host_port']
+            option << "#{port['host_interface']}:" if port['host_interface']
+            option << "#{port['host_port']}:" unless port['host_port'].to_s.empty?
+          end
+          option << "#{port['container_port']}"
+          option << '/udp' if port['proto'] && port['proto'].upcase == 'UDP'
+          option
+        end
+      end
+
+      def compose_links
+        return unless service.links
+        service.links.map(&:link_string)
+      end
+
+      def compose_environment
+        return unless service.environment
+        service.environment.map { |env| "#{env['variable']}=#{env['value']}" }
+      end
+
+      def compose_volume
+        return unless service.volumes
+        service.volumes.map do |volume|
+          option = ''
+          option << "#{volume['host_path']}:" if volume['host_path'].present?
+          option << volume['container_path']
+          option
+        end
+      end
+
+      def compose_volumes_from
+        return unless service.volumes_from && service.volumes_from.present?
+        service.volumes_from.map(&:exported_from_service_name)
+      end
+    end
+
     private
 
     def service_category_names
