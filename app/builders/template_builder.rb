@@ -3,10 +3,10 @@ module TemplateBuilder
   def self.create(options, persisted=true)
     options ||= {}
 
-    if options.kind_of?(String)
+    if options.is_a?(String)
       strategy = TemplateBuilder::FromJson.new(options)
-    elsif options.key?(:fig_yml)
-      strategy = TemplateBuilder::FromFig.new(options)
+    elsif options.key?(:compose_yaml)
+      strategy = TemplateBuilder::FromCompose.new(options)
     elsif options.key?(:app_id)
       app_id = options.delete(:app_id)
       strategy = TemplateBuilder::FromApp.new(app_id, options)

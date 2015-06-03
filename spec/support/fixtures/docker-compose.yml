@@ -5,10 +5,8 @@ web:
   links:
     - db
   environment:
-    - variable: MYSQL_PORT_3306_TCP_ADDR
-      value: 172.17.0.4
-    - variable: WORDPRESS_DB_PASSWORD
-      value: mysecretpassword
+    - MYSQL_PORT_3306_TCP_ADDR=172.17.0.4
+    - WORDPRESS_DB_PASSWORD=mysecretpassword
   volumes:
     - cache/:/tmp/cache
 db:
@@ -16,7 +14,6 @@ db:
   expose:
     - "3306"
   environment:
-    - variable: MYSQL_ROOT_PASSWORD
-      value: mysecretpassword
+    MYSQL_ROOT_PASSWORD: mysecretpassword
   volumes_from:
     - web

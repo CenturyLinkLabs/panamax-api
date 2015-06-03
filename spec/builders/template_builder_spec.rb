@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe TemplateBuilder do
-
   let(:options) do
     HashWithIndifferentAccess.new(
       description: 'some template',
@@ -11,7 +10,6 @@ describe TemplateBuilder do
   end
 
   describe '.create' do
-
     context 'when an app_id is passed' do
       fixtures :apps
       before { options[:app_id] = apps(:app1).id }
@@ -33,10 +31,10 @@ describe TemplateBuilder do
       end
     end
 
-    context 'when passed a fig_yml param' do
-      before { options[:fig_yml] = '---' }
+    context 'when passed a compose_yaml param' do
+      before { options[:compose_yaml] = '---' }
 
-      it 'returns a template created from the fig template' do
+      it 'returns a template created from the compose yaml' do
         t = described_class.create(options)
         expect(t).to be_a Template
       end
@@ -71,7 +69,5 @@ describe TemplateBuilder do
         described_class.create({ app_id: 1 }, false)
       end
     end
-
   end
-
 end

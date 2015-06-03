@@ -69,6 +69,7 @@ class AppsController < ApplicationController
 
   def app_params
     params.permit(
+      :compose_yaml,
       :template_id,
       :registry_id,
       :image,

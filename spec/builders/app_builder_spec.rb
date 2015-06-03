@@ -24,6 +24,23 @@ describe AppBuilder do
       end
     end
 
+    context 'when a compose yaml is provided' do
+      let(:options) { { compose_yaml: '---\n' } }
+
+      before do
+        allow(AppBuilder::FromCompose).to receive(:create_app).and_return(app)
+      end
+
+      it 'invokes the FromCompose strategy' do
+        expect(AppBuilder::FromCompose).to receive(:create_app)
+        described_class.create(options)
+      end
+
+      it 'returns the new app' do
+        expect(described_class.create(options)).to eq app
+      end
+    end
+
     context 'when an image is provided' do
 
       let(:options) { { image: 'foo/bar' } }

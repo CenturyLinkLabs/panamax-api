@@ -5,6 +5,8 @@ module AppBuilder
 
     strategy = if options.key?(:template_id)
                  AppBuilder::FromTemplate
+               elsif options.key?(:compose_yaml)
+                 AppBuilder::FromCompose
                else
                  AppBuilder::FromImage
                end

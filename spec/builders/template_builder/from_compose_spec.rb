@@ -1,24 +1,24 @@
 require 'spec_helper'
 
-describe TemplateBuilder::FromFig do
+describe TemplateBuilder::FromCompose do
 
-  let(:fig_yml) { File.open("#{Rails.root}/spec/support/fixtures/fig.yml").read }
+  let(:compose_yaml) { File.open("#{Rails.root}/spec/support/fixtures/docker-compose.yml").read }
   let(:options) do
     HashWithIndifferentAccess.new(
-          'name' => 'figgy-template',
-          'description' => 'some template',
-          'keywords' => 'foo,baz,bar',
-          'authors' => [],
-          'documentation' => '---\n\nBlah\n\n',
-          'type' => 'wordpress',
-          'fig_yml' => fig_yml
+      'name' => 'compose-template',
+      'description' => 'some template',
+      'keywords' => 'foo,baz,bar',
+      'authors' => [],
+      'documentation' => '---\n\nBlah\n\n',
+      'type' => 'wordpress',
+      'compose_yaml' => compose_yaml
     )
   end
 
   subject { described_class.new options }
 
   context '.create_template' do
-    it 'creates a template from the fig.yml' do
+    it 'creates a template from the docker-compose.yml' do
       expect(subject.create_template).to be_a(Template)
     end
 
@@ -30,7 +30,7 @@ describe TemplateBuilder::FromFig do
       its(:type) { should eq options[:type] }
       its(:documentation) { should eq options[:documentation] }
 
-      it 'creates images for each service defined in fig.yml' do
+      it 'creates images for each service defined in docker-compose.yml' do
         expect(subject.images.length).to eq(2)
         expect(subject.images.map(&:name)).to match_array(%w(web db))
         expect(subject.images.map(&:source)).to match_array(%w(wordpress mysql))
@@ -63,9 +63,9 @@ describe TemplateBuilder::FromFig do
       expect(subject.create_template).to be_persisted
     end
 
-    it 'returns the template with errors if the fig.yml is not supported' do
-      invalid_fig_yml = options.merge('fig_yml' => "wordpress:\n  build:\n    .")
-      strategy = described_class.new invalid_fig_yml
+    it 'returns the template with errors if the docker-compose.yml is not supported' do
+      invalid_compose_yaml = options.merge('compose_yaml' => "wordpress:\n  build:\n    .")
+      strategy = described_class.new invalid_compose_yaml
       expect(strategy.create_template).to_not be_valid
       expect(strategy.create_template).to_not be_persisted
       expect(strategy.create_template.errors).to_not be_empty
