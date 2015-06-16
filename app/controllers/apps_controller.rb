@@ -65,6 +65,14 @@ class AppsController < ApplicationController
     end
   end
 
+  def compose_gist
+    app = App.find(params[:id])
+    gist = Converters::AppConverter.new(app).to_compose_gist
+    html_url = gist[:html_url]
+    raw_url = gist[:files][Converters::AppConverter::DOCKER_COMPOSE_FILENAME][:raw_url]
+    render json: { links: { gist: { href: html_url, raw_url: raw_url } } }, status: 201
+  end
+
   private
 
   def app_update_params

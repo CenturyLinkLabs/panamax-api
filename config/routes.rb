@@ -15,6 +15,7 @@ PanamaxApi::Application.routes.draw do
       put :rebuild
       post :template
       get :compose_yml
+      post :compose_gist
     end
 
     resources :categories, only: [:index, :show, :create, :update, :destroy]

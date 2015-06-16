@@ -324,4 +324,37 @@ describe AppsController do
       expect(response.body).to eq('{"compose_yaml":"---\\\\n"}')
     end
   end
+
+  describe '#compose_gist' do
+    fixtures :services
+
+    let(:app) { App.first }
+    let(:converter_response) do
+      {
+        html_url: 'html',
+        files: { 'docker-compose.yml' => { raw_url: 'raw' } }
+      }
+    end
+    let(:converter) { double('converter', to_compose_gist: converter_response) }
+    let(:expected_response) { { links: { gist: { href: 'html', raw_url: 'raw' } } } }
+
+    before do
+      allow(Converters::AppConverter).to receive(:new).with(app).and_return(converter)
+    end
+
+    it 'invokes the app converter' do
+      expect(Converters::AppConverter).to receive(:new).with(app)
+      post :compose_gist, id: app.id, format: :json
+    end
+
+    it 'returns a created status' do
+      post :compose_gist, id: app.id, format: :json
+      expect(response.status).to eq(201)
+    end
+
+    it 'returns the gist URIs' do
+      post :compose_gist, id: app.id, format: :json
+      expect(response.body).to eq expected_response.to_json
+    end
+  end
 end

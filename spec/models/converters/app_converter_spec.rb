@@ -29,4 +29,26 @@ describe Converters::AppConverter do
       expect(rb.keys).to match_array apps(:app1).services.map(&:name)
     end
   end
+
+  context '#to_compose_gist' do
+    fixtures :apps, :services
+
+    let(:github_client) { double('github_client', create_gist: {}) }
+    let(:create_params) do
+      {
+        description: 'created by Panamax',
+        public: true,
+        files: { 'docker-compose.yml' => { content: subject.to_compose_yaml } }
+      }
+    end
+
+    before do
+      allow(Octokit::Client).to receive(:new).and_return(github_client)
+    end
+
+    it 'uses Octokit to create a new gist' do
+      expect(github_client).to receive(:create_gist).with(create_params)
+      subject.to_compose_gist
+    end
+  end
 end
