@@ -23,12 +23,12 @@ describe JobBuilder::FromTemplate do
 
       it 'creates a job template from the override' do
         expect(JobTemplateBuilder).to receive(:create).with(override, false).and_return(override_template)
-        described_class.create_job(template_id: job_template.id, override: override)
+        described_class.create_job(job_template_id: job_template.id, override: override)
       end
 
       it 'overrides the template with the override template' do
         expect(job_template).to receive(:override).with(override_template)
-        described_class.create_job(template_id: job_template.id, override: override)
+        described_class.create_job(job_template_id: job_template.id, override: override)
       end
 
     end
@@ -37,17 +37,17 @@ describe JobBuilder::FromTemplate do
       expect(Converters::JobTemplateConverter).to(
         receive(:new).with(job_template).and_return(converter))
 
-      described_class.create_job(template_id: job_template.id)
+      described_class.create_job(job_template_id: job_template.id)
     end
 
     it 'persists a new job' do
       expect do
-        described_class.create_job(template_id: job_template.id)
+        described_class.create_job(job_template_id: job_template.id)
       end.to change(Job, :count).by(1)
     end
 
     it 'returns the new job' do
-      expect(described_class.create_job(template_id: job_template.id)).to eql job
+      expect(described_class.create_job(job_template_id: job_template.id)).to eql job
     end
   end
 
