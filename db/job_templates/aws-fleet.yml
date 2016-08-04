@@ -27,7 +27,13 @@ environment:
 steps:
 - name: Deploy AWS CoreOS Fleet Cluster
   source: centurylink/cluster-deploy:aws.fleet
+  beginDelimiter: "----BEGIN PANAMAX DATA----"
+  endDelimiter: "----END PANAMAX DATA----"
 - name: Deploy Panamax Remote Agent Node
   source: centurylink/cluster-deploy:agent
+  beginDelimiter: "----BEGIN PANAMAX DATA----"
+  endDelimiter: "----END PANAMAX DATA----"
 - name: Install Panamax Remote Agent, Adaptor and Remote Target Endpoint
   source: centurylink/remote-agent-install:latest
+  beginDelimiter: "----BEGIN PANAMAX DATA----"
+  endDelimiter: "----END PANAMAX DATA----"
