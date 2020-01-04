@@ -22,6 +22,10 @@ Additional, external APIs are also used to do things like query the Docker Hub a
 * [MailChimp API](http://apidocs.mailchimp.com/) - Allow users to subscribe to the CenturyLink Labs mailing list.
 * [KissMetrics API](http://support.kissmetrics.com/apis/specifications.html) - Collect data about the templates users are running.
 
+## NOTE
+
+This repo is no longer being maintained. Users are welcome to fork it, but we make no warranty of its functionality.
+
 ## Getting Started
 
 If you're trying to install panamax as a complete package: [Follow these instructions](http://panamax.io/get-panamax).
