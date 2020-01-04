@@ -49,7 +49,7 @@ GEM
       excon (>= 0.37.0)
       json
     erubis (2.7.0)
-    excon (0.37.0)
+    excon (0.71.1)
     faraday (0.8.9)
       multipart-post (~> 1.2.0)
     faraday_middleware (0.9.0)
