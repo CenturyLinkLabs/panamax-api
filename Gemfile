@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'rails', '4.1.7'
-gem 'puma', '2.8.2'
+gem 'puma', '3.12.3'
 gem 'sqlite3', '1.3.9'
 gem 'faraday_middleware', '0.9.0'
 gem 'docker-api', '1.13.0', require: 'docker'
